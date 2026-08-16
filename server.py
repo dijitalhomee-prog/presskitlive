@@ -136,6 +136,16 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             return mgr
         return None
 
+    def is_authorized_manager(self, mgr, artist):
+        if not mgr or not artist:
+            return False
+        if mgr.get("is_super_admin"):
+            return True
+        artist_mgr_id = artist.get("manager_id")
+        if not artist_mgr_id or artist_mgr_id == mgr["id"]:
+            return True
+        return False
+
     def send_json(self, status_code, data, set_cookie=None):
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
         self.send_response(status_code)
@@ -354,7 +364,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                 return
 
             mgr = self.get_current_manager()
-            is_owner = (mgr is not None and mgr["id"] == artist["manager_id"])
+            is_owner = self.is_authorized_manager(mgr, artist)
 
             # Server-Side Lock Redaction for Guest Public Users
             if not is_owner:
@@ -693,7 +703,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             socials = req_body.get("socials", {})
 
             artist = db.get_artist_by_id(artist_id)
-            if not artist or artist["manager_id"] != mgr["id"]:
+            if not artist or not self.is_authorized_manager(mgr, artist):
                 self.send_error_json(403, "Bu sanatçı üzerinde yetkiniz yok.")
                 return
 
@@ -898,7 +908,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
         if path == "/api/artists/edit":
             artist_id = req_body.get("artistId")
             artist = db.get_artist_by_id(artist_id)
-            if not artist or artist["manager_id"] != mgr["id"]:
+            if not artist or not self.is_authorized_manager(mgr, artist):
                 self.send_error_json(403, "Bu sanatçı üzerinde işlem yapma yetkiniz yoktur.")
                 return
             updated = db.update_artist_info(
@@ -918,7 +928,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             is_locked = req_body.get("isLocked", False)
 
             artist = db.get_artist_by_id(artist_id)
-            if not artist or artist["manager_id"] != mgr["id"]:
+            if not artist or not self.is_authorized_manager(mgr, artist):
                 self.send_error_json(403, "Bu sanatçı üzerinde yetkiniz yok.")
                 return
 
@@ -936,7 +946,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             artist_id = req_body.get("artistId")
 
             artist = db.get_artist_by_id(artist_id)
-            if not artist or artist["manager_id"] != mgr["id"]:
+            if not artist or not self.is_authorized_manager(mgr, artist):
                 self.send_error_json(403, "Bu klasör üzerinde yetkiniz yoktur.")
                 return
 
@@ -964,7 +974,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             badge = req_body.get("badge", "Yeni Görsel")
 
             artist = db.get_artist_by_id(artist_id)
-            if not artist or artist["manager_id"] != mgr["id"]:
+            if not artist or not self.is_authorized_manager(mgr, artist):
                 self.send_error_json(403, "Bu sanatçıya fotoğraf ekleme yetkiniz yoktur.")
                 return
 
@@ -981,7 +991,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             artist_id = req_body.get("artistId", "yagmur-hizal")
 
             artist = db.get_artist_by_id(artist_id)
-            if not artist or artist["manager_id"] != mgr["id"]:
+            if not artist or not self.is_authorized_manager(mgr, artist):
                 self.send_error_json(403, "Bu fotoğrafı silme yetkiniz yoktur.")
                 return
 
