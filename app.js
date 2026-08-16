@@ -561,16 +561,23 @@ function setupFolderModals() {
   }
 }
 
+let selectedBatchFiles = [];
+
 function setupPhotoModals() {
   const modal = document.getElementById('addPhotoModal');
   const btnOpen = document.getElementById('btnOpenAddPhotoModal');
   const btnClose = document.getElementById('btnCloseAddPhotoModal');
   const btnCancel = document.getElementById('btnCancelAddPhoto');
   const form = document.getElementById('addPhotoForm');
+  const dropZone = document.getElementById('photoDropZone');
+  const fileInput = document.getElementById('inputPhotoFile');
+  const displayLabel = document.getElementById('photoFileNameDisplay');
 
   if (btnOpen && modal) {
     btnOpen.onclick = (e) => {
       e.preventDefault();
+      selectedBatchFiles = [];
+      if (displayLabel) displayLabel.innerText = "Fotoğrafları Sürükleyip Bırakın veya Seçin";
       const select = document.getElementById('selectTargetFolder');
       if (select && state && state.artist && state.artist.folders) {
         select.innerHTML = state.artist.folders.map(f => `<option value="${escapeHTML(f.id)}">${escapeHTML(f.name)}</option>`).join('');
@@ -582,56 +589,161 @@ function setupPhotoModals() {
   if (btnClose && modal) btnClose.onclick = (e) => { e.preventDefault(); modal.classList.remove('active'); };
   if (btnCancel && modal) btnCancel.onclick = (e) => { e.preventDefault(); modal.classList.remove('active'); };
 
+  // Setup Drag & Drop & File Select Listeners
+  if (dropZone && fileInput) {
+    dropZone.onclick = (e) => {
+      if (e.target !== fileInput) fileInput.click();
+    };
+
+    const handleFiles = (files) => {
+      const validFiles = Array.from(files).filter(f => f.type.startsWith('image/'));
+      if (validFiles.length > 0) {
+        selectedBatchFiles = validFiles;
+        const titleInput = document.getElementById('inputPhotoTitle');
+        if (validFiles.length === 1) {
+          if (displayLabel) displayLabel.innerText = `📄 ${validFiles[0].name} (${(validFiles[0].size / (1024 * 1024)).toFixed(1)} MB)`;
+          if (titleInput && (!titleInput.value || titleInput.value === 'Fotoğraf Paketi')) {
+            titleInput.value = validFiles[0].name.split('.')[0].replace(/[-_]/g, ' ');
+          }
+        } else {
+          if (displayLabel) displayLabel.innerText = `📷 ${validFiles.length} Adet Fotoğraf Seçildi`;
+          if (titleInput && !titleInput.value) {
+            titleInput.value = `Görsel Paketi (${validFiles.length} adet)`;
+          }
+        }
+      }
+    };
+
+    fileInput.onchange = (e) => handleFiles(e.target.files);
+
+    ['dragenter', 'dragover'].forEach(eventName => {
+      dropZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.add('dragover');
+      }, false);
+    });
+
+    ['dragleave', 'drop'].forEach(eventName => {
+      dropZone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        dropZone.classList.remove('dragover');
+      }, false);
+    });
+
+    dropZone.addEventListener('drop', (e) => {
+      const dt = e.dataTransfer;
+      if (dt && dt.files) {
+        handleFiles(dt.files);
+      }
+    }, false);
+  }
+
   if (form && modal) {
     form.onsubmit = async (e) => {
       e.preventDefault();
       const selectEl = document.getElementById('selectTargetFolder');
       const folderId = selectEl ? selectEl.value : '';
       const titleEl = document.getElementById('inputPhotoTitle');
-      const title = titleEl ? titleEl.value.trim() : '';
+      const baseTitle = (titleEl && titleEl.value.trim()) ? titleEl.value.trim() : 'Görsel';
       const resEl = document.getElementById('inputPhotoRes');
       const resVal = (resEl && resEl.value.trim()) ? resEl.value.trim() : '3808 x 5712 px (300 DPI)';
       const badgeEl = document.getElementById('inputPhotoBadge');
       const badge = (badgeEl && badgeEl.value.trim()) ? badgeEl.value.trim() : 'Yeni Görsel';
-      const photoUrl = (typeof uploadedPhotoDataUrl !== 'undefined' && uploadedPhotoDataUrl) ? uploadedPhotoDataUrl : '/assets/images/yagmur-hizal/Kort1 2.JPG';
 
-      if (!folderId || !title) {
-        alert("Lütfen klasör seçin ve görsel başlığını girin.");
+      if (!folderId) {
+        alert("Lütfen bir hedef klasör seçin.");
         return;
       }
 
       const activeArtistId = getActiveArtistId();
+      const submitBtn = form.querySelector('button[type="submit"]');
 
       try {
-        const submitBtn = form.querySelector('button[type="submit"]');
-        if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Fotoğraf Ekleniyor...'; }
+        if (submitBtn) submitBtn.disabled = true;
 
-        const res = await fetch('/api/photos/add', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            artistId: activeArtistId,
-            folderId: folderId,
-            title: title,
-            url: photoUrl,
-            resolution: resVal,
-            badge: badge
-          })
-        });
+        if (selectedBatchFiles.length === 0) {
+          // Single fallback upload if no custom file selected
+          const photoUrl = (typeof uploadedPhotoDataUrl !== 'undefined' && uploadedPhotoDataUrl) ? uploadedPhotoDataUrl : '/assets/images/yagmur-hizal/Kort1 2.JPG';
+          if (submitBtn) submitBtn.innerText = 'Fotoğraf Ekleniyor...';
 
-        const data = await res.json();
-        if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Fotoğrafı Ekle'; }
-
-        if (data.status === 'success') {
-          modal.classList.remove('active');
-          form.reset();
-          await loadArtistData();
-          alert('Fotoğraf klasöre başarıyla eklendi.');
+          const res = await fetch('/api/photos/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              artistId: activeArtistId,
+              folderId: folderId,
+              title: baseTitle,
+              url: photoUrl,
+              resolution: resVal,
+              badge: badge
+            })
+          });
+          const data = await res.json();
+          if (submitBtn) submitBtn.disabled = false;
+          if (data.status === 'success') {
+            modal.classList.remove('active');
+            form.reset();
+            selectedBatchFiles = [];
+            await loadArtistData();
+            alert('Fotoğraf klasöre başarıyla eklendi.');
+          } else {
+            alert(data.message || "Fotoğraf eklenemedi.");
+          }
         } else {
-          alert(data.message || "Fotoğraf eklenemedi.");
+          // BATCH MULTIPLE FILE UPLOAD
+          let successCount = 0;
+          const totalFiles = selectedBatchFiles.length;
+
+          for (let i = 0; i < totalFiles; i++) {
+            const file = selectedBatchFiles[i];
+            if (submitBtn) submitBtn.innerText = `Yükleniyor (${i + 1}/${totalFiles})...`;
+
+            const base64Url = await new Promise((resolve, reject) => {
+              const reader = new FileReader();
+              reader.onload = (event) => resolve(event.target.result);
+              reader.onerror = (error) => reject(error);
+              reader.readAsDataURL(file);
+            });
+
+            const photoTitle = (totalFiles === 1) ? baseTitle : `${baseTitle} - ${file.name.split('.')[0].replace(/[-_]/g, ' ')}`;
+
+            const res = await fetch('/api/photos/add', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                artistId: activeArtistId,
+                folderId: folderId,
+                title: photoTitle,
+                url: base64Url,
+                resolution: resVal,
+                badge: badge
+              })
+            });
+
+            const data = await res.json();
+            if (data.status === 'success') {
+              successCount++;
+            }
+          }
+
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Fotoğrafları Ekle'; }
+
+          if (successCount > 0) {
+            modal.classList.remove('active');
+            form.reset();
+            selectedBatchFiles = [];
+            if (displayLabel) displayLabel.innerText = "Fotoğrafları Sürükleyip Bırakın veya Seçin";
+            await loadArtistData();
+            alert(`${successCount} adet fotoğraf klasöre başarıyla yüklendi.`);
+          } else {
+            alert("Fotoğraflar yüklenemedi.");
+          }
         }
       } catch (err) {
-        alert("Sunucu hatası.");
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Fotoğrafları Ekle'; }
+        alert("Yükleme sırasında hata oluştu.");
       }
     };
   }

@@ -234,6 +234,24 @@
       background: rgba(255, 255, 255, 0.15);
       color: #fff;
       transform: translateY(-2px);
+    .drop-zone {
+      border: 2px dashed var(--primary);
+      padding: 24px 16px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      background: rgba(29, 185, 84, 0.05);
+      transition: all 0.2s ease;
+    }
+    .drop-zone:hover, .drop-zone.dragover {
+      background: rgba(29, 185, 84, 0.15);
+      border-color: #22c55e;
+      transform: scale(1.01);
     }
 
     @media (max-width: 900px) {
@@ -737,12 +755,12 @@
         </div>
         
         <div class="form-group">
-          <label>Fotoğraf (Bilgisayardan Seç) *</label>
-          <div class="file-input-wrapper">
-            <label for="inputPhotoFile" class="file-input-custom" id="photoFileLabel">
-              <i data-lucide="upload"></i> <span id="photoFileNameDisplay">Bilgisayardan Fotoğraf Yükle (300 DPI JPG / PNG)</span>
-            </label>
-            <input type="file" id="inputPhotoFile" accept="image/*" style="display:none;" onchange="handlePhotoFileSelect(this)">
+          <label>Fotoğraf (Bilgisayardan Seç veya Sürükle Bırak) *</label>
+          <div class="drop-zone" id="photoDropZone">
+            <i data-lucide="upload-cloud" style="width:36px; height:36px; color: var(--primary);"></i>
+            <span id="photoFileNameDisplay" style="font-weight:700; font-size:14px; color:#fff;">Fotoğrafları Sürükleyip Bırakın veya Seçin</span>
+            <span style="font-size:12px; color:var(--text-muted);">Birden fazla 300 DPI JPG / PNG dosyası seçebilirsiniz</span>
+            <input type="file" id="inputPhotoFile" accept="image/*" multiple style="display:none;">
           </div>
         </div>
 
