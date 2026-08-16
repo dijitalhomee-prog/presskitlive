@@ -169,6 +169,12 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             parsed = urllib.parse.urlparse(self.path)
             path = parsed.path
 
+        # Favicon routing: /favicon.ico -> /assets/images/favicon.png
+        if path == "/favicon.ico":
+            self.path = "/assets/images/favicon.png"
+            parsed = urllib.parse.urlparse(self.path)
+            path = parsed.path
+
         # Clean dynamic /artist/<slug> URL routing (Section B.2)
         if path.startswith("/artist/"):
             slug = path[len("/artist/"):].strip("/")
