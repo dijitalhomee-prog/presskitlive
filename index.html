@@ -580,12 +580,15 @@
               <h2 class="section-title"><i data-lucide="folder"></i> Klasörler & Görseller</h2>
               <p class="section-subtitle">Menajer klasör oluşturabilir, kilit koyabilir ve yeni fotoğraf ekleyebilir</p>
             </div>
-            <div class="section-actions" style="display:flex; gap:10px;">
+            <div class="section-actions" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
               <button class="btn btn-primary btn-small" id="btnOpenAddFolderModal">
                 <i data-lucide="folder-plus"></i> + Yeni Klasör Aç
               </button>
               <button class="btn btn-accent btn-small" id="btnOpenAddPhotoModal">
                 <i data-lucide="image-plus"></i> + Klasöre Fotoğraf Ekle
+              </button>
+              <button class="btn btn-outline btn-small" id="btnDeleteFolderHeader" onclick="deleteActiveFolderHandler()" style="display:none; border-color: rgba(239, 68, 68, 0.4); color: #ef4444;">
+                <i data-lucide="trash-2"></i> Seçili Klasörü Sil
               </button>
             </div>
           </div>

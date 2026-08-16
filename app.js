@@ -384,6 +384,16 @@ function renderFoldersBar() {
   foldersBar.innerHTML = html;
   if (window.lucide) lucide.createIcons();
 
+  // Show/Hide top header "Seçili Klasörü Sil" button
+  const headerDelBtn = document.getElementById('btnDeleteFolderHeader');
+  if (headerDelBtn) {
+    if (!state.isPublicView && state.isOwner && state.activeFolderId && state.activeFolderId !== 'folder-all') {
+      headerDelBtn.style.display = 'inline-flex';
+    } else {
+      headerDelBtn.style.display = 'none';
+    }
+  }
+
   // Bind click handlers
   foldersBar.querySelectorAll('.folder-pill').forEach(btn => {
     btn.addEventListener('click', (e) => {
@@ -395,6 +405,16 @@ function renderFoldersBar() {
       renderFilteredPhotos();
     });
   });
+}
+
+async function deleteActiveFolderHandler() {
+  if (!state.activeFolderId || state.activeFolderId === 'folder-all') {
+    alert("Lütfen önce silmek istediğiniz özel klasörü seçiniz.");
+    return;
+  }
+  const folder = (state.artist.folders || []).find(f => f.id === state.activeFolderId);
+  const folderName = folder ? folder.name : 'Klasör';
+  deleteFolderHandler(null, state.activeFolderId, folderName);
 }
 
 async function deleteFolderHandler(e, folderId, folderName) {
@@ -466,13 +486,22 @@ function renderFilteredPhotos() {
   }
 
   if (photos.length === 0) {
+    const canDeleteThisFolder = !state.isPublicView && state.isOwner && state.activeFolderId !== 'folder-all';
     galleryGrid.innerHTML = `
       <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);">
         <i data-lucide="image-off" style="width: 48px; height: 48px; color: var(--text-muted); margin-bottom: 12px;"></i>
         <h4 style="color: #fff; font-family: var(--font-display); font-size: 18px;">Bu klasörde henüz görsel bulunmuyor</h4>
         <p style="color: var(--text-muted); font-size: 14px; margin-top: 4px;">Menajer tarafından yüklenen yüksek çözünürlüklü görseller burada sergilenecektir.</p>
+        ${canDeleteThisFolder ? `
+          <button type="button" class="btn btn-outline btn-small" onclick="deleteActiveFolderHandler()" style="margin-top:16px; border-color: rgba(239, 68, 68, 0.5); color: #ef4444;">
+            <i data-lucide="trash-2"></i> Bu Boş Klasörü Sil
+          </button>
+        ` : ''}
       </div>
     `;
+    if (window.lucide) lucide.createIcons();
+    return;
+  }
     if (window.lucide) lucide.createIcons();
     return;
   }
