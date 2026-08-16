@@ -342,25 +342,26 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             
             mgr = self.get_current_manager()
 
-            # If logged in manager, default to manager's first artist if no specific valid id requested
-            if not artist and mgr:
-                artists = db.get_artists_by_manager(mgr["id"])
-                if artists:
-                    artist = artists[0]
-
-            # Public fallback to yagmur-hizal ONLY if requested explicitly or if guest user
-            if not artist and not mgr and requested_id == "yagmur-hizal":
-                artist = db.get_artist_by_id("yagmur-hizal")
-
+            # If requested artist is not found or invalid, fallback to manager's first artist or primary artist
             if not artist:
                 if mgr:
-                    self.send_json(200, {"status": "success", "artist": None, "isOwner": True})
-                else:
-                    self.send_error_json(404, "Sanatçı bulunamadı.")
+                    my_artists = db.get_artists_by_manager(mgr["id"])
+                    if my_artists:
+                        artist = my_artists[0]
+                
+                if not artist:
+                    artist = db.get_artist_by_id("yagmur-hizal")
+
+            if not artist:
+                all_artists = db.get_all_artists()
+                if all_artists:
+                    artist = all_artists[0]
+
+            if not artist:
+                self.send_error_json(404, "Sanatçı bulunamadı.")
                 return
 
-            mgr = self.get_current_manager()
-            is_owner = self.is_authorized_manager(mgr, artist)
+            is_owner = self.is_authorized_manager(mgr, artist) if mgr else False
 
             # Server-Side Lock Redaction for Guest Public Users
             if not is_owner:
