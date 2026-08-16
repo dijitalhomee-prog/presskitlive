@@ -126,22 +126,25 @@
     }
 
     .manager-actions-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(160px, 1fr));
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
       gap: 12px;
-      min-width: 360px;
+      max-width: 480px;
     }
     .btn-grid-action {
-      padding: 12px 16px;
+      padding: 12px 20px;
       border-radius: 14px;
       font-size: 13px;
       font-weight: 700;
-      display: flex;
+      display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       text-decoration: none;
       transition: all 0.2s ease;
+      white-space: nowrap;
     }
     .btn-grid-whatsapp {
       background: linear-gradient(135deg, #25D366 0%, #1da851 100%);
