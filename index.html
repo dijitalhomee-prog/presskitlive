@@ -285,6 +285,81 @@
       color: #000;
     }
 
+    /* LIGHTBOX MODAL */
+    .lightbox-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.94);
+      backdrop-filter: blur(12px);
+      z-index: 99999;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .lightbox-modal.active {
+      display: flex;
+    }
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 24px;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      color: #fff;
+      font-size: 32px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      z-index: 100000;
+    }
+    .lightbox-close:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: scale(1.1);
+    }
+    .lightbox-content {
+      max-width: 92vw;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      text-align: center;
+    }
+    .lightbox-content img {
+      max-width: 88vw;
+      max-height: 75vh;
+      object-fit: contain;
+      border-radius: 12px;
+      box-shadow: 0 16px 50px rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+    .lightbox-info {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+    }
+    .lightbox-info h3 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      margin: 0;
+    }
+    .lightbox-info span {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
     @media (max-width: 900px) {
       .manager-card-cool {
         flex-direction: column;
@@ -1106,7 +1181,21 @@
           alert('Sunucu hatası.');
         }
       });
-    }
+  <!-- PHOTO LIGHTBOX MODAL -->
+  <div class="lightbox-modal" id="photoLightboxModal" onclick="closePhotoLightbox(event)">
+    <button class="lightbox-close" id="btnCloseLightbox" onclick="closePhotoLightbox(event)">&times;</button>
+    <div class="lightbox-content" onclick="event.stopPropagation()">
+      <img id="lightboxImg" src="" alt="Görsel">
+      <div class="lightbox-info">
+        <h3 id="lightboxTitle"></h3>
+        <span id="lightboxRes"></span>
+        <a id="lightboxDownloadBtn" href="" download class="btn btn-spotify btn-large" style="margin-top:4px;">
+          <i data-lucide="download"></i> 300 DPI Yüksek Çözünürlükte İndir
+        </a>
+      </div>
+    </div>
+  </div>
+
   </script>
 </body>
 </html>

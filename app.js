@@ -464,7 +464,7 @@ function renderFilteredPhotos() {
 
     html += `
       <div class="photo-card" id="card-${escapeHTML(p.id)}">
-        <div class="photo-preview-box" onclick="window.open('${safeUrl}', '_blank')">
+        <div class="photo-preview-box" onclick="openPhotoLightbox('${safeUrl}', '${escapeHTML(p.title)}', '${escapeHTML(p.resolution || '3808 x 5712 px (300 DPI)')}')" style="cursor: pointer;" title="Resmi Mevcut Sayfada Büyüt">
           <img src="${safeUrl}" alt="${escapeHTML(p.title)}" class="photo-preview-img" loading="lazy">
           <span class="photo-badge">${escapeHTML(p.badge || '300 DPI')}</span>
         </div>
@@ -488,6 +488,41 @@ function renderFilteredPhotos() {
   galleryGrid.innerHTML = html;
   if (window.lucide) lucide.createIcons();
 }
+
+// --------------------------------------------------------------------------
+// Photo Lightbox In-Page Viewer
+// --------------------------------------------------------------------------
+function openPhotoLightbox(url, title, resolution) {
+  const modal = document.getElementById('photoLightboxModal');
+  const img = document.getElementById('lightboxImg');
+  const titleEl = document.getElementById('lightboxTitle');
+  const resEl = document.getElementById('lightboxRes');
+  const dlBtn = document.getElementById('lightboxDownloadBtn');
+
+  if (img) img.src = url;
+  if (titleEl) titleEl.innerText = title || 'Görsel Önizleme';
+  if (resEl) resEl.innerText = resolution || '3808 x 5712 px (300 DPI)';
+  if (dlBtn) dlBtn.href = url;
+
+  if (modal) {
+    modal.classList.add('active');
+    document.body.style.overflow = 'hidden';
+    if (window.lucide) lucide.createIcons();
+  }
+}
+
+function closePhotoLightbox(e) {
+  if (e && e.target && e.target.id === 'lightboxImg') return; // Don't close if clicking the image itself
+  const modal = document.getElementById('photoLightboxModal');
+  if (modal) {
+    modal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closePhotoLightbox();
+});
 
 // --------------------------------------------------------------------------
 // Navigation & Modals Setup
