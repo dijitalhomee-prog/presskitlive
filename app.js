@@ -91,12 +91,23 @@ async function loadArtistData() {
         const apiJson = await apiRes.json();
         if (apiJson.artists && apiJson.artists.length > 0) {
           state.myArtists = apiJson.artists;
-          state.artist = paramArtistId ? (state.myArtists.find(a => a.id === paramArtistId || a.slug === paramArtistId || String(a.id).toLowerCase() === String(paramArtistId).toLowerCase() || String(a.name).toLowerCase() === String(paramArtistId).toLowerCase()) || state.myArtists[0]) : state.myArtists[0];
         }
       }
-      
-      // Fallback if specific artistId requested in URL
-      if (!state.artist && paramArtistId) {
+
+      let matched = null;
+      if (paramArtistId && state.myArtists.length > 0) {
+        const normParam = String(paramArtistId).toLowerCase().trim();
+        matched = state.myArtists.find(a => 
+          String(a.id).toLowerCase() === normParam || 
+          String(a.slug || '').toLowerCase() === normParam ||
+          String(a.name || '').toLowerCase() === normParam
+        );
+      }
+
+      if (matched) {
+        state.artist = matched;
+      } else if (paramArtistId) {
+        // Fetch specific artist by ID/slug from server
         const fallbackRes = await fetch(`/api/artist?artistId=${encodeURIComponent(paramArtistId)}`);
         if (fallbackRes.ok) {
           const fallJson = await fallbackRes.json();
@@ -104,6 +115,10 @@ async function loadArtistData() {
             state.artist = fallJson.artist;
           }
         }
+      }
+
+      if (!state.artist && state.myArtists.length > 0) {
+        state.artist = state.myArtists[0];
       }
 
       state.isOwner = true; // Always true for logged in manager in manager dashboard view!
