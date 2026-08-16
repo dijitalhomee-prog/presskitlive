@@ -280,6 +280,17 @@ def update_manager_password(manager_id, new_password):
         conn.commit()
     return True
 
+def update_manager_contact_info(manager_id, name=None, agency_name=None, phone=None):
+    with get_connection() as conn:
+        if name is not None:
+            conn.execute("UPDATE managers SET name = ? WHERE id = ?", (name, manager_id))
+        if agency_name is not None:
+            conn.execute("UPDATE managers SET agency_name = ? WHERE id = ?", (agency_name, manager_id))
+        if phone is not None:
+            conn.execute("UPDATE managers SET phone = ? WHERE id = ?", (phone, manager_id))
+        conn.commit()
+    return get_manager_by_id(manager_id)
+
 def get_manager_by_subscription_ref(subscription_ref):
     if not subscription_ref:
         return None

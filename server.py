@@ -649,6 +649,36 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             })
             return
 
+        # POST /api/manager/update-profile (AUTH REQUIRED)
+        if path == "/api/manager/update-profile":
+            mgr = self.get_current_manager()
+            if not mgr:
+                self.send_error_json(401, "Lütfen menajer girişi yapın.")
+                return
+            
+            name = req_body.get("name", "").strip()
+            agency_name = req_body.get("agencyName", "").strip()
+            phone = req_body.get("phone", "").strip()
+
+            if not name:
+                self.send_error_json(400, "Yetkili Adı Soyadı alanı boş bırakılamaz.")
+                return
+
+            updated = db.update_manager_contact_info(mgr["id"], name=name, agency_name=agency_name, phone=phone)
+            self.send_json(200, {
+                "status": "success",
+                "message": "İletişim bilgileriniz başarıyla güncellendi.",
+                "user": {
+                    "id": updated["id"],
+                    "email": updated["email"],
+                    "name": updated["name"],
+                    "agencyName": updated["agency_name"],
+                    "phone": updated["phone"],
+                    "isContactComplete": bool(updated.get("name") and updated.get("phone"))
+                }
+            })
+            return
+
         # POST /api/admin/managers/toggle-status (Active/Passive Toggle)
         if path == "/api/admin/managers/toggle-status":
             admin = self.get_current_super_admin()

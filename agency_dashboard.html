@@ -338,7 +338,10 @@
         <span>PressKit<span style="color: var(--primary);">Live</span></span>
       </a>
 
-      <div style="display: flex; align-items: center; gap: 16px;">
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <button class="btn btn-outline btn-small" id="btnOpenContactInfoModal" title="Yetkili & İletişim Bilgilerini Düzenle">
+          <i data-lucide="user-check"></i> Yetkili Bilgileri
+        </button>
         <button class="btn btn-outline btn-small" id="btnOpenChangePassModal" title="Şifre Değiştir">
           <i data-lucide="key-round"></i> Şifre Değiştir
         </button>
@@ -367,7 +370,12 @@
     <!-- DASHBOARD STATS -->
     <div class="agency-stats-grid">
       <div class="stat-card">
-        <span class="stat-label">AJANS & TEMSİLCİLİK</span>
+        <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
+          <span class="stat-label">AJANS & TEMSİLCİLİK</span>
+          <button type="button" onclick="openContactInfoModal()" style="background:transparent; border:none; color:var(--primary); font-size:12px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:4px; padding:0;" title="İletişim Bilgilerini Düzenle">
+            <i data-lucide="edit-2" style="width:12px; height:12px;"></i> Düzenle
+          </button>
+        </div>
         <span class="stat-value" id="statManagerName">Ajans Yükleniyor...</span>
         <span class="stat-sub" id="statManagerEmail">...</span>
       </div>
@@ -543,6 +551,51 @@
     </div>
   </div>
 
+  <!-- MODAL: CONTACT & AUTHORIZED PERSON INFO -->
+  <div class="modal-backdrop" id="contactInfoModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3><i data-lucide="user-check" style="color:var(--primary);"></i> Yetkili İletişim Bilgilerim</h3>
+          <p>Ajans temsilcisi ve yetkili kişi bilgilerinizi ekleyin/güncelleyin.</p>
+        </div>
+        <button class="modal-close" id="btnCloseContactInfoModal">&times;</button>
+      </div>
+
+      <form id="contactInfoForm" class="modal-body">
+        <div id="contactNoticeBanner" style="display:none; background:rgba(234,179,8,0.15); border:1px solid rgba(234,179,8,0.4); color:#fef08a; padding:12px; border-radius:var(--radius-sm); font-size:13px; margin-bottom:16px;">
+          ⚠️ <strong>Lütfen İletişim Bilgilerinizi Tamamlayın:</strong> Yapımcılar ve organizatörler presskit sayfalarındaki WhatsApp ve vCard bağlantılarında doğrudan bu yetkili bilgilerine ulaşır.
+        </div>
+        <div id="contactInfoErrorBox" style="display:none; margin-bottom:16px;"></div>
+
+        <div class="form-group">
+          <label>Yetkili Adı Soyadı *</label>
+          <input type="text" id="contactName" placeholder="Örn: Sedat Ünal" required>
+        </div>
+
+        <div class="form-group">
+          <label>Ajans / Cast Şirketi Unvanı</label>
+          <input type="text" id="contactAgencyName" placeholder="Örn: Sedat Cast & Menajerlik">
+        </div>
+
+        <div class="form-group">
+          <label>Telefon / WhatsApp Numarası (Ülke Kodu İle) *</label>
+          <input type="tel" id="contactPhone" placeholder="+90 532 000 00 00" required>
+        </div>
+
+        <div class="form-group">
+          <label>E-posta Adresi (Sistem Kaydı)</label>
+          <input type="email" id="contactEmail" disabled style="opacity:0.6; cursor:not-allowed;">
+        </div>
+
+        <div class="modal-footer" style="padding:16px 0 0 0; background:transparent; border-top:none;">
+          <button type="button" class="btn btn-outline" id="btnCancelContactInfo">İptal</button>
+          <button type="submit" class="btn btn-spotify"><i data-lucide="check"></i> Bilgileri Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- MODAL: CHANGE PASSWORD -->
   <div class="modal-backdrop" id="changePassModal">
     <div class="modal-card">
@@ -636,6 +689,9 @@
               planQuotaLimit = sessJson.user.quotaLimit;
             }
             renderManagerHeaderAndStats();
+            if (!currentManager.phone || !currentManager.phone.trim()) {
+              setTimeout(() => openContactInfoModal(true), 400);
+            }
           } else {
             window.location.href = '/login.html';
             return;
@@ -672,11 +728,13 @@
 
       const mgrName = currentManager.name || "Kullanıcı";
       const mgrEmail = currentManager.email || "";
+      const mgrAgency = currentManager.agencyName || "";
+      const mgrPhone = currentManager.phone || "";
       const isSolo = (currentManager.accountType === 'solo');
       const subStatus = currentManager.subscriptionStatus || 'active';
 
-      document.getElementById('statManagerName').innerText = mgrName;
-      document.getElementById('statManagerEmail').innerText = mgrEmail;
+      document.getElementById('statManagerName').innerText = mgrAgency ? `${mgrName} (${mgrAgency})` : mgrName;
+      document.getElementById('statManagerEmail').innerText = `${mgrEmail} ${mgrPhone ? '• ' + mgrPhone : '• (Telefon Girilmedi)'}`;
       document.getElementById('headerManagerName').innerText = isSolo ? `${mgrName} (Sanatçı)` : `${mgrName}`;
 
       const planName = isSolo ? 'Bireysel Sanatçı / DJ Paketi' :
@@ -1040,6 +1098,68 @@
         }
       } catch (err) {
         alert("Sunucu hatası.");
+      }
+    });
+
+    // Contact Info Modal Handlers
+    const contactModal = document.getElementById('contactInfoModal');
+    const btnOpenContact = document.getElementById('btnOpenContactInfoModal');
+    const btnCloseContact = document.getElementById('btnCloseContactInfoModal');
+    const btnCancelContact = document.getElementById('btnCancelContactInfo');
+    const contactForm = document.getElementById('contactInfoForm');
+
+    function openContactInfoModal(forcePrompt = false) {
+      if (!currentManager) return;
+      document.getElementById('contactName').value = currentManager.name || '';
+      document.getElementById('contactAgencyName').value = currentManager.agencyName || '';
+      document.getElementById('contactPhone').value = currentManager.phone || '';
+      document.getElementById('contactEmail').value = currentManager.email || '';
+      const notice = document.getElementById('contactNoticeBanner');
+      if (notice) notice.style.display = forcePrompt ? 'block' : 'none';
+      contactModal.classList.add('active');
+    }
+
+    if (btnOpenContact) btnOpenContact.addEventListener('click', () => openContactInfoModal(false));
+    if (btnCloseContact) btnCloseContact.addEventListener('click', () => contactModal.classList.remove('active'));
+    if (btnCancelContact) btnCancelContact.addEventListener('click', () => contactModal.classList.remove('active'));
+
+    contactForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('contactName').value.trim();
+      const agencyName = document.getElementById('contactAgencyName').value.trim();
+      const phone = document.getElementById('contactPhone').value.trim();
+      const errBox = document.getElementById('contactInfoErrorBox');
+      if (errBox) errBox.style.display = 'none';
+
+      if (!name || !phone) {
+        if (errBox) {
+          errBox.innerHTML = '<div style="color:#ef4444; font-size:13px;">Lütfen yetkili adı ve telefon numarasını doldurun.</div>';
+          errBox.style.display = 'block';
+        }
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/manager/update-profile', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, agencyName, phone })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          contactModal.classList.remove('active');
+          await loadDashboardData();
+        } else {
+          if (errBox) {
+            errBox.innerHTML = `<div style="color:#ef4444; font-size:13px;">${escapeHTML(data.message || 'Güncellenemedi.')}</div>`;
+            errBox.style.display = 'block';
+          }
+        }
+      } catch (err) {
+        if (errBox) {
+          errBox.innerHTML = '<div style="color:#ef4444; font-size:13px;">Sunucu hatası oluştu.</div>';
+          errBox.style.display = 'block';
+        }
       }
     });
   </script>
