@@ -138,6 +138,14 @@ function renderArtistHeader() {
 
   const name = state.artist.name || 'Profil Adı';
 
+  if (name) {
+    if (state.isPublicView) {
+      document.title = `${name} — Resmi Presskit Portalı | PressKitLive`;
+    } else {
+      document.title = `${name} — Menajer Yönetim Paneli | PressKitLive`;
+    }
+  }
+
   const titleEl = document.getElementById('heroArtistName') || document.getElementById('artistTitleName');
   if (titleEl) titleEl.innerText = name;
 
