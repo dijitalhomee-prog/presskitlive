@@ -258,9 +258,10 @@ function renderManagerInfo() {
 
   const updateWaBtn = (btnEl) => {
     if (!btnEl) return;
-    if (mgr.phoneRaw) {
+    const waRaw = mgr.whatsappRaw || mgr.phoneRaw;
+    if (waRaw) {
       btnEl.style.display = 'inline-flex';
-      btnEl.href = `https://wa.me/${mgr.phoneRaw}?text=Merhaba%20${encodeURIComponent(mgr.name)}%2C%20${encodeURIComponent(state.artist.name)}%20presskit%20ve%20konser%20rezervasyonu%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum.`;
+      btnEl.href = `https://wa.me/${waRaw}?text=Merhaba%20${encodeURIComponent(mgr.name)}%2C%20${encodeURIComponent(state.artist.name)}%20presskit%20ve%20rezervasyon%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum.`;
     } else {
       btnEl.style.display = 'none';
     }

@@ -134,6 +134,8 @@ def init_db():
             cursor.execute("ALTER TABLE managers ADD COLUMN subscription_status TEXT NOT NULL DEFAULT 'none';")
         if 'is_super_admin' not in columns:
             cursor.execute("ALTER TABLE managers ADD COLUMN is_super_admin INTEGER NOT NULL DEFAULT 0;")
+        if 'whatsapp_phone' not in columns:
+            cursor.execute("ALTER TABLE managers ADD COLUMN whatsapp_phone TEXT DEFAULT NULL;")
 
         # 2. Artists Table
         cursor.execute("""
@@ -280,7 +282,7 @@ def update_manager_password(manager_id, new_password):
         conn.commit()
     return True
 
-def update_manager_contact_info(manager_id, name=None, agency_name=None, phone=None):
+def update_manager_contact_info(manager_id, name=None, agency_name=None, phone=None, whatsapp_phone=None):
     with get_connection() as conn:
         if name is not None:
             conn.execute("UPDATE managers SET name = ? WHERE id = ?", (name, manager_id))
@@ -288,6 +290,8 @@ def update_manager_contact_info(manager_id, name=None, agency_name=None, phone=N
             conn.execute("UPDATE managers SET agency_name = ? WHERE id = ?", (agency_name, manager_id))
         if phone is not None:
             conn.execute("UPDATE managers SET phone = ? WHERE id = ?", (phone, manager_id))
+        if whatsapp_phone is not None:
+            conn.execute("UPDATE managers SET whatsapp_phone = ? WHERE id = ?", (whatsapp_phone, manager_id))
         conn.commit()
     return get_manager_by_id(manager_id)
 
@@ -457,11 +461,16 @@ def get_artists_by_manager(manager_id):
             mgr = get_manager_by_id(a["manager_id"])
             if mgr:
                 is_solo = (mgr.get("account_type") == "solo")
+                phone_val = mgr["phone"] or ""
+                wa_val = mgr.get("whatsapp_phone") or phone_val
                 a["manager"] = {
                     "name": mgr["name"],
+                    "agencyName": mgr.get("agency_name") or "",
                     "title": "Sanatçı / Doğrudan İletişim" if is_solo else "Resmi Menajer / Booking Agent",
-                    "phone": mgr["phone"] or "",
-                    "phoneRaw": (mgr["phone"] or "").replace("+", "").replace(" ", ""),
+                    "phone": phone_val,
+                    "phoneRaw": phone_val.replace("+", "").replace(" ", "").replace("-", ""),
+                    "whatsappPhone": wa_val,
+                    "whatsappRaw": wa_val.replace("+", "").replace(" ", "").replace("-", ""),
                     "email": mgr["email"],
                     "accountType": mgr.get("account_type", "agency")
                 }
@@ -479,11 +488,16 @@ def get_artist_by_id(artist_id):
         mgr = get_manager_by_id(a["manager_id"])
         if mgr:
             is_solo = (mgr.get("account_type") == "solo")
+            phone_val = mgr["phone"] or ""
+            wa_val = mgr.get("whatsapp_phone") or phone_val
             a["manager"] = {
                 "name": mgr["name"],
+                "agencyName": mgr.get("agency_name") or "",
                 "title": "Sanatçı / Doğrudan İletişim" if is_solo else "Resmi Menajer / Booking Agent",
-                "phone": mgr["phone"] or "",
-                "phoneRaw": (mgr["phone"] or "").replace("+", "").replace(" ", ""),
+                "phone": phone_val,
+                "phoneRaw": phone_val.replace("+", "").replace(" ", "").replace("-", ""),
+                "whatsappPhone": wa_val,
+                "whatsappRaw": wa_val.replace("+", "").replace(" ", "").replace("-", ""),
                 "email": mgr["email"],
                 "accountType": mgr.get("account_type", "agency")
             }

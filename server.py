@@ -297,6 +297,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                         "name": mgr["name"],
                         "agencyName": mgr["agency_name"],
                         "phone": mgr["phone"],
+                        "whatsappPhone": mgr.get("whatsapp_phone") or mgr["phone"],
                         "plan": plan_name,
                         "accountType": mgr.get("account_type", "agency"),
                         "quotaLimit": quota_limit,
@@ -659,12 +660,13 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             name = req_body.get("name", "").strip()
             agency_name = req_body.get("agencyName", "").strip()
             phone = req_body.get("phone", "").strip()
+            whatsapp_phone = req_body.get("whatsappPhone", "").strip() or phone
 
             if not name:
                 self.send_error_json(400, "Yetkili Adı Soyadı alanı boş bırakılamaz.")
                 return
 
-            updated = db.update_manager_contact_info(mgr["id"], name=name, agency_name=agency_name, phone=phone)
+            updated = db.update_manager_contact_info(mgr["id"], name=name, agency_name=agency_name, phone=phone, whatsapp_phone=whatsapp_phone)
             self.send_json(200, {
                 "status": "success",
                 "message": "İletişim bilgileriniz başarıyla güncellendi.",
@@ -674,6 +676,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                     "name": updated["name"],
                     "agencyName": updated["agency_name"],
                     "phone": updated["phone"],
+                    "whatsappPhone": updated.get("whatsapp_phone") or updated["phone"],
                     "isContactComplete": bool(updated.get("name") and updated.get("phone"))
                 }
             })

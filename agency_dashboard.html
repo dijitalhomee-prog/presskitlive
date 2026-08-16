@@ -570,17 +570,23 @@
 
         <div class="form-group">
           <label>Yetkili Adı Soyadı *</label>
-          <input type="text" id="contactName" placeholder="Örn: Sedat Ünal" required>
+          <input type="text" id="contactName" placeholder="" required>
         </div>
 
         <div class="form-group">
-          <label>Ajans / Cast Şirketi Unvanı</label>
-          <input type="text" id="contactAgencyName" placeholder="Örn: Sedat Cast & Menajerlik">
+          <label>Şirket Unvanı</label>
+          <input type="text" id="contactAgencyName" placeholder="">
         </div>
 
         <div class="form-group">
-          <label>Telefon / WhatsApp Numarası (Ülke Kodu İle) *</label>
-          <input type="tel" id="contactPhone" placeholder="+90 532 000 00 00" required>
+          <label>Telefon Numarası *</label>
+          <input type="tel" id="contactPhone" placeholder="" required>
+        </div>
+
+        <div class="form-group">
+          <label>WhatsApp Numarası (Hattı) *</label>
+          <input type="tel" id="contactWhatsApp" placeholder="" required>
+          <span style="font-size:11px; color:var(--text-muted); display:block; margin-top:4px;">Presskit sayfalarındaki WhatsApp butonları doğrudan bu numaraya mesaj başlatır.</span>
         </div>
 
         <div class="form-group">
@@ -1113,6 +1119,7 @@
       document.getElementById('contactName').value = currentManager.name || '';
       document.getElementById('contactAgencyName').value = currentManager.agencyName || '';
       document.getElementById('contactPhone').value = currentManager.phone || '';
+      document.getElementById('contactWhatsApp').value = currentManager.whatsappPhone || currentManager.phone || '';
       document.getElementById('contactEmail').value = currentManager.email || '';
       const notice = document.getElementById('contactNoticeBanner');
       if (notice) notice.style.display = forcePrompt ? 'block' : 'none';
@@ -1128,6 +1135,7 @@
       const name = document.getElementById('contactName').value.trim();
       const agencyName = document.getElementById('contactAgencyName').value.trim();
       const phone = document.getElementById('contactPhone').value.trim();
+      const whatsappPhone = document.getElementById('contactWhatsApp').value.trim() || phone;
       const errBox = document.getElementById('contactInfoErrorBox');
       if (errBox) errBox.style.display = 'none';
 
@@ -1143,7 +1151,7 @@
         const res = await fetch('/api/manager/update-profile', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name, agencyName, phone })
+          body: JSON.stringify({ name, agencyName, phone, whatsappPhone })
         });
         const data = await res.json();
         if (data.status === 'success') {
