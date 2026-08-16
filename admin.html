@@ -127,6 +127,7 @@
 
     .data-table {
       width: 100%;
+      min-width: 1200px;
       border-collapse: collapse;
       text-align: left;
     }
@@ -138,12 +139,14 @@
       letter-spacing: 0.8px;
       text-transform: uppercase;
       border-bottom: 1px solid var(--border-subtle);
+      white-space: nowrap;
     }
     .data-table td {
       padding: 16px;
       font-size: 13px;
       border-bottom: 1px solid rgba(255,255,255,0.04);
       vertical-align: middle;
+      white-space: nowrap;
     }
     .data-table tr:hover td {
       background: rgba(255,255,255,0.02);
@@ -152,6 +155,7 @@
       display: flex;
       align-items: center;
       gap: 12px;
+      white-space: nowrap;
     }
     .manager-avatar-sm {
       width: 36px;
@@ -523,24 +527,24 @@
             <td>
               <div class="manager-user-cell">
                 <div class="manager-avatar-sm">${initials}</div>
-                <div>
-                  <strong style="color:#fff;">${name} ${m.isSuperAdmin ? '<span style="font-size:10px; background:var(--primary); color:#000; padding:2px 6px; border-radius:10px; font-weight:800; margin-left:4px;">ADMIN</span>' : ''}</strong>
-                  <div style="font-size:12px; color:var(--text-subdued);">${agency}</div>
+                <div style="white-space:nowrap;">
+                  <strong style="color:#fff; white-space:nowrap;">${name} ${m.isSuperAdmin ? '<span style="font-size:10px; background:var(--primary); color:#000; padding:2px 6px; border-radius:10px; font-weight:800; margin-left:4px;">ADMIN</span>' : ''}</strong>
+                  <div style="font-size:12px; color:var(--text-subdued); white-space:nowrap;">${agency}</div>
                 </div>
               </div>
             </td>
-            <td>
-              <div style="color:#fff;">${phone}</div>
-              <div style="font-size:12px; color:var(--primary); font-weight:600;">${email}</div>
+            <td style="white-space:nowrap;">
+              <div style="color:#fff; white-space:nowrap;">${phone}</div>
+              <div style="font-size:12px; color:var(--primary); font-weight:600; white-space:nowrap;">${email}</div>
             </td>
-            <td>
-              <span style="color:var(--accent-blue); font-weight:700;">${plan}</span>
+            <td style="white-space:nowrap;">
+              <span style="color:var(--accent-blue); font-weight:700; white-space:nowrap;">${plan}</span>
             </td>
-            <td>
-              <strong style="color:#fff;">${artistCount} Sanatçı</strong>
+            <td style="white-space:nowrap;">
+              <strong style="color:#fff; white-space:nowrap;">${artistCount} Sanatçı</strong>
             </td>
-            <td>${statusBadge}</td>
-            <td>${createdAt}</td>
+            <td style="white-space:nowrap;">${statusBadge}</td>
+            <td style="white-space:nowrap; font-family:monospace; font-size:12px;">${createdAt}</td>
             <td>
               <div class="table-actions">
                 ${m.isSuperAdmin ? `
