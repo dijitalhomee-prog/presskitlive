@@ -501,7 +501,12 @@ def get_artist_by_id(artist_id):
                 "email": mgr["email"],
                 "accountType": mgr.get("account_type", "agency")
             }
-        return a
+def update_artist_socials(artist_id, socials_dict):
+    socials_json = json.dumps(socials_dict or {})
+    with get_connection() as conn:
+        conn.execute("UPDATE artists SET socials_json = ? WHERE id = ?", (socials_json, artist_id))
+        conn.commit()
+    return get_artist_by_id(artist_id)
 
 def create_artist(manager_id, name, genre="Pop", monthly_listeners="3.200", avatar="", banner="", bio="", short_bio="", socials=None):
     # Sanitize and slugify artist name (Section B.1 XSS/Slug Fix)

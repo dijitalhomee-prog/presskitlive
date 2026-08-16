@@ -444,88 +444,55 @@
           </div>
 
           <div class="logo-cards-grid" id="logoCardsGrid">
-            
-            <div class="logo-card" id="logoCard-1">
-              <div class="logo-preview-box dark-bg">
-                <div class="logo-text-preview" style="color:var(--primary); font-weight:900; letter-spacing:3px;" id="logoGoldPreview">PORTFÖY LOGOSU</div>
-              </div>
-              <div class="logo-card-info">
-                <h4 id="logoCardTitle1">Marka Tipografisi & Tipografi Logosu</h4>
-                <p>Karanlık zeminli afişler, lansman görselleri ve sahneler için tasarlanmış marka tipografisi.</p>
-                <div class="logo-card-actions">
-                  <button type="button" class="btn btn-outline" style="flex-grow:1;" onclick="alert('Logo indirme bağlantısı ZIP arşivinde yer almaktadır.')">
-                    <i data-lucide="download"></i> JPG İndir (High-Res)
-                  </button>
-                  <button type="button" class="btn-trash-logo" title="Logoyu Sil" onclick="deleteLogoCard('logoCard-1', 'Marka Tipografisi')">
-                    <i data-lucide="trash-2"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-
-            <div class="logo-card" id="logoCard-2">
-              <div class="logo-preview-box transparent-bg">
-                <div class="logo-text-preview" id="logoTextPreview">PORTFÖY İSMİ</div>
-              </div>
-              <div class="logo-card-info">
-                <h4>Vektörel Metin & Şeffaf Vektör PNG</h4>
-                <p>İstenilen zemin üzerine yerleştirilebilir şeffaf marka yazısı.</p>
-                <div class="logo-card-actions">
-                  <button class="btn btn-outline" style="flex-grow:1;" onclick="alert('PNG Şeffaf Logo ZIP paketine eklenmiştir.')">
-                    <i data-lucide="file-check"></i> Vektör PNG İndir
-                  </button>
-                  <button type="button" class="btn-trash-logo" title="Logoyu Sil" onclick="deleteLogoCard('logoCard-2', 'Vektörel Metin & Şeffaf Vektör PNG')">
-                    <i data-lucide="trash-2"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-
+            <!-- Uploaded logo cards rendered dynamically -->
           </div>
         </section>
 
-        <!-- SECTION 3: MUSIC & PLATFORM LINKS -->
+        <!-- SECTION 3: DIGITAL PLATFORM LINKS -->
         <section class="press-section" id="dijital-platformlar">
-          <div class="section-header">
+          <div class="section-header" style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
             <div>
-              <h2 class="section-title"><i data-lucide="music-2"></i> Şarkılar & Dijital Platform Bağlantıları</h2>
-              <p class="section-subtitle">Sanatçının resmi müzik ve sosyal medya kanalları</p>
+              <h2 class="section-title"><i data-lucide="globe"></i> Dijital Platform Bağlantıları</h2>
+              <p class="section-subtitle">Sosyal medya, resmi kanallar ve portföy bağlantıları</p>
             </div>
+            <button class="btn btn-primary btn-small" id="btnOpenEditSocialsModal">
+              <i data-lucide="edit-3"></i> + Bağlantı Ekle / Düzenle
+            </button>
           </div>
 
-          <div class="platform-links-grid">
-            <a href="https://open.spotify.com/intl-tr/artist/6az5Ndiuz3g1oAP3tMG2SQ" target="_blank" class="platform-card spotify" id="linkSpotify">
-              <div class="platform-icon"><i data-lucide="disc"></i></div>
-              <div class="platform-info">
-                <span class="platform-name">Spotify</span>
-                <span class="platform-sub">Sanatçı Profili</span>
-              </div>
-              <i data-lucide="external-link" class="arrow-icon"></i>
-            </a>
-
-            <a href="https://www.youtube.com/channel/UCOnMPPDLx7JobICqWpDBUvg" target="_blank" class="platform-card youtube" id="linkYoutube">
-              <div class="platform-icon"><i data-lucide="video"></i></div>
-              <div class="platform-info">
-                <span class="platform-name">YouTube</span>
-                <span class="platform-sub">Resmi Kanal & Video Klip</span>
-              </div>
-              <i data-lucide="external-link" class="arrow-icon"></i>
-            </a>
-
-            <a href="https://www.deezer.com/tr/album/606921462" target="_blank" class="platform-card deezer" id="linkDeezer">
-              <div class="platform-icon"><i data-lucide="music"></i></div>
-              <div class="platform-info">
-                <span class="platform-name">Deezer</span>
-                <span class="platform-sub">Resmi Albüm & Eserler</span>
-              </div>
-              <i data-lucide="external-link" class="arrow-icon"></i>
-            </a>
-
-            <a href="https://www.instagram.com/yagmurhizall/" target="_blank" class="platform-card instagram" id="linkInstagram">
+          <div class="platform-links-grid" id="platformLinksGrid">
+            <a href="#" target="_blank" class="platform-card instagram" id="linkInstagram" style="display:none;">
               <div class="platform-icon"><i data-lucide="instagram"></i></div>
               <div class="platform-info">
                 <span class="platform-name">Instagram</span>
-                <span class="platform-sub">@yagmurhizall</span>
+                <span class="platform-sub" id="subInstagram">@profil</span>
+              </div>
+              <i data-lucide="external-link" class="arrow-icon"></i>
+            </a>
+
+            <a href="#" target="_blank" class="platform-card youtube" id="linkYoutube" style="display:none;">
+              <div class="platform-icon"><i data-lucide="video"></i></div>
+              <div class="platform-info">
+                <span class="platform-name">YouTube</span>
+                <span class="platform-sub">Resmi Kanal & İçerikler</span>
+              </div>
+              <i data-lucide="external-link" class="arrow-icon"></i>
+            </a>
+
+            <a href="#" target="_blank" class="platform-card spotify" id="linkSpotify" style="display:none;">
+              <div class="platform-icon"><i data-lucide="disc"></i></div>
+              <div class="platform-info">
+                <span class="platform-name">Spotify</span>
+                <span class="platform-sub">Müzik Profili</span>
+              </div>
+              <i data-lucide="external-link" class="arrow-icon"></i>
+            </a>
+
+            <a href="#" target="_blank" class="platform-card website" id="linkWebsite" style="display:none; border-left:3px solid #60a5fa;">
+              <div class="platform-icon"><i data-lucide="globe"></i></div>
+              <div class="platform-info">
+                <span class="platform-name">Web Sitesi / Portföy</span>
+                <span class="platform-sub" id="subWebsite">Resmi İnternet Sitesi</span>
               </div>
               <i data-lucide="external-link" class="arrow-icon"></i>
             </a>
@@ -775,6 +742,48 @@
     </div>
   </div>
 
+  <!-- MODAL: EDIT DIGITAL PLATFORM LINKS -->
+  <div class="modal-backdrop" id="editSocialsModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3><i data-lucide="globe"></i> Dijital Platform & Bağlantı Yönetimi</h3>
+          <p>Profilinizde görüntülenecek resmi kanal ve dijital platform bağlantılarını ekleyin.</p>
+        </div>
+        <button class="modal-close" id="btnCloseEditSocialsModal">&times;</button>
+      </div>
+
+      <form id="editSocialsForm" class="modal-body">
+        <div id="editSocialsErrorBox" style="display:none; margin-bottom:16px;"></div>
+
+        <div class="form-group">
+          <label><i data-lucide="instagram" style="width:14px; inline-size:14px; color:#e1306c;"></i> Instagram Adresi</label>
+          <input type="url" id="inputSocialInstagram" placeholder="https://instagram.com/kullaniciadi">
+        </div>
+
+        <div class="form-group">
+          <label><i data-lucide="video" style="width:14px; inline-size:14px; color:#ff0000;"></i> YouTube Kanalı / İletişim Video Linki</label>
+          <input type="url" id="inputSocialYoutube" placeholder="https://youtube.com/@kanal">
+        </div>
+
+        <div class="form-group">
+          <label><i data-lucide="disc" style="width:14px; inline-size:14px; color:#1db954;"></i> Spotify / Müzik Profili Linki</label>
+          <input type="url" id="inputSocialSpotify" placeholder="https://open.spotify.com/artist/...">
+        </div>
+
+        <div class="form-group">
+          <label><i data-lucide="globe" style="width:14px; inline-size:14px; color:#60a5fa;"></i> Resmi Web Sitesi / Portföy Linki</label>
+          <input type="url" id="inputSocialWebsite" placeholder="https://www.sanatciwebsite.com">
+        </div>
+
+        <div class="modal-footer" style="padding:16px 0 0 0; background:transparent; border-top:none;">
+          <button type="button" class="btn btn-ghost" id="btnCancelEditSocials">İptal</button>
+          <button type="submit" class="btn btn-spotify"><i data-lucide="check"></i> Bağlantıları Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <!-- JavaScript -->
   <script src="/app.js"></script>
   <script>
@@ -938,6 +947,61 @@
         logoForm.reset();
         document.getElementById('logoFileNameDisplay').innerText = "Bilgisayardan Logo Yükle (PNG / SVG / AI / JPG)";
         if (window.lucide) lucide.createIcons();
+      });
+    }
+
+    // Modal Handlers for Edit Socials
+    const socialsModal = document.getElementById('editSocialsModal');
+    const btnOpenSocials = document.getElementById('btnOpenEditSocialsModal');
+    const btnCloseSocials = document.getElementById('btnCloseEditSocialsModal');
+    const btnCancelSocials = document.getElementById('btnCancelEditSocials');
+    const socialsForm = document.getElementById('editSocialsForm');
+
+    function openEditSocialsModal() {
+      if (typeof state !== 'undefined' && state.artist && state.artist.socials) {
+        const s = state.artist.socials;
+        document.getElementById('inputSocialInstagram').value = s.instagram || '';
+        document.getElementById('inputSocialYoutube').value = s.youtube || '';
+        document.getElementById('inputSocialSpotify').value = s.spotify || '';
+        document.getElementById('inputSocialWebsite').value = s.website || s.deezer || '';
+      }
+      socialsModal.classList.add('active');
+    }
+
+    if (btnOpenSocials) btnOpenSocials.addEventListener('click', openEditSocialsModal);
+    if (btnCloseSocials) btnCloseSocials.addEventListener('click', () => socialsModal.classList.remove('active'));
+    if (btnCancelSocials) btnCancelSocials.addEventListener('click', () => socialsModal.classList.remove('active'));
+
+    if (socialsForm) {
+      socialsForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        if (typeof state === 'undefined' || !state.artist) return;
+
+        const instagram = document.getElementById('inputSocialInstagram').value.trim();
+        const youtube = document.getElementById('inputSocialYoutube').value.trim();
+        const spotify = document.getElementById('inputSocialSpotify').value.trim();
+        const website = document.getElementById('inputSocialWebsite').value.trim();
+
+        const socialsObj = { instagram, youtube, spotify, website };
+
+        try {
+          const res = await fetch('/api/artists/update-socials', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ artistId: state.artist.id, socials: socialsObj })
+          });
+          const data = await res.json();
+          if (data.status === 'success') {
+            state.artist.socials = socialsObj;
+            renderArtistHeader();
+            socialsModal.classList.remove('active');
+            alert('Dijital platform bağlantıları başarıyla güncellendi.');
+          } else {
+            alert(data.message || 'Bağlantılar güncellenemedi.');
+          }
+        } catch (err) {
+          alert('Sunucu hatası.');
+        }
       });
     }
   </script>

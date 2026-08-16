@@ -244,6 +244,19 @@ function renderArtistHeader() {
       linkDeezer.style.display = 'none';
     }
   }
+
+  const linkWeb = document.getElementById('linkWebsite');
+  if (linkWeb) {
+    const webUrl = socials.website || socials.deezer;
+    if (webUrl) {
+      linkWeb.href = webUrl;
+      const subWeb = document.getElementById('subWebsite');
+      if (subWeb) subWeb.innerText = webUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
+      linkWeb.style.display = 'flex';
+    } else {
+      linkWeb.style.display = 'none';
+    }
+  }
 }
 
 function renderManagerInfo() {

@@ -682,6 +682,29 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             })
             return
 
+        # POST /api/artists/update-socials (AUTH REQUIRED)
+        if path == "/api/artists/update-socials":
+            mgr = self.get_current_manager()
+            if not mgr:
+                self.send_error_json(401, "Lütfen menajer girişi yapın.")
+                return
+
+            artist_id = req_body.get("artistId", "").strip()
+            socials = req_body.get("socials", {})
+
+            artist = db.get_artist_by_id(artist_id)
+            if not artist or artist["manager_id"] != mgr["id"]:
+                self.send_error_json(403, "Bu sanatçı üzerinde yetkiniz yok.")
+                return
+
+            updated_artist = db.update_artist_socials(artist_id, socials)
+            self.send_json(200, {
+                "status": "success",
+                "message": "Dijital platform bağlantıları güncellendi.",
+                "artist": updated_artist
+            })
+            return
+
         # POST /api/admin/managers/toggle-status (Active/Passive Toggle)
         if path == "/api/admin/managers/toggle-status":
             admin = self.get_current_super_admin()
