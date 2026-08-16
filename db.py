@@ -584,6 +584,13 @@ def toggle_folder_lock(folder_id):
         conn.commit()
         return bool(new_val)
 
+def delete_folder(folder_id):
+    with get_connection() as conn:
+        conn.execute("DELETE FROM photos WHERE folder_id = ?", (folder_id,))
+        conn.execute("DELETE FROM folders WHERE id = ?", (folder_id,))
+        conn.commit()
+    return True
+
 def get_photos_by_artist(artist_id):
     with get_connection() as conn:
         rows = conn.execute("SELECT * FROM photos WHERE artist_id = ? ORDER BY created_at DESC", (artist_id,)).fetchall()

@@ -349,11 +349,17 @@ function renderFoldersBar() {
     const isLocked = f.isLocked;
 
     let lockBadgeHTML = '';
+    let deleteBtnHTML = '';
     if (!state.isPublicView && state.isOwner) {
       lockBadgeHTML = `
         <span class="folder-lock-btn ${isLocked ? 'locked' : 'unlocked'}" onclick="toggleFolderLockHandler(event, '${escapeHTML(f.id)}')" title="${isLocked ? 'Klasör Kilitli (Açmak İçin Tıklayın)' : 'Klasör Açık (Kilitlemek İçin Tıklayın)'}">
           <i data-lucide="${isLocked ? 'lock' : 'unlock'}" style="width:12px; height:12px;"></i>
           <span>${isLocked ? 'Kilitli' : 'Açık'}</span>
+        </span>
+      `;
+      deleteBtnHTML = `
+        <span class="folder-delete-btn" onclick="deleteFolderHandler(event, '${escapeHTML(f.id)}', '${escapeHTML(f.name)}')" title="Klasörü Sil">
+          <i data-lucide="trash-2" style="width:12px; height:12px;"></i>
         </span>
       `;
     } else if (isLocked) {
@@ -370,6 +376,7 @@ function renderFoldersBar() {
         <span>${escapeHTML(f.name)}</span>
         <span class="folder-info-count">(${fPhotos.length})</span>
         ${lockBadgeHTML}
+        ${deleteBtnHTML}
       </button>
     `;
   });
@@ -380,7 +387,7 @@ function renderFoldersBar() {
   // Bind click handlers
   foldersBar.querySelectorAll('.folder-pill').forEach(btn => {
     btn.addEventListener('click', (e) => {
-      if (e.target.closest('.folder-lock-btn')) return; // Ignore pill select when toggle lock button clicked
+      if (e.target.closest('.folder-lock-btn') || e.target.closest('.folder-delete-btn')) return; // Ignore pill select when action buttons clicked
       const targetBtn = e.target.closest('.folder-pill');
       if (!targetBtn) return;
       state.activeFolderId = targetBtn.dataset.folderId;
@@ -388,6 +395,33 @@ function renderFoldersBar() {
       renderFilteredPhotos();
     });
   });
+}
+
+async function deleteFolderHandler(e, folderId, folderName) {
+  if (e) e.stopPropagation();
+  if (!confirm(`"${folderName}" klasörünü ve içerisindeki tüm görselleri silmek istediğinize emin misiniz?`)) return;
+
+  try {
+    const res = await fetch('/api/folders/delete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        folderId: folderId,
+        artistId: getActiveArtistId()
+      })
+    });
+
+    const data = await res.json();
+    if (data.status === 'success') {
+      state.activeFolderId = 'folder-all';
+      await loadArtistData();
+      alert('Klasör ve içerisindeki görseller başarıyla silindi.');
+    } else {
+      alert(data.message || "Klasör silinemedi.");
+    }
+  } catch (err) {
+    alert("Sunucu hatası.");
+  }
 }
 
 async function toggleFolderLockHandler(e, folderId) {

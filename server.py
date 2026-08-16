@@ -987,6 +987,24 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json(200, {"status": "success", "isLocked": new_state})
             return
 
+        # POST /api/folders/delete
+        if path == "/api/folders/delete":
+            folder_id = req_body.get("folderId")
+            artist_id = req_body.get("artistId")
+
+            artist = db.get_artist_by_id(artist_id)
+            if not artist or not self.is_authorized_manager(mgr, artist):
+                self.send_error_json(403, "Bu klasörü silme yetkiniz bulunmamaktadır.")
+                return
+
+            db.delete_folder(folder_id)
+            self.send_json(200, {
+                "status": "success",
+                "message": "Klasör ve içerisindeki görseller başarıyla silindi.",
+                "artist": db.get_artist_by_id(artist["id"])
+            })
+            return
+
         # POST /api/upload (Direct Base64 Image Upload to IMAGES_ROOT)
         if path == "/api/upload":
             data_url = req_body.get("dataUrl") or req_body.get("image")
