@@ -12,7 +12,15 @@ import hashlib
 import time
 import re
 
-DATA_ROOT = os.getenv("DATA_ROOT", os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets"))
+def _resolve_data_root():
+    env_root = os.getenv("DATA_ROOT") or os.getenv("RAILWAY_VOLUME_MOUNT_PATH")
+    if env_root:
+        return env_root
+    if os.path.exists("/data"):
+        return "/data"
+    return os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
+
+DATA_ROOT = _resolve_data_root()
 DB_PATH = os.path.join(DATA_ROOT, "data", "presskit.db")
 IMAGES_ROOT = os.path.join(DATA_ROOT, "images")
 
