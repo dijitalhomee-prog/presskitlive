@@ -106,6 +106,12 @@ async function loadArtistData() {
 
       if (matched) {
         state.artist = matched;
+      } else if (state.myArtists.length > 0) {
+        // Fallback to manager's first artist if requested artist doesn't belong to manager
+        state.artist = state.myArtists[0];
+        if (paramArtistId && window.history && window.history.replaceState) {
+          window.history.replaceState({}, '', '/index.html?artistId=' + encodeURIComponent(state.artist.id || state.artist.slug || ''));
+        }
       } else if (paramArtistId) {
         // Fetch specific artist by ID/slug from server
         const fallbackRes = await fetch(`/api/artist?artistId=${encodeURIComponent(paramArtistId)}`);
@@ -115,10 +121,6 @@ async function loadArtistData() {
             state.artist = fallJson.artist;
           }
         }
-      }
-
-      if (!state.artist && state.myArtists.length > 0) {
-        state.artist = state.myArtists[0];
       }
 
       state.isOwner = true; // Always true for logged in manager in manager dashboard view!
