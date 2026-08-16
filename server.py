@@ -765,6 +765,37 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             })
             return
 
+        # POST /api/admin/managers/update-plan
+        if path == "/api/admin/managers/update-plan":
+            admin = self.get_current_super_admin()
+            if not admin:
+                self.send_error_json(403, "Bu işlem için yönetici yetkisi gerekiyor.")
+                return
+
+            manager_id = req_body.get("managerId", "").strip()
+            new_plan = req_body.get("newPlan", "").strip().lower()
+
+            if not manager_id or new_plan not in db.PLAN_QUOTAS:
+                self.send_error_json(400, "Geçersiz menajer ID veya paket adı.")
+                return
+
+            target = db.get_manager_by_id(manager_id)
+            if not target:
+                self.send_error_json(404, "Menajer bulunamadı.")
+                return
+
+            db.update_manager_plan(manager_id, new_plan)
+            quota_limit = db.PLAN_QUOTAS.get(new_plan, 4)
+
+            self.send_json(200, {
+                "status": "success",
+                "message": f"{target['name']} kullanıcısının paketi {new_plan.upper()} ({quota_limit} Profil) olarak güncellendi.",
+                "managerId": manager_id,
+                "newPlan": new_plan,
+                "quotaLimit": quota_limit
+            })
+            return
+
         # POST /api/admin/impersonate (Section D.3)
         if path == "/api/admin/impersonate":
             admin = self.get_current_super_admin()

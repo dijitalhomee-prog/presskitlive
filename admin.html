@@ -560,7 +560,12 @@
               <div style="font-size:12px; color:var(--primary); font-weight:600; white-space:nowrap;">${email}</div>
             </td>
             <td style="white-space:nowrap;">
-              <span style="color:var(--accent-blue); font-weight:700; white-space:nowrap;">${plan}</span>
+              <select class="plan-select-badge" onchange="handleAdminChangePlan('${escapeHTML(m.id)}', this.value)" style="background: rgba(59, 130, 246, 0.15); color: #60a5fa; border: 1px solid rgba(59, 130, 246, 0.4); font-weight: 800; font-size: 11px; padding: 4px 8px; border-radius: 6px; cursor: pointer; outline: none; transition: all 0.2s ease;">
+                <option value="bireysel" ${m.plan === 'bireysel' ? 'selected' : ''} style="background:#121212; color:#fff;">BIREYSEL (1 Profil)</option>
+                <option value="starter" ${m.plan === 'starter' ? 'selected' : ''} style="background:#121212; color:#fff;">STARTER (4 Profil)</option>
+                <option value="pro" ${m.plan === 'pro' ? 'selected' : ''} style="background:#121212; color:#fff;">PRO (10 Profil)</option>
+                <option value="enterprise" ${m.plan === 'enterprise' ? 'selected' : ''} style="background:#121212; color:#fff;">ENTERPRISE (50 Profil)</option>
+              </select>
             </td>
             <td style="white-space:nowrap;">
               <strong style="color:#fff; white-space:nowrap;">${artistCount} Profil</strong>
@@ -608,6 +613,32 @@
         (m.agency_name || '').toLowerCase().includes(q)
       );
       renderManagersTable(filtered);
+    }
+
+    async function handleAdminChangePlan(managerId, newPlan) {
+      if (!confirm(`Bu kullanıcının paketini ${newPlan.toUpperCase()} olarak değiştirmek istediğinize emin misiniz?`)) {
+        loadManagersData();
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/admin/managers/update-plan', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ managerId, newPlan })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          await loadManagersData();
+          alert(data.message || "Paket başarıyla güncellendi.");
+        } else {
+          alert(data.message || "Paket güncellenemedi.");
+          loadManagersData();
+        }
+      } catch (err) {
+        alert("Sunucu hatası.");
+        loadManagersData();
+      }
     }
 
     function openGrantFreeModal() {
