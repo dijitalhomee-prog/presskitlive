@@ -477,8 +477,12 @@ def get_artists_by_manager(manager_id):
         return artists
 
 def get_artist_by_id(artist_id):
+    if not artist_id:
+        return None
     with get_connection() as conn:
-        row = conn.execute("SELECT * FROM artists WHERE id = ?", (artist_id,)).fetchone()
+        row = conn.execute("SELECT * FROM artists WHERE id = ? OR LOWER(id) = LOWER(?)", (artist_id, artist_id)).fetchone()
+        if not row:
+            row = conn.execute("SELECT * FROM artists WHERE LOWER(name) = LOWER(?) OR id LIKE ? ORDER BY created_at DESC", (artist_id, f"{artist_id}%")).fetchone()
         if not row:
             return None
         a = dict(row)

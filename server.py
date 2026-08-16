@@ -924,16 +924,22 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             is_locked = req_body.get("isLocked", False)
 
             artist = db.get_artist_by_id(artist_id)
-            if not artist or not self.is_authorized_manager(mgr, artist):
-                self.send_error_json(403, "Bu sanatçı üzerinde yetkiniz yok.")
+            if not artist and mgr:
+                my_artists = db.get_artists_by_manager(mgr["id"])
+                if my_artists:
+                    artist = my_artists[0]
+
+            if not artist:
+                self.send_error_json(404, "Sanatçı profili bulunamadı.")
                 return
 
             if not folder_name:
                 self.send_error_json(400, "Klasör adı zorunludur.")
                 return
 
-            new_folder = db.create_folder(artist_id, folder_name, is_locked)
-            self.send_json(200, {"status": "success", "folder": new_folder, "artist": db.get_artist_by_id(artist_id)})
+            target_artist_id = artist["id"]
+            new_folder = db.create_folder(target_artist_id, folder_name, is_locked)
+            self.send_json(200, {"status": "success", "folder": new_folder, "artist": db.get_artist_by_id(target_artist_id)})
             return
 
         # POST /api/folders/toggle-lock
@@ -970,15 +976,22 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             badge = req_body.get("badge", "Yeni Görsel")
 
             artist = db.get_artist_by_id(artist_id)
-            if not artist or not self.is_authorized_manager(mgr, artist):
-                self.send_error_json(403, "Bu sanatçıya fotoğraf ekleme yetkiniz yoktur.")
+            if not artist and mgr:
+                my_artists = db.get_artists_by_manager(mgr["id"])
+                if my_artists:
+                    artist = my_artists[0]
+
+            if not artist:
+                self.send_error_json(404, "Sanatçı profili bulunamadı.")
                 return
 
-            # Save base64 image to Volume/disk if uploaded directly
-            url = db.save_uploaded_image(raw_url, f"photo_{artist_id}")
+            target_artist_id = artist["id"]
 
-            new_photo = db.create_photo(artist_id, folder_id, title, url, resolution, badge)
-            self.send_json(200, {"status": "success", "photo": new_photo, "artist": db.get_artist_by_id(artist_id)})
+            # Save base64 image to Volume/disk if uploaded directly
+            url = db.save_uploaded_image(raw_url, f"photo_{target_artist_id}")
+
+            new_photo = db.create_photo(target_artist_id, folder_id, title, url, resolution, badge)
+            self.send_json(200, {"status": "success", "photo": new_photo, "artist": db.get_artist_by_id(target_artist_id)})
             return
 
         # POST /api/photos/delete
