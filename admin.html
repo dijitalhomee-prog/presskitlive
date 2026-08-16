@@ -525,7 +525,9 @@
         const plan = escapeHTML((m.plan || 'starter').toUpperCase());
         const artistCount = m.artistCount || 0;
         const subStatus = m.subscriptionStatus || 'none';
+        const createdAt = escapeHTML(m.createdAt || '-');
         const displayDate = createdAt.split(' ')[0] || createdAt;
+        const initials = name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
 
         let statusBadge = '';
         if (!m.isActive) {
