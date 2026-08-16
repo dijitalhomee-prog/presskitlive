@@ -241,7 +241,7 @@
 
       <div style="display: flex; align-items: center; gap: 16px;">
         <a href="/agency_dashboard.html" class="btn btn-outline btn-small">
-          <i data-lucide="layout-dashboard"></i> Menajer Paneli
+          <i data-lucide="layout-dashboard"></i> Ajans Paneli
         </a>
         <a href="https://dijitalgru.com/" target="_blank" class="dijitalgru-top-pill">
           <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru">
@@ -257,7 +257,7 @@
           <i data-lucide="users"></i>
         </div>
         <div class="admin-stat-details">
-          <span class="admin-stat-label">TOPLAM AKTİF MENAJER</span>
+          <span class="admin-stat-label">TOPLAM AKTİF AJANS & MÜŞTERİ</span>
           <span class="admin-stat-value" id="statTotalManagers">...</span>
           <span class="admin-stat-sub" id="statTotalManagersSub">Yükleniyor...</span>
         </div>
@@ -265,10 +265,10 @@
 
       <div class="admin-stat-card">
         <div class="admin-stat-icon blue">
-          <i data-lucide="music-2"></i>
+          <i data-lucide="layers"></i>
         </div>
         <div class="admin-stat-details">
-          <span class="admin-stat-label">TOPLAM SANATÇI PRESSKIT'İ</span>
+          <span class="admin-stat-label">TOPLAM MEDYA PORTFÖYÜ</span>
           <span class="admin-stat-value" id="statTotalArtists">...</span>
           <span class="admin-stat-sub">300 DPI Medya Depolama</span>
         </div>
@@ -302,14 +302,14 @@
       
       <div class="table-header-bar">
         <div>
-          <h3 style="font-family:var(--font-display); font-size:18px; font-weight:800; color:#fff;">Menajer Üyelik & Abonelik Listesi</h3>
-          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Sistemde kayıtlı menajerleri yönetin, ücretsiz üyelik atayın veya teknik destek için giriş yapın.</p>
+          <h3 style="font-family:var(--font-display); font-size:18px; font-weight:800; color:#fff;">Ajans & Üyelik Abonelik Listesi</h3>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Sistemde kayıtlı ajans ve temsilcileri yönetin, ücretsiz üyelik atayın veya teknik destek için giriş yapın.</p>
         </div>
 
         <div style="display:flex; align-items:center; gap:12px;">
           <div class="table-search-box">
             <i data-lucide="search" style="color:var(--text-subdued); width:16px;"></i>
-            <input type="text" id="inputSearchManager" placeholder="Menajer veya e-posta ara..." onkeyup="filterManagersTable()">
+            <input type="text" id="inputSearchManager" placeholder="Ajans, isim veya e-posta ara..." onkeyup="filterManagersTable()">
           </div>
 
           <button class="btn btn-outline btn-small" onclick="loadManagersData()" title="Canlı Listeyi Yenile">
@@ -563,7 +563,7 @@
               <span style="color:var(--accent-blue); font-weight:700; white-space:nowrap;">${plan}</span>
             </td>
             <td style="white-space:nowrap;">
-              <strong style="color:#fff; white-space:nowrap;">${artistCount} Sanatçı</strong>
+              <strong style="color:#fff; white-space:nowrap;">${artistCount} Profil</strong>
             </td>
             <td style="white-space:nowrap;">${statusBadge}</td>
             <td style="white-space:nowrap; font-family:monospace; font-size:12px;">${displayDate}</td>
