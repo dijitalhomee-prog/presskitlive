@@ -217,7 +217,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-Type", "image/png")
                     self.send_header("Content-Length", str(len(data)))
-                    self.send_header("Cache-Control", "public, max-age=86400")
+                    self.send_header("Cache-Control", "public, max-age=86400, s-maxage=86400")
                     self.end_headers()
                     self.wfile.write(data)
                     return
@@ -245,7 +245,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                     self.send_response(200)
                     self.send_header("Content-Type", content_type)
                     self.send_header("Content-Length", str(len(data)))
-                    self.send_header("Cache-Control", "public, max-age=86400")
+                    self.send_header("Cache-Control", "public, max-age=86400, s-maxage=86400")
                     self.end_headers()
                     self.wfile.write(data)
                     return
