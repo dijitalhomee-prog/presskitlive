@@ -163,6 +163,12 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
         path = parsed.path
         query_params = urllib.parse.parse_qs(parsed.query)
 
+        # Root homepage routing: / or /index.html without artistId -> landing.html
+        if path == "/" or (path == "/index.html" and not query_params.get("artistId")):
+            self.path = "/landing.html"
+            parsed = urllib.parse.urlparse(self.path)
+            path = parsed.path
+
         # Clean dynamic /artist/<slug> URL routing (Section B.2)
         if path.startswith("/artist/"):
             slug = path[len("/artist/"):].strip("/")
