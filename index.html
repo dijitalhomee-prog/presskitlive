@@ -245,6 +245,34 @@
         min-width: 100%;
       }
     }
+
+    /* FORM ROW GRID & MODAL SPACING FIX */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 12px;
+    }
+    @media (max-width: 640px) {
+      .form-row {
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+    }
+    .modal-backdrop {
+      padding: 32px 16px;
+      overflow-y: auto;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-card {
+      max-height: 85vh;
+      overflow-y: auto;
+      margin: auto;
+      border-radius: 20px;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.8);
+    }
   </style>
 </head>
 <body>
@@ -744,7 +772,7 @@
 
   <!-- MODAL: EDIT DIGITAL PLATFORM LINKS -->
   <div class="modal-backdrop" id="editSocialsModal">
-    <div class="modal-card" style="max-width:560px;">
+    <div class="modal-card" style="max-width:680px;">
       <div class="modal-header">
         <div>
           <h3><i data-lucide="globe"></i> Dijital Platform & Sektörel Bağlantı Yönetimi</h3>
