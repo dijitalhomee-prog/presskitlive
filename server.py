@@ -75,6 +75,7 @@ FAILED_LOGIN_ATTEMPTS = {}
 
 class ThreadedHTTPServer(socketserver.ThreadingMixIn, http.server.HTTPServer):
     daemon_threads = True
+    allow_reuse_address = True
 
 class PressKitHandler(http.server.SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
@@ -863,7 +864,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
 
 def run():
     os.chdir(DIRECTORY)
-    server = ThreadedHTTPServer(("", PORT), PressKitHandler)
+    server = ThreadedHTTPServer(("0.0.0.0", PORT), PressKitHandler)
     print(f"🚀 PressKitLive Multi-Manager Backend Server (Phase 1 SQLite) Çalışıyor:")
     print(f"👉 http://localhost:{PORT}")
     print(f"👉 SQLite Database (presskit.db) & Strict Ownership Guards Active")
