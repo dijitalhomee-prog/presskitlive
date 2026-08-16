@@ -145,7 +145,11 @@ function generateInitialsAvatar(name) {
     <circle cx="100" cy="100" r="88" fill="#27272a" stroke="#1db854" stroke-width="5"/>
     <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="70" font-weight="900" fill="#1db854">${initials}</text>
   </svg>`;
-  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  try {
+    return 'data:image/svg+xml;base64,' + window.btoa(unescape(encodeURIComponent(svg)));
+  } catch (e) {
+    return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  }
 }
 
 function renderArtistHeader() {
@@ -178,8 +182,12 @@ function renderArtistHeader() {
 
   const avatarEl = document.getElementById('heroAvatar') || document.getElementById('artistAvatarImg');
   if (avatarEl) {
-    if (state.artist.avatar) {
-      const rawAv = state.artist.avatar;
+    avatarEl.onerror = function() {
+      this.onerror = null;
+      this.src = generateInitialsAvatar(name);
+    };
+    if (state.artist.avatar && state.artist.avatar.trim() !== '') {
+      const rawAv = state.artist.avatar.trim();
       avatarEl.src = (rawAv.startsWith('http') || rawAv.startsWith('/') || rawAv.startsWith('data:')) ? rawAv : '/' + rawAv;
     } else {
       avatarEl.src = generateInitialsAvatar(name);
@@ -195,8 +203,8 @@ function renderArtistHeader() {
 
   const heroBg = document.getElementById('heroBg');
   if (heroBg) {
-    if (state.artist.banner) {
-      const rawBg = state.artist.banner;
+    if (state.artist.banner && state.artist.banner.trim() !== '') {
+      const rawBg = state.artist.banner.trim();
       const bgUrl = (rawBg.startsWith('http') || rawBg.startsWith('/')) ? rawBg : '/' + rawBg;
       heroBg.style.backgroundImage = `url('${bgUrl}')`;
     } else {
