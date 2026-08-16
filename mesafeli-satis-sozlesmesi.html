@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <script>
+    if (window.location.protocol === 'file:') {
+      const page = window.location.pathname.split('/').pop() || 'mesafeli-satis-sozlesmesi.html';
+      window.location.href = 'http://localhost:8080/' + page + window.location.search + window.location.hash;
+    }
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mesafeli Satış Sözleşmesi — PressKitLive | DijitalGru™</title>
+  <meta name="description" content="PressKitLive SaaS dijital platform üyelik hizmetleri resmi mesafeli satış sözleşmesi.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons (Version Locked) -->
+  <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .legal-body {
+      background-color: #060606;
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .legal-container {
+      max-width: 960px;
+      margin: 40px auto 80px auto;
+      padding: 0 20px;
+    }
+    .legal-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 48px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    }
+    .legal-header {
+      margin-bottom: 32px;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .legal-title {
+      font-family: var(--font-display);
+      font-size: 30px;
+      font-weight: 900;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .legal-subtitle {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 8px;
+    }
+    .legal-content h3 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+      margin: 24px 0 10px 0;
+    }
+    .legal-content p, .legal-content ul {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+      margin-bottom: 14px;
+    }
+    .legal-info-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin: 16px 0;
+    }
+  </style>
+</head>
+<body class="legal-body">
+
+  <!-- NAVBAR -->
+  <nav class="landing-nav" style="max-width:960px;">
+    <a href="landing.html" class="landing-logo">
+      <i data-lucide="disc" style="color: var(--primary);"></i>
+      <span>PressKit<span style="color: var(--primary);">Live</span></span>
+    </a>
+
+    <a href="https://dijitalgru.com/" target="_blank" class="dijitalgru-top-pill">
+      <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru">
+      <span>DijitalGru™ Altyapısı</span>
+    </a>
+  </nav>
+
+  <!-- CONTENT -->
+  <div class="legal-container">
+    <div class="legal-card">
+      <div class="legal-header">
+        <h1 class="legal-title">
+          <i data-lucide="file-text" style="color:var(--primary);"></i> Mesafeli Satış Sözleşmesi
+        </h1>
+        <p class="legal-subtitle">6502 Sayılı Tüketicinin Korunması Hakkında Kanun Uyarınca Düzenlenmiştir</p>
+      </div>
+
+      <div class="legal-content">
+        <h3>MADDE 1 — TARAFLAR</h3>
+        <div class="legal-info-card">
+          <strong>SATICI BİLGİLERİ:</strong><br>
+          Unvan: DijitalGru / Furkan Egemen Güneş<br>
+          Adres: Gülbahar Mah. No 34 Kat 3 Daire 11, Şişli / İstanbul<br>
+          Vergi Dairesi & No: Zincirlikuyu Vergi Dairesi / 4330665400<br>
+          Telefon: 0537 627 44 15 • E-posta: dijitalgru@gmail.com
+        </div>
+
+        <div class="legal-info-card">
+          <strong>ALICI BİLGİLERİ:</strong><br>
+          Ad-Soyad / Unvan: <span id="buyerNameDoc">[Ödeme Anında Beyan Edilen Müşteri Adı]</span><br>
+          T.C. Kimlık / Vergi No: <span id="buyerTcknDoc">[Ödeme Anında Beyan Edilen TCKN / VKNO]</span><br>
+          E-posta: <span id="buyerEmailDoc">[Ödeme Anında Beyan Edilen E-posta]</span><br>
+          Telefon: <span id="buyerPhoneDoc">[Ödeme Anında Beyan Edilen Telefon]</span>
+        </div>
+
+        <h3>MADDE 2 — SÖZLEŞMENİN KONUSU</h3>
+        <p>
+          İşbu sözleşmenin konusu, ALICI'nın SATICI'ya ait PressKitLive platformu üzerinden elektronik ortamda siparişini yaptığı dijital SaaS yazılım aboneliği (Starter, Pro Ajans veya Enterprise paketleri) hizmetinin satışı, teslimi ve tarafların hak ve yükümlülüklerinin saptanmasıdır.
+        </p>
+
+        <h3>MADDE 3 — HİZMET NİTELİĞİ VE ÖDEME</h3>
+        <p>
+          Satın alınan hizmet; dijital ortamda anında ifa edilen bulut depolama, 300 DPI medya sunucusu ve ajans paneli erişim lisansıdır. Ödemeler iyzico altyapısı üzerinden kredi kartı / banka kartı ile 3D Secure onaylı olarak gerçekleştirilir.
+        </p>
+
+        <h3>MADDE 4 — CAYMA HAKKI İSTİSNASI</h3>
+        <p>
+          Mesafeli Sözleşmeler Yönetmeliği’nin 15. maddesinin (ğ) bendi uyarınca; <em>"Elektronik ortamda anında ifa edilen hizmetler veya tüketiciye anında teslim edilen gayrimaddi mallara ilişkin sözleşmelerde"</em> <strong>cayma hakkı kullanılamaz.</strong> ALICI, hizmetin elektronik ortamda anında erişime açıldığını ve cayma hakkının bulunmadığını kabul eder.
+        </p>
+
+        <h3>MADDE 5 — YETKİLİ MAHKEME</h3>
+        <p>
+          İşbu sözleşmenin uygulanmasında, Ticaret Bakanlığınca ilan edilen değere kadar Tüketici Hakem Heyetleri ile SATICI'nın yerleşim yerindeki (İstanbul) Tüketici Mahkemeleri yetkilidir.
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="app-footer-premium">
+    <div class="footer-container">
+      <div class="footer-brand-col">
+        <a href="https://dijitalgru.com/" target="_blank">
+          <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru Logo" class="footer-brand-logo">
+        </a>
+        <p class="footer-brand-desc">
+          <strong>PressKitLive</strong> — Sanatçılar ve menajerler için <a href="https://dijitalgru.com/" target="_blank" style="color:var(--primary); font-weight:700;">DijitalGru™</a> tarafından geliştirilmiş 300 DPI medya depo ve presskit altyapısı.
+        </p>
+      </div>
+
+      <div class="footer-links-col">
+        <div class="footer-col-title">Resmi Bağlantılar</div>
+        <div class="footer-links-list">
+          <a href="https://dijitalgru.com/" target="_blank" class="footer-link">
+            <i data-lucide="globe"></i> dijitalgru.com
+          </a>
+          <a href="https://www.instagram.com/dijitalgru/" target="_blank" class="footer-link">
+            <i data-lucide="instagram"></i> Instagram (@dijitalgru)
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-contact-col">
+        <div class="footer-col-title">İletişim & Destek</div>
+        <div class="footer-links-list">
+          <a href="mailto:dijitalgru@gmail.com" class="footer-link">
+            <i data-lucide="mail"></i> dijitalgru@gmail.com
+          </a>
+          <a href="tel:+905376274415" class="footer-link">
+            <i data-lucide="phone"></i> 0537 627 44 15
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom-bar">
+      <span>© 2026 PressKitLive. Tüm Hakları Saklıdır.</span>
+      <span style="color: rgba(255,255,255,0.2);">•</span>
+      <span>Bir <a href="https://dijitalgru.com/" target="_blank" style="color:var(--primary); font-weight:700;">DijitalGru™ Yazılım Teknolojisi</a></span>
+    </div>
+
+    <div class="footer-bottom-bar" style="border-top:none; padding-top:0;">
+      <span style="font-size:12px;">
+        <a href="hakkimizda.html" style="color:var(--text-subdued);">Hakkımızda</a> ·
+        <a href="gizlilik-politikasi.html" style="color:var(--text-subdued);">Gizlilik Politikası</a> ·
+        <a href="mesafeli-satis-sozlesmesi.html" style="color:var(--text-subdued);">Mesafeli Satış Sözleşmesi</a> ·
+        <a href="teslimat-iade-sartlari.html" style="color:var(--text-subdued);">Teslimat ve İade Şartları</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    if (window.lucide) lucide.createIcons();
+  </script>
+</body>
+</html>

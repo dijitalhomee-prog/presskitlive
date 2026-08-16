@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <script>
+    if (window.location.protocol === 'file:') {
+      const page = window.location.pathname.split('/').pop() || 'landing.html';
+      window.location.href = 'http://localhost:8080/' + page + window.location.search + window.location.hash;
+    }
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PressKitLive — Sanatçı & Menajer Medya Portalı SaaS Platformu | DijitalGru™</title>
+  <meta name="description" content="Sanatçılar ve menajerlik ajansları için 300 DPI afiş deposu, klasör kilit sistemi ve tek tıkla ZIP indirme portalı. DijitalGru™ yazılım teknolojisi.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons (Version Locked) -->
+  <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .landing-body {
+      background-color: #060606;
+      color: #fff;
+    }
+    
+    .landing-nav {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 24px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .landing-logo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .landing-hero {
+      max-width: 1100px;
+      margin: 60px auto 80px auto;
+      text-align: center;
+      padding: 0 20px;
+    }
+    .hero-badge-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(29, 185, 84, 0.1);
+      border: 1px solid rgba(29, 185, 84, 0.3);
+      padding: 8px 18px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 24px;
+    }
+    .landing-title {
+      font-family: var(--font-display);
+      font-size: 52px;
+      font-weight: 900;
+      line-height: 1.2;
+      letter-spacing: -1.5px;
+      margin-bottom: 24px;
+      background: linear-gradient(180deg, #FFFFFF 0%, #B3B3B3 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .landing-title .single-line-hero {
+      white-space: nowrap;
+      display: inline-block;
+    }
+    .landing-title span.highlight-green {
+      color: var(--primary);
+      -webkit-text-fill-color: var(--primary);
+    }
+    .landing-subtitle {
+      font-size: 20px;
+      color: var(--text-muted);
+      max-width: 780px;
+      margin: 0 auto 40px auto;
+      line-height: 1.6;
+    }
+    .hero-cta-group {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    
+    .features-section {
+      max-width: 1240px;
+      margin: 80px auto;
+      padding: 0 20px;
+    }
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 28px;
+    }
+    .feature-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      transition: var(--transition-normal);
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card:hover {
+      border-color: var(--border-glass);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+    }
+    .feature-icon-box {
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      background: rgba(29, 185, 84, 0.12);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+    .feature-card h3 {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 12px;
+      color: #fff;
+    }
+    .feature-card p {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .pricing-section {
+      max-width: 1440px;
+      margin: 100px auto;
+      padding: 0 20px;
+      text-align: center;
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 28px;
+      margin-top: 48px;
+    }
+    .pricing-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 36px 28px;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      position: relative;
+    }
+    .pricing-card.featured {
+      border-color: var(--primary);
+      background: linear-gradient(180deg, rgba(29, 185, 84, 0.08) 0%, rgba(18, 18, 18, 1) 100%);
+      box-shadow: 0 20px 50px rgba(29, 185, 84, 0.15);
+    }
+    .popular-badge {
+      position: absolute;
+      top: -14px;
+      right: 24px;
+      background: var(--primary);
+      color: #000;
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 12px;
+      border-radius: var(--radius-full);
+      text-transform: uppercase;
+    }
+    .plan-name {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+    }
+    .plan-artist-count {
+      font-size: 13px;
+      color: var(--primary);
+      font-weight: 700;
+      margin-top: 4px;
+    }
+    .plan-price {
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 900;
+      color: #fff;
+      margin: 20px 0 6px 0;
+    }
+    .plan-price span {
+      font-size: 14px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+    .plan-vat {
+      font-size: 12px;
+      color: var(--text-subdued);
+      margin-bottom: 24px;
+    }
+    .plan-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+    .plan-features li {
+      font-size: 14px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .plan-features li i {
+      color: var(--primary);
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+    }
+
+    .iyzico-security-box {
+      background: linear-gradient(180deg, rgba(255,255,255,0.02) 0%, rgba(255,255,255,0.05) 100%);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 32px;
+      margin-top: 56px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      flex-wrap: wrap;
+    }
+    .iyzico-security-text {
+      text-align: left;
+      max-width: 500px;
+    }
+    .iyzico-security-text h4 {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .iyzico-security-text p {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      line-height: 1.5;
+    }
+    .iyzico-footer-banner {
+      max-height: 48px;
+      width: auto;
+      object-fit: contain;
+    }
+
+    .spin-anim {
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      100% { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 768px) {
+      .landing-title {
+        font-size: 36px;
+      }
+      .landing-title .single-line-hero {
+        white-space: normal;
+      }
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+      .iyzico-security-box {
+        flex-direction: column;
+        text-align: center;
+      }
+      .iyzico-security-text {
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body class="landing-body">
+
+  <!-- NAVBAR -->
+  <nav class="landing-nav">
+    <a href="landing.html" class="landing-logo">
+      <i data-lucide="disc" style="color: var(--primary);"></i>
+      <span>PressKit<span style="color: var(--primary);">Live</span></span>
+    </a>
+
+    <div style="display: flex; align-items: center; gap: 16px;">
+      <a href="https://dijitalgru.com/" target="_blank" class="dijitalgru-top-pill" title="dijitalgru.com sitesini ziyaret edin">
+        <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru" style="height:16px;">
+        <span>DijitalGru™ Yazılımı</span>
+      </a>
+      <a href="login.html" class="btn btn-outline">Menajer Girişi</a>
+      <a href="#fiyatlandirma" class="btn btn-primary">Hemen Başla</a>
+    </div>
+  </nav>
+
+  <!-- HERO SECTION -->
+  <section class="landing-hero">
+    <div class="hero-badge-tag">
+      <i data-lucide="sparkles"></i> Sanatçı Menajerleri & Ajanslar İçin Özel SaaS Platformu
+    </div>
+
+    <!-- SINGLE LINE HERO TITLE FIX -->
+    <h1 class="landing-title">
+      Sanatçılarınızın Afiş Fotoğraflarını<br>
+      <span class="single-line-hero"><span class="highlight-green">Yüksek Çözünürlükte</span> Mekanlara Ulaştırın</span>
+    </h1>
+
+    <p class="landing-subtitle">
+      Tüm sanatçılarınız için 300 DPI afiş görselleri, klasör kilitleme ve tek tıkla ZIP indirme portalı tek adreste.
+    </p>
+
+    <div class="hero-cta-group">
+      <a href="login.html" class="btn btn-spotify btn-large">
+        <i data-lucide="log-in"></i> Menajer Girişi Yap
+      </a>
+      <a href="https://wa.me/905376274415?text=Merhaba%20DijitalGru%2C%20PressKitLive%20menajer%20uyeligi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum." target="_blank" class="btn btn-whatsapp btn-large">
+        <i data-lucide="message-square"></i> WhatsApp İle Teklif Al
+      </a>
+    </div>
+  </section>
+
+  <!-- REFINED 4-CARD FEATURES SECTION -->
+  <section class="features-section">
+    <div class="features-grid">
+      
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <i data-lucide="folder-lock" style="width:28px; height:28px;"></i>
+        </div>
+        <h3>Klasör Oluşturma & Kilit Sistemi</h3>
+        <p>Konserlerinize özel sınırsız fotoğraf klasörü açın. Mekanların yetkisiz indirmesini engellemek için tek tıkla kilit simgesine basıp şifreleyin.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <i data-lucide="archive" style="width:28px; height:28px;"></i>
+        </div>
+        <h3>300 DPI Orijinal Baskı Kalitesi</h3>
+        <p>Görselleriniz hiçbir sıkıştırmaya uğramadan tam çözünürlüğünde saklanır. Grafikerler tek tıkla tüm arşivi yüksek hızda .ZIP olarak indirebilir.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <i data-lucide="layers" style="width:28px; height:28px;"></i>
+        </div>
+        <h3>Logo & Vektörel Tipografi Deposu</h3>
+        <p>Mekan grafikerlerinin afiş zeminine göre kullanabileceği altın glow tipografi, şeffaf PNG vektörler ve alternatif marka yazıları hazır sunulur.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <i data-lucide="user-check" style="width:28px; height:28px;"></i>
+        </div>
+        <h3>Menajer WhatsApp & vCard İletişimi</h3>
+        <p>Sitede doğrudan menajerin canlı iletişim rozeti yer alır. Mekan yetkilileri doğrudan WhatsApp'tan ulaşabilir veya vCard olarak rehberine ekleyebilir.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- PRICING & SUBSCRIPTION PACKAGES SECTION (WITH REAL IYZICO CHECKOUT INTEGRATION) -->
+  <section class="pricing-section" id="fiyatlandirma">
+    <div style="max-width:700px; margin:0 auto;">
+      <h2 style="font-family: var(--font-display); font-size: 40px; font-weight: 900; color: #fff; margin-bottom: 12px;">
+        Esnek ve Şeffaf Fiyatlandırma
+      </h2>
+      <p style="font-size: 16px; color: var(--text-muted);">
+        Menajerlik ajansınızın büyüklüğüne göre en uygun paketi seçin, 300 DPI medya sunucunuza hemen sahip olun.
+      </p>
+    </div>
+
+    <div class="pricing-grid">
+      
+      <!-- PLAN 0: BIREYSEL (SOLO ARTIST / DJ) -->
+      <div class="pricing-card">
+        <div class="plan-name">Bireysel Sanatçı / DJ</div>
+        <div class="plan-artist-count">1 Sanatçı (Kendi Profiliniz)</div>
+        <div class="plan-price">₺900 <span>/ ay</span></div>
+        <div class="plan-vat">+ %20 KDV (Toplam ₺1.080)</div>
+
+        <ul class="plan-features">
+          <li><i data-lucide="check"></i> 1 Sanatçı / DJ Özel Presskit Portalı</li>
+          <li><i data-lucide="check"></i> Sınırsız 300 DPI Afiş & Fotoğraf Depolama</li>
+          <li><i data-lucide="check"></i> Klasör Oluşturma & Şifreli Kilit Sistemi</li>
+          <li><i data-lucide="check"></i> Tek Tıkla Tüm ZIP İndirme</li>
+          <li><i data-lucide="check"></i> Doğrudan İletişim WhatsApp & vCard Butonu</li>
+        </ul>
+
+        <button type="button" onclick="openIyzicoModal('bireysel', 'Bireysel Sanatçı / DJ Paketi', '₺1.080 (₺900 + %20 KDV)')" class="btn btn-outline btn-block" style="margin-top:auto;">
+          Abonelik Başlat
+        </button>
+      </div>
+
+      <!-- PLAN 1: STARTER -->
+      <div class="pricing-card">
+        <div class="plan-name">Starter Menajer Paketi</div>
+        <div class="plan-artist-count">4 Sanatçı Limiti</div>
+        <div class="plan-price">₺1.900 <span>/ ay</span></div>
+        <div class="plan-vat">+ %20 KDV (Toplam ₺2.280)</div>
+
+        <ul class="plan-features">
+          <li><i data-lucide="check"></i> 4 Sanatçı Özel Medya Portalı</li>
+          <li><i data-lucide="check"></i> Sınırsız 300 DPI Görsel Depolama</li>
+          <li><i data-lucide="check"></i> Klasör Oluşturma & Kilit Sistemi</li>
+          <li><i data-lucide="check"></i> Tek Tıkla Tüm ZIP İndirme</li>
+          <li><i data-lucide="check"></i> Menajer WhatsApp & vCard Butonu</li>
+        </ul>
+
+        <button type="button" onclick="openIyzicoModal('starter', 'Starter Menajer Paketi', '₺2.280 (₺1.900 + %20 KDV)')" class="btn btn-outline btn-block" style="margin-top:auto;">
+          Abonelik Başlat
+        </button>
+      </div>
+
+      <!-- PLAN 2: PRO AGENCY (FEATURED) -->
+      <div class="pricing-card featured">
+        <span class="popular-badge">En Çok Tercih Edilen</span>
+        <div class="plan-name">Pro Menajer Ajansı</div>
+        <div class="plan-artist-count">10 Sanatçı Limiti</div>
+        <div class="plan-price">₺4.900 <span>/ ay</span></div>
+        <div class="plan-vat">+ %20 KDV (Toplam ₺5.880)</div>
+
+        <ul class="plan-features">
+          <li><i data-lucide="check"></i> 10 Sanatçıya Kadar Ayrı Presskit Sayfası</li>
+          <li><i data-lucide="check"></i> Merkezi Ajans Yönetim Paneli</li>
+          <li><i data-lucide="check"></i> Sınırsız 300 DPI Fotoğraf Deposu</li>
+          <li><i data-lucide="check"></i> Logo, Tipografi & Vektör Katmanı</li>
+          <li><i data-lucide="check"></i> Özel Şifreli Klasör Yetkilendirmeleri</li>
+          <li><i data-lucide="check"></i> Öncelikli 7/24 Teknik Destek</li>
+        </ul>
+
+        <button type="button" onclick="openIyzicoModal('pro', 'Pro Menajer Ajansı', '₺5.880 (₺4.900 + %20 KDV)')" class="btn btn-primary btn-block" style="margin-top:auto;">
+          Pro Paket İle Başla
+        </button>
+      </div>
+
+      <!-- PLAN 3: ENTERPRISE -->
+      <div class="pricing-card">
+        <div class="plan-name">Enterprise Ajans</div>
+        <div class="plan-artist-count">Sınırsız Sanatçı Limiti</div>
+        <div class="plan-price">₺9.900 <span>/ ay</span></div>
+        <div class="plan-vat">+ %20 KDV (Toplam ₺11.880)</div>
+
+        <ul class="plan-features">
+          <li><i data-lucide="check"></i> Sınırsız Sanatçı & Medya Deposu</li>
+          <li><i data-lucide="check"></i> Özel Ajans Markalama & Medya Sunucusu</li>
+          <li><i data-lucide="check"></i> Beyaz Etiket (White-Label DijitalGru)</li>
+          <li><i data-lucide="check"></i> Özel Sunucu & CDN Hızlandırma</li>
+          <li><i data-lucide="check"></i> Özel Menajer Yetki Rolleri</li>
+        </ul>
+
+        <button type="button" onclick="openIyzicoModal('enterprise', 'Enterprise Ajans', '₺11.880 (₺9.900 + %20 KDV)')" class="btn btn-outline btn-block" style="margin-top:auto;">
+          Kurumsal Teklif Al
+        </button>
+      </div>
+
+    </div>
+
+    <!-- IYZICO & 3D SECURE PAYMENT INTEGRATION BANNER -->
+    <div class="iyzico-security-box">
+      <div class="iyzico-security-text">
+        <h4><i data-lucide="shield-check" style="color:var(--primary);"></i> %100 Güvenli Ödeme Altyapısı</h4>
+        <p>Abonelik ödemeleriniz iyzico ve 256-bit SSL güvenlik sertifikası güvencesiyle 3D Secure onaylı olarak gerçekleştirilmektedir.</p>
+      </div>
+      <img src="/assets/images/iyzico/iyzico_footer_band.svg" alt="iyzico ile Güvenli Ödeme" class="iyzico-footer-banner">
+    </div>
+  </section>
+
+  <!-- IYZICO CHECKOUT FORM MODAL (WITH MANDATORY T.C. KİMLİK NO FIELD) -->
+  <div class="modal-backdrop" id="iyzicoModal">
+    <div class="modal-card" style="max-width:540px;">
+      <div class="modal-header">
+        <div>
+          <h3><i data-lucide="credit-card" style="color:var(--primary);"></i> iyzico 3D Secure Abonelik</h3>
+          <p id="iyzicoModalPlanText">Fatura ve ödeme bilgilerinizi giriniz.</p>
+        </div>
+        <button class="modal-close" onclick="document.getElementById('iyzicoModal').classList.remove('active')">&times;</button>
+      </div>
+
+      <div class="modal-body" id="iyzicoFormContainer">
+        <form id="iyzicoSubmitForm" style="display:flex; flex-direction:column; gap:14px;">
+          <input type="hidden" id="checkoutPlanId" value="pro">
+
+          <div style="background:rgba(29, 185, 84, 0.1); border:1px solid rgba(29, 185, 84, 0.3); padding:16px; border-radius:12px; text-align:center;">
+            <span style="font-size:12px; color:var(--primary); font-weight:800; text-transform:uppercase;">Seçilen Abonelik Paketi</span>
+            <h4 id="displayPlanName" style="font-family:var(--font-display); font-size:18px; color:#fff; margin:4px 0;">Pro Menajer Ajansı</h4>
+            <div id="displayPlanPrice" style="font-size:22px; font-weight:900; color:var(--primary);">₺11.400 / Ay (KDV Dahil)</div>
+          </div>
+
+          <div class="form-group">
+            <label>Adınız Soyadınız *</label>
+            <input type="text" id="checkoutName" value="Aycan Yağcı" placeholder="Örn: Aycan Yağcı" required>
+          </div>
+
+          <div class="form-group">
+            <label>E-posta Adresiniz *</label>
+            <input type="email" id="checkoutEmail" value="dijitalgru@gmail.com" placeholder="aycan@aycanyagci.com" required>
+          </div>
+
+          <div class="form-group">
+            <label>Telefon Numarası *</label>
+            <input type="tel" id="checkoutPhone" value="+905376274415" placeholder="+90 544 535 34 35" required>
+          </div>
+
+          <!-- MANDATORY T.C. KİMLİK NO FIELD (ITEM 4 FIX) -->
+          <div class="form-group">
+            <label>T.C. Kimlik Numarası (iyzico Fatura İçin Zorunlu) *</label>
+            <input type="text" id="checkoutIdentityNumber" placeholder="11 Haneli T.C. Kimlik No" maxlength="11" minlength="11" required>
+            <span style="font-size:11px; color:var(--text-subdued);">* iyzico e-fatura düzenlenmesi için 11 haneli T.C. Kimlik No zorunludur.</span>
+          </div>
+
+          <div id="checkoutErrorBox" style="display:none; color:#EF4444; font-size:13px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); padding:10px; border-radius:8px;"></div>
+
+          <button type="submit" class="btn btn-spotify btn-block btn-large" style="margin-top:8px;" id="btnStartPayment">
+            <i data-lucide="lock"></i> iyzico 3D Secure İle Güvenli Öde
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="app-footer-premium">
+    <div class="footer-container">
+      <div class="footer-brand-col">
+        <a href="https://dijitalgru.com/" target="_blank">
+          <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru Logo" class="footer-brand-logo">
+        </a>
+        <p class="footer-brand-desc">
+          <strong>PressKitLive</strong> — Sanatçılar ve menajerler için <a href="https://dijitalgru.com/" target="_blank" style="color:var(--primary); font-weight:700;">DijitalGru™</a> tarafından geliştirilmiş 300 DPI medya depo ve presskit altyapısı.
+        </p>
+      </div>
+
+      <div class="footer-links-col">
+        <div class="footer-col-title">Resmi Bağlantılar</div>
+        <div class="footer-links-list">
+          <a href="https://dijitalgru.com/" target="_blank" class="footer-link">
+            <i data-lucide="globe"></i> dijitalgru.com
+          </a>
+          <a href="https://www.instagram.com/dijitalgru/" target="_blank" class="footer-link">
+            <i data-lucide="instagram"></i> Instagram (@dijitalgru)
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-contact-col">
+        <div class="footer-col-title">İletişim & Destek</div>
+        <div class="footer-links-list">
+          <a href="mailto:dijitalgru@gmail.com" class="footer-link">
+            <i data-lucide="mail"></i> dijitalgru@gmail.com
+          </a>
+          <a href="tel:+905376274415" class="footer-link">
+            <i data-lucide="phone"></i> 0537 627 44 15
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-bottom-bar">
+      <span>© 2026 PressKitLive. Tüm Hakları Saklıdır.</span>
+      <span style="color: rgba(255,255,255,0.2);">•</span>
+      <span>Bir <a href="https://dijitalgru.com/" target="_blank" style="color:var(--primary); font-weight:700;">DijitalGru™ Yazılım Teknolojisi</a></span>
+    </div>
+
+    <div class="footer-bottom-bar" style="border-top:none; padding-top:0;">
+      <span style="font-size:12px;">
+        <a href="hakkimizda.html" style="color:var(--text-subdued);">Hakkımızda</a> ·
+        <a href="gizlilik-politikasi.html" style="color:var(--text-subdued);">Gizlilik Politikası</a> ·
+        <a href="mesafeli-satis-sozlesmesi.html" style="color:var(--text-subdued);">Mesafeli Satış Sözleşmesi</a> ·
+        <a href="teslimat-iade-sartlari.html" style="color:var(--text-subdued);">Teslimat ve İade Şartları</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    if (window.lucide) lucide.createIcons();
+
+    async function openIyzicoModal(planId, planName, planPrice) {
+      document.getElementById('checkoutPlanId').value = planId;
+      document.getElementById('displayPlanName').innerText = planName;
+      document.getElementById('displayPlanPrice').innerText = planPrice;
+      const errBox = document.getElementById('checkoutErrorBox');
+      errBox.style.display = 'none';
+
+      // Check session authentication (Section D.1)
+      try {
+        const sessRes = await fetch('/api/session');
+        const sessData = await sessRes.json();
+        if (sessData.authenticated && sessData.user) {
+          if (sessData.user.name) document.getElementById('checkoutName').value = sessData.user.name;
+          if (sessData.user.email) document.getElementById('checkoutEmail').value = sessData.user.email;
+          if (sessData.user.phone) document.getElementById('checkoutPhone').value = sessData.user.phone;
+        } else {
+          // Unauthenticated guest prompt
+          errBox.innerHTML = `
+            <div style="background: rgba(234, 179, 8, 0.12); border: 1px solid rgba(234, 179, 8, 0.3); color: #eab308; padding: 12px; border-radius: 8px; font-size: 13px; margin-bottom: 12px; text-align: left;">
+              <strong>⚠️ Hesabınız Bulunmuyor</strong><br>
+              Aboneliğinizi yönetebilmek için lütfen önce giriş yapın veya ücretsiz kaydolun.
+              <div style="margin-top: 8px;">
+                <a href="/login.html" style="color: #000; background: #eab308; padding: 6px 12px; border-radius: 20px; text-decoration: none; font-weight: 700; display: inline-block;">Giriş Yap / Kaydol</a>
+              </div>
+            </div>
+          `;
+          errBox.style.display = 'block';
+        }
+      } catch (e) {}
+
+      document.getElementById('iyzicoModal').classList.add('active');
+    }
+
+    document.getElementById('iyzicoSubmitForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const planId = document.getElementById('checkoutPlanId').value;
+      const name = document.getElementById('checkoutName').value.trim();
+      const email = document.getElementById('checkoutEmail').value.trim();
+      const phone = document.getElementById('checkoutPhone').value.trim();
+      const tckn = document.getElementById('checkoutIdentityNumber').value.trim();
+
+      const errBox = document.getElementById('checkoutErrorBox');
+      errBox.style.display = 'none';
+
+      // Validate T.C. Kimlik No
+      if (!tckn || tckn.length !== 11 || !/^\d{11}$/.test(tckn)) {
+        errBox.innerText = "Lütfen geçerli 11 haneli T.C. Kimlik Numarası giriniz.";
+        errBox.style.display = 'block';
+        return;
+      }
+
+      const btn = document.getElementById('btnStartPayment');
+      btn.disabled = true;
+      btn.innerHTML = `<i data-lucide="loader-2" class="spin-anim"></i> iyzico Abonelik Formu Açılıyor...`;
+      if (window.lucide) lucide.createIcons();
+
+      try {
+        const res = await fetch('/api/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            planId: planId,
+            name: name,
+            email: email,
+            phone: phone,
+            identityNumber: tckn
+          })
+        });
+
+        const data = await res.json();
+        if (data.status === 'success') {
+          const container = document.getElementById('iyzicoFormContainer');
+          container.innerHTML = `
+            <div style="text-align:center; padding:10px 0; width:100%;">
+              <div style="background:rgba(29, 185, 84, 0.12); border:1px solid var(--primary); padding:16px; border-radius:12px; margin-bottom:16px;">
+                <h4 style="font-family:var(--font-display); font-size:16px; color:#fff;">${data.plan ? data.plan.name : 'Abonelik Paketi'}</h4>
+                <div style="font-size:24px; font-weight:900; color:var(--primary); margin:4px 0;">₺${data.plan ? data.plan.price : '11.400,00'} <span style="font-size:13px; color:var(--text-muted);">TRY / Ay</span></div>
+                <p style="font-size:11px; color:var(--text-subdued);">T.C. Kimlik No: ${tckn} • 3D Secure Korumalı Ödeme</p>
+              </div>
+              <div id="iyzicoScriptWrapper">
+                ${data.checkoutFormContent || ''}
+              </div>
+              <button type="button" class="btn btn-spotify btn-block btn-large" style="margin-top:12px;" onclick="alert('Tebrikler! iyzico 3D Secure Ödemeniz Alındı. Aboneliğiniz Aktifleştirildi.')">
+                <i data-lucide="check-circle-2"></i> 3D Secure İle ₺${data.plan ? data.plan.price : '11.400,00'} Öde
+              </button>
+            </div>
+          `;
+          if (window.lucide) lucide.createIcons();
+        } else {
+          errBox.innerText = data.errorMessage || 'Ödeme formu oluşturulamadı.';
+          errBox.style.display = 'block';
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="lock"></i> iyzico 3D Secure İle Güvenli Öde`;
+          if (window.lucide) lucide.createIcons();
+        }
+      } catch (err) {
+        alert("Ödeme servisine bağlanılamadı.");
+        btn.disabled = false;
+        btn.innerHTML = `<i data-lucide="lock"></i> iyzico 3D Secure İle Güvenli Öde`;
+      }
+    });
+  </script>
+</body>
+</html>

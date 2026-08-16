@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <script>
+    if (window.location.protocol === 'file:') {
+      const page = window.location.pathname.split('/').pop() || 'index.html';
+      window.location.href = 'http://localhost:8080/' + page + window.location.search + window.location.hash;
+    }
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Yağmur Hızal — Menajer Yönetim Paneli | PressKitLive</title>
+  <meta name="description" content="Yağmur Hızal resmi presskit portalı. PressKitLive ve DijitalGru yazılım altyapısıyla geliştirilmiştir. Klasör açma, kilitleme ve fotoğraf yükleme alanı.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons (Version Locked) & JSZip / FileSaver -->
+  <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .file-input-wrapper {
+      position: relative;
+      overflow: hidden;
+      display: inline-block;
+      width: 100%;
+    }
+    .file-input-custom {
+      border: 1px dashed var(--primary);
+      background: rgba(29, 185, 84, 0.08);
+      color: #fff;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      transition: var(--transition-fast);
+    }
+    .file-input-custom:hover {
+      background: rgba(29, 185, 84, 0.15);
+    }
+
+    /* AVATAR & COVER EDIT OVERLAYS */
+    .avatar-edit-overlay {
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      font-size: 11px;
+      font-weight: 700;
+      opacity: 0;
+      cursor: pointer;
+      transition: opacity 0.25s ease;
+      z-index: 10;
+      border: 2px dashed var(--primary);
+    }
+    .artist-avatar-wrapper:hover .avatar-edit-overlay {
+      opacity: 1;
+    }
+
+    .hero-cover-edit-btn {
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(8px);
+      border: 1px solid var(--border-glass);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .hero-cover-edit-btn:hover {
+      background: var(--primary);
+      color: #000;
+      border-color: var(--primary);
+      transform: translateY(-2px);
+    }
+
+    /* REDESIGNED MANAGER CARD & 2x2 ACTION GRID */
+    .manager-card-cool {
+      background: rgba(24, 24, 27, 0.9);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 24px;
+      padding: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 32px;
+      box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+    }
+    .manager-card-left {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+    .manager-avatar-badge {
+      position: relative;
+    }
+    .manager-avatar-circle {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: rgba(29, 185, 84, 0.15);
+      border: 2px solid var(--primary);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .manager-online-dot {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: #22C55E;
+      border: 3px solid #18181b;
+      position: absolute;
+      bottom: 2px;
+      right: 2px;
+    }
+    .manager-role-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+    .manager-name-text {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 900;
+      color: #fff;
+    }
+    .manager-contact-meta {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 8px;
+      flex-wrap: wrap;
+    }
+    .contact-meta-item {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .contact-meta-item strong {
+      color: #fff;
+    }
+
+    .manager-actions-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(160px, 1fr));
+      gap: 12px;
+      min-width: 360px;
+    }
+    .btn-grid-action {
+      padding: 12px 16px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      text-decoration: none;
+      transition: all 0.2s ease;
+    }
+    .btn-grid-whatsapp {
+      background: linear-gradient(135deg, #25D366 0%, #1da851 100%);
+      color: #000;
+      box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+    }
+    .btn-grid-whatsapp:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+    }
+
+    .btn-grid-phone {
+      background: rgba(29, 185, 84, 0.15);
+      border: 1px solid rgba(29, 185, 84, 0.4);
+      color: var(--primary);
+    }
+    .btn-grid-phone:hover {
+      background: var(--primary);
+      color: #000;
+      transform: translateY(-2px);
+    }
+
+    .btn-grid-email {
+      background: rgba(59, 130, 246, 0.15);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+      color: var(--accent-blue);
+    }
+    .btn-grid-email:hover {
+      background: var(--accent-blue);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .btn-grid-vcard {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+    .btn-grid-vcard:hover {
+      background: rgba(255, 255, 255, 0.15);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    @media (max-width: 900px) {
+      .manager-card-cool {
+        flex-direction: column;
+        align-items: stretch;
+      }
+      .manager-actions-grid {
+        min-width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- IMPERSONATION BANNER (SECTION D.6) -->
+  <div id="impersonationBanner" style="display:none; background: #f59e0b; color: #000; padding: 12px 24px; font-weight: 700; font-size: 14px; text-align: center; align-items: center; justify-content: center; gap: 16px; position: sticky; top: 0; z-index: 99999;">
+    <span>⚠️ TEKNİK DESTEK MODUNDASINIZ — <strong id="impersonationTargetName">...</strong> hesabını görüntülüyorsunuz.</span>
+    <button type="button" class="btn btn-small" style="background:#000; color:#fff; border:none; padding:4px 14px; border-radius:20px; font-weight:700; cursor:pointer;" onclick="endImpersonation()">Kendi Hesabıma Dön</button>
+  </div>
+  <div class="app-container">
+    
+    <!-- LEFT SIDEBAR -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon">
+          <i data-lucide="disc"></i>
+        </div>
+        <div class="brand-text">
+          <span class="brand-name">PressKit<span class="highlight">Live</span></span>
+          <span class="brand-tagline">Sanatçı Medya Portalı</span>
+        </div>
+      </div>
+
+      <!-- CLICKABLE DIJITALGRU SIDEBAR BADGE -->
+      <a href="https://dijitalgru.com/" target="_blank" class="dijitalgru-sidebar-badge" title="dijitalgru.com sitesini ziyaret edin">
+        <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru Logo" class="dg-logo-sm">
+        <span>DijitalGru™ Yazılımı</span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="sidebar-nav">
+        <label class="section-label">PRESSKIT MENÜSÜ</label>
+        <a href="#hero" class="nav-item active" data-target="hero">
+          <i data-lucide="sparkles"></i> <span>Genel Bakış</span>
+        </a>
+        <a href="#afis-fotograflari" class="nav-item" data-target="afis-fotograflari">
+          <i data-lucide="folder"></i> <span>Klasörler & Afişler</span>
+        </a>
+        <a href="#logolar" class="nav-item" data-target="logolar">
+          <i data-lucide="layers"></i> <span>Logo & Tipografi</span>
+        </a>
+        <a href="#dijital-platformlar" class="nav-item" data-target="dijital-platformlar">
+          <i data-lucide="music-2"></i> <span>Müzik & Platformlar</span>
+        </a>
+        <a href="#menajer-iletisim" class="nav-item" data-target="menajer-iletisim">
+          <i data-lucide="phone-call"></i> <span>Menajer İletişimi</span>
+        </a>
+      </nav>
+
+      <!-- Sidebar Action Footer -->
+      <div class="sidebar-footer">
+        <a href="https://dijitalgru.com/" target="_blank" class="sidebar-note" title="dijitalgru.com sitesini ziyaret edin">
+          <i data-lucide="code-2"></i> DijitalGru™ Özel Yazılım Teknolojisi
+        </a>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="main-content">
+      
+      <!-- TOPBAR HEADER -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <div class="breadcrumb">
+            <span id="breadcrumbArtist">Yağmur Hızal</span>
+            <i data-lucide="chevron-right"></i>
+            <span class="active">Menajer Yönetim Paneli</span>
+          </div>
+        </div>
+
+        <div class="topbar-right">
+          <!-- CLICKABLE DIJITALGRU TOPBAR PILL -->
+          <a href="https://dijitalgru.com/" target="_blank" class="dijitalgru-top-pill" title="dijitalgru.com sitesini ziyaret edin">
+            <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru">
+            <span>DijitalGru™ Yazılımı</span>
+          </a>
+
+          <div class="domain-info-badge">
+            <i data-lucide="globe"></i> <span>presskitlive.com/artist/<strong id="artistSlugBadge">yagmur-hizal</strong></span>
+            <button class="btn-icon-small" id="btnCopyPageUrl" title="Bağlantıyı Kopyala">
+              <i data-lucide="copy"></i>
+            </button>
+          </div>
+          <button class="btn btn-outline" id="btnOpenAddArtistTop">
+            <i data-lucide="upload-cloud"></i> <span>Menajer İletişim</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- HERO BANNER -->
+      <section class="hero-header" id="hero">
+        <div class="hero-bg" id="heroBg"></div>
+        <div class="hero-overlay"></div>
+
+        <!-- HERO COVER PHOTO EDIT & INTERACTIVE POSITIONING CONTROLS (ONLY SHOWS DURING UPLOAD) -->
+        <div class="hero-cover-controls-wrapper">
+          <div class="position-slider-pill" id="coverPosControlBar" style="display: none;">
+            <span><i data-lucide="move-vertical" style="width:14px; color:var(--primary);"></i> Kapak Hizala:</span>
+            <button type="button" class="btn-pos-preset" onclick="updateCoverPosition(0)" title="Üst Hizala">Üst</button>
+            <button type="button" class="btn-pos-preset active" onclick="updateCoverPosition(35)" title="Orta Hizala">Orta</button>
+            <button type="button" class="btn-pos-preset" onclick="updateCoverPosition(80)" title="Alt Hizala">Alt</button>
+            <input type="range" min="0" max="100" value="35" class="pos-range-input" oninput="updateCoverPosition(this.value)" title="Dikey Konum Ayarla">
+            <button type="button" class="btn-pos-save" onclick="saveCoverPosition()" title="Hizalamayı Kaydet">
+              <i data-lucide="check" style="width:14px; height:14px;"></i> Tamam
+            </button>
+          </div>
+
+          <label for="inputCoverFile" class="hero-cover-edit-btn" title="Kapak Fotoğrafını Bilgisayardan Seç">
+            <i data-lucide="image"></i> Kapak Değiştir
+            <input type="file" id="inputCoverFile" accept="image/*" style="display:none;" onchange="handleCoverUpload(this)">
+          </label>
+        </div>
+        
+        <div class="hero-content">
+          <div class="artist-avatar-wrapper">
+            <img src="/assets/images/yagmur-hizal/Kort1_2.JPG" alt="Yağmur Hızal" id="heroAvatar" class="artist-avatar" onerror="this.onerror=null; this.src='/assets/images/yagmur-hizal/Kort1_2.JPG';">
+            
+            <!-- AVATAR EDIT OVERLAY BUTTON -->
+            <label for="inputAvatarFile" class="avatar-edit-overlay" title="Profil Fotoğrafını Bilgisayardan Seç">
+              <i data-lucide="camera" style="width:24px; height:24px;"></i>
+              <span>Fotoğraf Değiştir</span>
+              <input type="file" id="inputAvatarFile" accept="image/*" style="display:none;" onchange="handleAvatarUpload(this)">
+            </label>
+
+            <!-- INTERACTIVE AVATAR POSITIONING CONTROLS (ONLY SHOWS DURING UPLOAD) -->
+            <div class="avatar-controls-pill" id="avatarPosControlBar" style="display: none;">
+              <button type="button" class="btn-avatar-pos" onclick="updateAvatarPosition(0)" title="Üst Hizala">Üst</button>
+              <button type="button" class="btn-avatar-pos" onclick="updateAvatarPosition(50)" title="Orta Hizala">Orta</button>
+              <button type="button" class="btn-avatar-pos" onclick="updateAvatarPosition(100)" title="Alt Hizala">Alt</button>
+              <button type="button" class="btn-avatar-save" onclick="saveAvatarPosition()" title="Hizalamayı Kaydet">✓</button>
+            </div>
+
+            <span class="verified-badge" title="Doğrulanmış Sanatçı Presskit">
+              <i data-lucide="check-circle-2"></i>
+            </span>
+          </div>
+
+          <div class="hero-details">
+            <h1 class="artist-name" id="heroArtistName">Yağmur Hızal</h1>
+            
+            <p class="hero-meta">
+              <span class="meta-item"><i data-lucide="user-check"></i> Menajer: <strong id="heroManagerName">Aycan Yağcı</strong></span>
+            </p>
+
+            <div class="hero-actions">
+              <button class="btn btn-spotify btn-large" id="btnDownloadAllZip">
+                <i data-lucide="download-cloud"></i> 
+                <span>Tek Tıkla Tüm Presskit'i İndir (.ZIP)</span>
+              </button>
+              <a href="https://wa.me/905445353435?text=Merhaba%20Aycan%20Han%C4%B1m%2C%20Ya%C4%9Fmur%20H%C4%B1zal%20konser%20ve%20etkinlik%20teklifi%20hakk%C4%B1nda%20g%C3%B6r%C3%BC%C5%9Fmek%20istiyorum." id="btnHeroWhatsapp" target="_blank" class="btn btn-whatsapp btn-large">
+                <i data-lucide="message-square"></i>
+                <span>Menajer WhatsApp</span>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- MAIN WRAPPER CONTAINER FOR SECTIONS -->
+      <div class="content-wrapper">
+        
+        <!-- SECTION 1: PRESS & POSTER FOLDERS -->
+        <section class="press-section" id="afis-fotograflari">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title"><i data-lucide="folder"></i> Klasörler & Afiş Görselleri</h2>
+              <p class="section-subtitle">Menajer klasör oluşturabilir, kilit koyabilir ve yeni fotoğraf ekleyebilir</p>
+            </div>
+            <div class="section-actions" style="display:flex; gap:10px;">
+              <button class="btn btn-primary btn-small" id="btnOpenNewFolderModal">
+                <i data-lucide="folder-plus"></i> + Yeni Klasör Aç
+              </button>
+              <button class="btn btn-accent btn-small" id="btnOpenAddPhotoModal">
+                <i data-lucide="image-plus"></i> + Klasöre Fotoğraf Ekle
+              </button>
+            </div>
+          </div>
+
+          <!-- FOLDER TABS BAR -->
+          <div class="folders-bar" id="foldersBar">
+            <!-- Populated dynamically by app.js -->
+          </div>
+
+          <div class="gallery-grid" id="galleryGrid">
+            <!-- Dynamic photos rendered by app.js -->
+          </div>
+        </section>
+
+        <!-- SECTION 2: LOGOS & DEKOPE WITH DELETION CAPABILITY -->
+        <section class="press-section" id="logolar">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title"><i data-lucide="layers"></i> Logo, Tipografi & Vektör Deposu</h2>
+              <p class="section-subtitle">Afiş zeminine uygun logo versiyonları, vektörler ve tipografi</p>
+            </div>
+            <button class="btn btn-primary btn-small" id="btnOpenAddLogoModal">
+              <i data-lucide="upload-cloud"></i> + Yeni Logo / Vektör Ekle
+            </button>
+          </div>
+
+          <div class="logo-cards-grid" id="logoCardsGrid">
+            
+            <div class="logo-card" id="logoCard-1">
+              <div class="logo-preview-box dark-bg">
+                <img src="/assets/images/yagmur-hizal/logo_brand.jpg" alt="Yağmur Hızal Logo Gold" id="logoImg1">
+              </div>
+              <div class="logo-card-info">
+                <h4>Yağmur Hızal Typography Logo (Altın / Glow Tipografi)</h4>
+                <p>Karanlık zeminli afişler ve sahne LED ekranları için tasarlanmış marka tipografisi.</p>
+                <div class="logo-card-actions">
+                  <a href="/assets/images/yagmur-hizal/logo_brand.jpg" download="Yagmur_Hizal_Logo_Brand.jpg" class="btn btn-outline" style="flex-grow:1;">
+                    <i data-lucide="download"></i> JPG İndir (High-Res)
+                  </a>
+                  <button type="button" class="btn-trash-logo" title="Logoyu Sil" onclick="deleteLogoCard('logoCard-1', 'Yağmur Hızal Typography Logo')">
+                    <i data-lucide="trash-2"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <div class="logo-card" id="logoCard-2">
+              <div class="logo-preview-box transparent-bg">
+                <div class="logo-text-preview" id="logoTextPreview">YAĞMUR HIZAL</div>
+              </div>
+              <div class="logo-card-info">
+                <h4>Vektörel Metin & Şeffaf Vektör PNG</h4>
+                <p>İstenilen zemin üzerine yerleştirilebilir şeffaf marka yazısı.</p>
+                <div class="logo-card-actions">
+                  <button class="btn btn-outline" style="flex-grow:1;" onclick="alert('PNG Şeffaf Logo ZIP paketine eklenmiştir.')">
+                    <i data-lucide="file-check"></i> Vektör PNG İndir
+                  </button>
+                  <button type="button" class="btn-trash-logo" title="Logoyu Sil" onclick="deleteLogoCard('logoCard-2', 'Vektörel Metin & Şeffaf Vektör PNG')">
+                    <i data-lucide="trash-2"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- SECTION 3: MUSIC & PLATFORM LINKS -->
+        <section class="press-section" id="dijital-platformlar">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title"><i data-lucide="music-2"></i> Şarkılar & Dijital Platform Bağlantıları</h2>
+              <p class="section-subtitle">Sanatçının resmi müzik ve sosyal medya kanalları</p>
+            </div>
+          </div>
+
+          <div class="platform-links-grid">
+            <a href="https://open.spotify.com/intl-tr/artist/6az5Ndiuz3g1oAP3tMG2SQ" target="_blank" class="platform-card spotify" id="linkSpotify">
+              <div class="platform-icon"><i data-lucide="disc"></i></div>
+              <div class="platform-info">
+                <span class="platform-name">Spotify</span>
+                <span class="platform-sub">Sanatçı Profili</span>
+              </div>
+              <i data-lucide="external-link" class="arrow-icon"></i>
+            </a>
+
+            <a href="https://www.youtube.com/channel/UCOnMPPDLx7JobICqWpDBUvg" target="_blank" class="platform-card youtube" id="linkYoutube">
+              <div class="platform-icon"><i data-lucide="video"></i></div>
+              <div class="platform-info">
+                <span class="platform-name">YouTube</span>
+                <span class="platform-sub">Resmi Kanal & Video Klip</span>
+              </div>
+              <i data-lucide="external-link" class="arrow-icon"></i>
+            </a>
+
+            <a href="https://www.deezer.com/tr/album/606921462" target="_blank" class="platform-card deezer" id="linkDeezer">
+              <div class="platform-icon"><i data-lucide="music"></i></div>
+              <div class="platform-info">
+                <span class="platform-name">Deezer</span>
+                <span class="platform-sub">Resmi Albüm & Eserler</span>
+              </div>
+              <i data-lucide="external-link" class="arrow-icon"></i>
+            </a>
+
+            <a href="https://www.instagram.com/yagmurhizall/" target="_blank" class="platform-card instagram" id="linkInstagram">
+              <div class="platform-icon"><i data-lucide="instagram"></i></div>
+              <div class="platform-info">
+                <span class="platform-name">Instagram</span>
+                <span class="platform-sub">@yagmurhizall</span>
+              </div>
+              <i data-lucide="external-link" class="arrow-icon"></i>
+            </a>
+          </div>
+        </section>
+
+        <!-- SECTION 4: MANAGER CONTACT CARD WITH COOL 2x2 ACTION GRID -->
+        <section class="press-section" id="menajer-iletisim">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title"><i data-lucide="phone-call"></i> Menajer & Booking İletişim</h2>
+              <p class="section-subtitle">Mekan rezervasyonu ve konser teklifleri için doğrudan iletişim merkezi</p>
+            </div>
+          </div>
+
+          <div class="manager-card-cool">
+            <div class="manager-card-left">
+              <div class="manager-avatar-badge">
+                <div class="manager-avatar-circle">
+                  <i data-lucide="user-check" style="width:32px; height:32px;"></i>
+                </div>
+                <div class="manager-online-dot" title="Aktif Booking"></div>
+              </div>
+
+              <div>
+                <div class="manager-role-tag">RESMİ MENAJER & BOOKING</div>
+                <h3 class="manager-name-text" id="cardManagerName">Aycan Yağcı</h3>
+                
+                <div class="manager-contact-meta">
+                  <span class="contact-meta-item">
+                    <i data-lucide="phone" style="color:var(--primary); width:14px;"></i>
+                    <strong id="cardManagerPhone">+90 544 535 34 35</strong>
+                  </span>
+                  <span class="contact-meta-item">
+                    <i data-lucide="mail" style="color:var(--accent-blue); width:14px;"></i>
+                    <span id="cardManagerEmail">aycan@aycanyagci.com</span>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- SYMMETRICAL 2x2 ACTION GRID -->
+            <div class="manager-actions-grid">
+              <a href="https://wa.me/905445353435?text=Merhaba%20Aycan%20Han%C4%B1m%2C%20Ya%C4%9Fmur%20H%C4%B1zal%20konser%20ve%20etkinlik%20teklifi%20hakk%C4%B1nda%20g%C3%B6r%C3%BC%C5%9Fmek%20istiyorum." id="gridWhatsappLink" target="_blank" class="btn-grid-action btn-grid-whatsapp">
+                <i data-lucide="message-square" style="width:16px;"></i> WhatsApp
+              </a>
+
+              <a href="tel:+905445353435" id="gridPhoneLink" class="btn-grid-action btn-grid-phone">
+                <i data-lucide="phone" style="width:16px;"></i> Hemen Ara
+              </a>
+
+              <a href="mailto:aycan@aycanyagci.com" id="gridEmailLink" class="btn-grid-action btn-grid-email">
+                <i data-lucide="mail" style="width:16px;"></i> E-posta Gönder
+              </a>
+
+              <button type="button" class="btn-grid-action btn-grid-vcard" id="btnSaveVcard">
+                <i data-lucide="user-plus" style="width:16px;"></i> vCard Kaydet
+              </button>
+            </div>
+
+          </div>
+        </section>
+
+      </div> <!-- /content-wrapper -->
+
+      <!-- PREMIUM DIJITALGRU FOOTER (ALL DIJITALGRU LINKS TO DIJITALGRU.COM) -->
+      <footer class="app-footer-premium">
+        <div class="footer-container">
+          <div class="footer-brand-col">
+            <a href="https://dijitalgru.com/" target="_blank" title="dijitalgru.com sitesini ziyaret edin">
+              <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru Logo" class="footer-brand-logo">
+            </a>
+            <p class="footer-brand-desc">
+              <strong>PressKitLive</strong> — Sanatçılar ve menajerler için <a href="https://dijitalgru.com/" target="_blank" style="color:var(--primary); font-weight:700;">DijitalGru™</a> tarafından geliştirilmiş 300 DPI medya depo ve presskit altyapısı.
+            </p>
+          </div>
+
+          <div class="footer-links-col">
+            <div class="footer-col-title">Resmi Bağlantılar</div>
+            <div class="footer-links-list">
+              <a href="https://dijitalgru.com/" target="_blank" class="footer-link">
+                <i data-lucide="globe"></i> dijitalgru.com
+              </a>
+              <a href="https://www.instagram.com/dijitalgru/" target="_blank" class="footer-link">
+                <i data-lucide="instagram"></i> Instagram (@dijitalgru)
+              </a>
+            </div>
+          </div>
+
+          <div class="footer-contact-col">
+            <div class="footer-col-title">İletişim & Destek</div>
+            <div class="footer-links-list">
+              <a href="mailto:dijitalgru@gmail.com" class="footer-link">
+                <i data-lucide="mail"></i> dijitalgru@gmail.com
+              </a>
+              <a href="tel:+905376274415" class="footer-link">
+                <i data-lucide="phone"></i> 0537 627 44 15
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-bottom-bar" style="display: flex; justify-content: center; gap: 8px;">
+          <span>© 2026 PressKitLive. Tüm Hakları Saklıdır.</span>
+          <span style="color: rgba(255,255,255,0.2);">•</span>
+          <span>Bir <a href="https://dijitalgru.com/" target="_blank" style="color:var(--primary); font-weight:700;">DijitalGru™ Yazılım Teknolojisi</a></span>
+        </div>
+
+        <div class="footer-bottom-bar" style="border-top:none; padding-top:0;">
+          <span style="font-size:12px;">
+            <a href="hakkimizda.html" style="color:var(--text-subdued);">Hakkımızda</a> ·
+            <a href="gizlilik-politikasi.html" style="color:var(--text-subdued);">Gizlilik Politikası</a> ·
+            <a href="mesafeli-satis-sozlesmesi.html" style="color:var(--text-subdued);">Mesafeli Satış Sözleşmesi</a> ·
+            <a href="teslimat-iade-sartlari.html" style="color:var(--text-subdued);">Teslimat ve İade Şartları</a>
+          </span>
+        </div>
+      </footer>
+
+    </main>
+
+  </div> <!-- /app-container -->
+
+  <!-- MODAL: ADD NEW LOGO / VECTOR FILE -->
+  <div class="modal-backdrop" id="addLogoModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3><i data-lucide="layers"></i> Yeni Logo / Vektör Dosyası Yükle</h3>
+          <p>Afiş ve tasarım için yeni logo, vektör veya tipografi dosyası ekleyin.</p>
+        </div>
+        <button class="modal-close" id="btnCloseAddLogoModal">&times;</button>
+      </div>
+
+      <form id="addLogoForm" class="modal-body">
+        <div class="form-group">
+          <label>Logo / Tipografi Başlığı *</label>
+          <input type="text" id="inputLogoTitle" placeholder="Örn: Şeffaf Siyah Vektör Logo (.PNG)" required>
+        </div>
+
+        <div class="form-group">
+          <label>Kullanım Açıklaması</label>
+          <input type="text" id="inputLogoDesc" placeholder="Örn: Açık renkli konser afişleri ve led zeminler için">
+        </div>
+
+        <div class="form-group">
+          <label>Logo / Vektör Dosyası (Bilgisayardan Seç) *</label>
+          <div class="file-input-wrapper">
+            <label for="inputLogoFile" class="file-input-custom" id="logoFileLabel">
+              <i data-lucide="upload"></i> <span id="logoFileNameDisplay">Bilgisayardan Logo Yükle (PNG / SVG / AI / JPG)</span>
+            </label>
+            <input type="file" id="inputLogoFile" accept="image/*,.svg,.ai,.eps,.pdf" style="display:none;" onchange="handleLogoFileSelect(this)">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Dosya Formatı / Türü</label>
+            <input type="text" id="inputLogoFormat" value="PNG (Şeffaf Vektör)">
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" id="btnCancelAddLogo">İptal</button>
+          <button type="submit" class="btn btn-primary"><i data-lucide="check"></i> Logoyu Depoya Ekle</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- OTHER MODALS -->
+  <div class="modal-backdrop" id="newFolderModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3><i data-lucide="folder-plus"></i> Yeni Fotoğraf Klasörü Aç</h3>
+          <p>Konser veya etkinlik adına göre yeni bir klasör oluşturun.</p>
+        </div>
+        <button class="modal-close" id="btnCloseNewFolderModal">&times;</button>
+      </div>
+
+      <form id="newFolderForm" class="modal-body">
+        <div class="form-group">
+          <label>Klasör Adı *</label>
+          <input type="text" id="inputFolderName" placeholder="Örn: Stüdyo Çekimleri 2026" required>
+        </div>
+
+        <div class="form-group">
+          <label>Klasör Kilit Durumu</label>
+          <select id="inputFolderLock">
+            <option value="false">🔓 Açık (Herkes İndirebilir)</option>
+            <option value="true">🔒 Kilitli (Kilitli Görünür)</option>
+          </select>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" id="btnCancelNewFolder">İptal</button>
+          <button type="submit" class="btn btn-primary">Klasörü Oluştur</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="addPhotoModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3><i data-lucide="image-plus"></i> Klasöre Yeni Fotoğraf Ekle</h3>
+        </div>
+        <button class="modal-close" id="btnCloseAddPhotoModal">&times;</button>
+      </div>
+
+      <form id="addPhotoForm" class="modal-body">
+        <div class="form-group">
+          <label>Hedef Klasör *</label>
+          <select id="selectTargetFolder" required></select>
+        </div>
+        <div class="form-group">
+          <label>Görsel Başlığı *</label>
+          <input type="text" id="inputPhotoTitle" placeholder="Örn: Konser Canlı Performansı (300 DPI)" required>
+        </div>
+        
+        <div class="form-group">
+          <label>Fotoğraf (Bilgisayardan Seç) *</label>
+          <div class="file-input-wrapper">
+            <label for="inputPhotoFile" class="file-input-custom" id="photoFileLabel">
+              <i data-lucide="upload"></i> <span id="photoFileNameDisplay">Bilgisayardan Fotoğraf Yükle (300 DPI JPG / PNG)</span>
+            </label>
+            <input type="file" id="inputPhotoFile" accept="image/*" style="display:none;" onchange="handlePhotoFileSelect(this)">
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>Çözünürlük</label>
+            <input type="text" id="inputPhotoRes" value="3808 x 5712 px (300 DPI)">
+          </div>
+          <div class="form-group">
+            <label>Rozet</label>
+            <input type="text" id="inputPhotoBadge" value="Yeni Görsel">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-ghost" id="btnCancelAddPhoto">İptal</button>
+          <button type="submit" class="btn btn-accent">Fotoğrafı Ekle</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="/app.js"></script>
+  <script>
+    let uploadedPhotoDataUrl = '/assets/images/yagmur-hizal/Kort1 2.JPG';
+    let uploadedLogoDataUrl = '/assets/images/yagmur-hizal/logo_brand.jpg';
+
+    // INTERACTIVE COVER POSITION ADJUSTMENT
+    function updateCoverPosition(val) {
+      const heroBg = document.getElementById('heroBg');
+      if (heroBg) {
+        heroBg.style.backgroundPosition = `center ${val}%`;
+      }
+    }
+
+    function saveCoverPosition() {
+      const ctrl = document.getElementById('coverPosControlBar');
+      if (ctrl) ctrl.style.display = 'none';
+    }
+
+    // INTERACTIVE AVATAR POSITION ADJUSTMENT
+    function updateAvatarPosition(val) {
+      const avatarImg = document.getElementById('heroAvatar');
+      if (avatarImg) {
+        avatarImg.style.objectPosition = `center ${val}%`;
+      }
+    }
+
+    function saveAvatarPosition() {
+      const ctrl = document.getElementById('avatarPosControlBar');
+      if (ctrl) ctrl.style.display = 'none';
+    }
+
+    // DIRECT AVATAR UPLOAD HANDLER
+    function handleAvatarUpload(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const avatarImg = document.getElementById('heroAvatar');
+          if (avatarImg) {
+            avatarImg.src = e.target.result;
+            avatarImg.style.objectFit = 'cover';
+            avatarImg.style.objectPosition = 'center 20%';
+          }
+          if (typeof state !== 'undefined' && state.artist) {
+            state.artist.avatar = e.target.result;
+          }
+          // SHOW POSITIONING BAR ONLY DURING UPLOAD MODE!
+          const ctrl = document.getElementById('avatarPosControlBar');
+          if (ctrl) ctrl.style.display = 'flex';
+          if (window.lucide) lucide.createIcons();
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // DIRECT COVER BANNER UPLOAD HANDLER
+    function handleCoverUpload(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const heroBg = document.getElementById('heroBg');
+          if (heroBg) {
+            heroBg.style.backgroundImage = `url('${e.target.result}')`;
+            heroBg.style.backgroundSize = 'cover';
+            heroBg.style.backgroundPosition = 'center 35%';
+          }
+          if (typeof state !== 'undefined' && state.artist) {
+            state.artist.banner = e.target.result;
+          }
+          // SHOW POSITIONING BAR ONLY DURING UPLOAD MODE!
+          const ctrl = document.getElementById('coverPosControlBar');
+          if (ctrl) ctrl.style.display = 'flex';
+          if (window.lucide) lucide.createIcons();
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function deleteLogoCard(cardId, logoTitle) {
+      if (confirm(`"${logoTitle}" dosyasını depodan silmek istediğinize emin misiniz?`)) {
+        const elem = document.getElementById(cardId);
+        if (elem) {
+          elem.remove();
+          alert(`"${logoTitle}" başarıyla silindi.`);
+        }
+      }
+    }
+
+    function handlePhotoFileSelect(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        document.getElementById('photoFileNameDisplay').innerText = `Seçilen: ${file.name}`;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          uploadedPhotoDataUrl = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handleLogoFileSelect(input) {
+      if (input.files && input.files[0]) {
+        const file = input.files[0];
+        document.getElementById('logoFileNameDisplay').innerText = `Seçilen: ${file.name}`;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          uploadedLogoDataUrl = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    // Modal Logic for Adding Logo
+    const logoModal = document.getElementById('addLogoModal');
+    const btnOpenLogo = document.getElementById('btnOpenAddLogoModal');
+    const btnCloseLogo = document.getElementById('btnCloseAddLogoModal');
+    const btnCancelLogo = document.getElementById('btnCancelAddLogo');
+    const logoForm = document.getElementById('addLogoForm');
+
+    if (btnOpenLogo) btnOpenLogo.addEventListener('click', () => logoModal.classList.add('active'));
+    if (btnCloseLogo) btnCloseLogo.addEventListener('click', () => logoModal.classList.remove('active'));
+    if (btnCancelLogo) btnCancelLogo.addEventListener('click', () => logoModal.classList.remove('active'));
+
+    if (logoForm) {
+      logoForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const title = document.getElementById('inputLogoTitle').value;
+        const desc = document.getElementById('inputLogoDesc').value || 'Afiş ve tasarım için yeni yüklenen marka logosu.';
+        const format = document.getElementById('inputLogoFormat').value;
+        const newCardId = `logoCard-${Date.now()}`;
+
+        const grid = document.getElementById('logoCardsGrid');
+        const card = document.createElement('div');
+        card.className = 'logo-card';
+        card.id = newCardId;
+        card.innerHTML = `
+          <div class="logo-preview-box dark-bg">
+            <img src="${uploadedLogoDataUrl}" alt="${title}" style="max-height:100px; object-fit:contain;">
+          </div>
+          <div class="logo-card-info">
+            <h4>${title}</h4>
+            <p>${desc}</p>
+            <div class="logo-card-actions">
+              <a href="${uploadedLogoDataUrl}" download="${title}.jpg" class="btn btn-outline" style="flex-grow:1;">
+                <i data-lucide="download"></i> ${format} İndir
+              </a>
+              <button type="button" class="btn-trash-logo" title="Logoyu Sil" onclick="deleteLogoCard('${newCardId}', '${title}')">
+                <i data-lucide="trash-2"></i>
+              </button>
+            </div>
+          </div>
+        `;
+
+        grid.appendChild(card);
+        alert(`"${title}" logosu depoya başarıyla eklendi!`);
+        logoModal.classList.remove('active');
+        logoForm.reset();
+        document.getElementById('logoFileNameDisplay').innerText = "Bilgisayardan Logo Yükle (PNG / SVG / AI / JPG)";
+        if (window.lucide) lucide.createIcons();
+      });
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,198 @@
+[
+  {
+    "id": "yagmur-hizal",
+    "name": "Yağmur Hızal",
+    "genre": "Pop / Indie Pop / Akustik",
+    "monthlyListeners": "3.209",
+    "avatar": "assets/images/yagmur-hizal/Kort1_2.JPG",
+    "banner": "assets/images/yagmur-hizal/Kort1_2.JPG",
+    "bio": "Yağmur Hızal, kendine has vokal rengi ve duygusal yorumlarıyla Türk Pop ve Indie sahnesinde öne çıkan kadın sanatçılarımızdandır.",
+    "shortBio": "Türk Pop & Akustik sahnesinin yükselen sesi. Hit parçaları: Ben Bilmem, Tut Elimi, Bırakma.",
+    "manager": {
+      "name": "Aycan Yağcı",
+      "title": "Menajer / Booking Agent",
+      "phone": "+90 544 535 34 35",
+      "phoneRaw": "905445353435",
+      "email": "aycan@aycanyagci.com"
+    },
+    "socials": {
+      "instagram": "https://www.instagram.com/yagmurhizall/",
+      "youtube": "https://www.youtube.com/channel/UCOnMPPDLx7JobICqWpDBUvg",
+      "spotify": "https://open.spotify.com/intl-tr/artist/6az5Ndiuz3g1oAP3tMG2SQ",
+      "deezer": "https://www.deezer.com/tr/album/606921462"
+    },
+    "folders": [
+      {
+        "id": "folder-all",
+        "name": "Tüm Görseller",
+        "isLocked": false
+      },
+      {
+        "id": "folder-korto",
+        "name": "Korto Live Konser Afişleri",
+        "isLocked": false
+      },
+      {
+        "id": "folder-studio",
+        "name": "Stüdyo & Basın Çekimleri",
+        "isLocked": false
+      }
+    ],
+    "pressPhotos": [
+      {
+        "id": "kort1-2",
+        "folderId": "folder-korto",
+        "title": "Canlı Sahne Performansı - Korto Live (Ultra 300 DPI)",
+        "type": "Konser / Sahne",
+        "format": "JPG",
+        "resolution": "3808 x 5712 px (300 DPI)",
+        "fileSize": "5.8 MB",
+        "url": "assets/images/yagmur-hizal/Kort1_2.JPG",
+        "badge": "Afiş İçin İdeal"
+      },
+      {
+        "id": "korto1",
+        "folderId": "folder-korto",
+        "title": "Vokal Yakın Çekim - Korto Live",
+        "type": "Portre / Canlı",
+        "format": "JPG",
+        "resolution": "3808 x 5712 px (300 DPI)",
+        "fileSize": "5.3 MB",
+        "url": "assets/images/yagmur-hizal/Korto1.JPG",
+        "badge": "Portre HQ"
+      },
+      {
+        "id": "korto2",
+        "folderId": "folder-korto",
+        "title": "Akustik Sahne Çekimi - Korto Live",
+        "type": "Konser / Sahne",
+        "format": "JPG",
+        "resolution": "3808 x 5712 px (300 DPI)",
+        "fileSize": "5.2 MB",
+        "url": "assets/images/yagmur-hizal/Korto2.JPG",
+        "badge": "Afiş HQ"
+      },
+      {
+        "id": "korto3",
+        "folderId": "folder-korto",
+        "title": "Sahne Ambiyans Çekimi - Korto Live",
+        "type": "Konser / Ambiyans",
+        "format": "JPG",
+        "resolution": "3808 x 5712 px (300 DPI)",
+        "fileSize": "5.7 MB",
+        "url": "assets/images/yagmur-hizal/Korto3.JPG",
+        "badge": "Ultra HQ"
+      },
+      {
+        "id": "kort1",
+        "folderId": "folder-korto",
+        "title": "Sahne Işık Çekimi - Korto Live",
+        "type": "Konser / Sahne",
+        "format": "JPG",
+        "resolution": "3808 x 5712 px (300 DPI)",
+        "fileSize": "5.2 MB",
+        "url": "assets/images/yagmur-hizal/Kort1.JPG",
+        "badge": "Sahne Işık"
+      },
+      {
+        "id": "kort2-1",
+        "folderId": "folder-korto",
+        "title": "Korto Live Konser Anı Performansı",
+        "type": "Konser / Sahne",
+        "format": "JPG",
+        "resolution": "3808 x 5712 px (300 DPI)",
+        "fileSize": "4.4 MB",
+        "url": "assets/images/yagmur-hizal/Kort2_1.JPG",
+        "badge": "Canlı Performans"
+      },
+      {
+        "id": "kort2-2",
+        "folderId": "folder-korto",
+        "title": "Akustik Sahne Yakın Çekim",
+        "type": "Konser",
+        "format": "JPG",
+        "resolution": "3808 x 5712 px (300 DPI)",
+        "fileSize": "3.4 MB",
+        "url": "assets/images/yagmur-hizal/Kort2.JPG",
+        "badge": "Akustik HQ"
+      },
+      {
+        "id": "kort3",
+        "folderId": "folder-korto",
+        "title": "Canlı Sahne Vokal Açısı",
+        "type": "Konser",
+        "format": "JPG",
+        "resolution": "3808 x 5712 px (300 DPI)",
+        "fileSize": "3.2 MB",
+        "url": "assets/images/yagmur-hizal/Kort3.JPG",
+        "badge": "Vokal"
+      },
+      {
+        "id": "kort4-1",
+        "folderId": "folder-korto",
+        "title": "Canlı Vokal Performansı",
+        "type": "Konser",
+        "format": "JPG",
+        "resolution": "3808 x 5712 px (300 DPI)",
+        "fileSize": "5.6 MB",
+        "url": "assets/images/yagmur-hizal/Kort4_1.JPG",
+        "badge": "Vokal HQ"
+      },
+      {
+        "id": "kort5",
+        "folderId": "folder-korto",
+        "title": "Konser Afiş Görseli - High Res",
+        "type": "Afiş Görseli",
+        "format": "JPG",
+        "resolution": "3808 x 5712 px (300 DPI)",
+        "fileSize": "5.3 MB",
+        "url": "assets/images/yagmur-hizal/Kort5.JPG",
+        "badge": "Billboard"
+      },
+      {
+        "id": "kort6-1",
+        "folderId": "folder-korto",
+        "title": "Sahne Portre Görseli",
+        "type": "Portre",
+        "format": "JPG",
+        "resolution": "3808 x 5712 px (300 DPI)",
+        "fileSize": "4.2 MB",
+        "url": "assets/images/yagmur-hizal/Kort6_1.JPG",
+        "badge": "Portre"
+      },
+      {
+        "id": "kort7",
+        "folderId": "folder-korto",
+        "title": "Konser Anı Çekimi",
+        "type": "Konser",
+        "format": "JPG",
+        "resolution": "3808 x 5712 px (300 DPI)",
+        "fileSize": "3.6 MB",
+        "url": "assets/images/yagmur-hizal/Kort7.JPG",
+        "badge": "Sahne Anı"
+      },
+      {
+        "id": "44c280",
+        "folderId": "folder-studio",
+        "title": "Stüdyo & Sahne Çekimi 4K",
+        "type": "Basın / Tanıtım",
+        "format": "JPG",
+        "resolution": "3414 x 5120 px (300 DPI)",
+        "fileSize": "2.0 MB",
+        "url": "assets/images/yagmur-hizal/44c28099-3858-41bf-9a99-4ab2f566034c.JPG",
+        "badge": "4K Tanıtım"
+      },
+      {
+        "id": "b1c17e",
+        "folderId": "folder-studio",
+        "title": "Özel Basın Görseli",
+        "type": "Basın",
+        "format": "JPG",
+        "resolution": "3414 x 5120 px (300 DPI)",
+        "fileSize": "1.7 MB",
+        "url": "assets/images/yagmur-hizal/b1c17eaf-f478-4387-8341-50537384dd7f.JPG",
+        "badge": "Basın Özel"
+      }
+    ]
+  }
+]

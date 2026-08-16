@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <script>
+    if (window.location.protocol === 'file:') {
+      const page = window.location.pathname.split('/').pop() || '404.html';
+      window.location.href = 'http://localhost:8080/' + page + window.location.search + window.location.hash;
+    }
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PressKitLive™ — 404 Sayfa Bulunamadı</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body {
+      background-color: var(--bg-body, #0a0a0a);
+      color: #fff;
+      font-family: var(--font-main, 'Inter', sans-serif);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      margin: 0;
+    }
+    .error-container {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+    }
+    .error-icon-box {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      background: rgba(239, 68, 68, 0.12);
+      color: #ef4444;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 24px;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+    }
+    .error-title {
+      font-family: var(--font-display, 'Inter', sans-serif);
+      font-size: 36px;
+      font-weight: 900;
+      margin: 0 0 12px 0;
+    }
+    .error-subtitle {
+      font-size: 16px;
+      color: var(--text-muted, #a7a7a7);
+      max-width: 480px;
+      line-height: 1.6;
+      margin: 0 0 32px 0;
+    }
+    .btn-home {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--primary, #1db954);
+      color: #000;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 50px;
+      text-decoration: none;
+      transition: transform 0.2s ease, background 0.2s ease;
+    }
+    .btn-home:hover {
+      transform: scale(1.04);
+      background: #1ed760;
+    }
+  </style>
+</head>
+<body>
+  <div class="error-container">
+    <div class="error-icon-box">
+      <i data-lucide="alert-triangle" style="width: 40px; height: 40px;"></i>
+    </div>
+    <h1 class="error-title">Sanatçı Bulunamadı (404)</h1>
+    <p class="error-subtitle">
+      Aradığınız sanatçı presskit sayfası mevcut değil, taşınmış veya henüz oluşturulmamış olabilir.
+    </p>
+    <a href="landing.html" class="btn-home">
+      <i data-lucide="arrow-left"></i> Ana Sayfaya Dön
+    </a>
+  </div>
+
+  <script>
+    if (window.lucide) lucide.createIcons();
+  </script>
+</body>
+</html>

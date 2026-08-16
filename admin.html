@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <script>
+    if (window.location.protocol === 'file:') {
+      const page = window.location.pathname.split('/').pop() || 'admin.html';
+      window.location.href = 'http://localhost:8080/' + page + window.location.search + window.location.hash;
+    }
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DijitalGru™ Super Admin Kontrol Paneli — PressKitLive</title>
+  <meta name="description" content="DijitalGru super admin yönetim paneli. Menajer üyelikleri, iyzico ödeme takibi ve sanatçı kota yönetimi.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons (Version Locked) -->
+  <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .admin-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 32px 24px 80px 24px;
+    }
+    .admin-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 32px;
+    }
+    .admin-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 20px;
+      margin-bottom: 32px;
+    }
+    .admin-stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    .admin-stat-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .admin-stat-icon.green { background: rgba(29, 185, 84, 0.15); color: var(--primary); }
+    .admin-stat-icon.blue { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
+    .admin-stat-icon.gold { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+    .admin-stat-icon.purple { background: rgba(168, 85, 247, 0.15); color: #a855f7; }
+
+    .admin-stat-label {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-subdued);
+      letter-spacing: 1px;
+      display: block;
+      margin-bottom: 4px;
+    }
+    .admin-stat-value {
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 900;
+      color: #fff;
+      display: block;
+      line-height: 1.2;
+    }
+    .admin-stat-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: block;
+    }
+
+    .admin-table-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 28px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+    }
+    .table-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .table-search-box {
+      background: var(--bg-base);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 8px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 280px;
+    }
+    .table-search-box input {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 13px;
+      width: 100%;
+      outline: none;
+    }
+
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+    .data-table th {
+      padding: 14px 16px;
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--text-subdued);
+      letter-spacing: 0.8px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+    .data-table td {
+      padding: 16px;
+      font-size: 13px;
+      border-bottom: 1px solid rgba(255,255,255,0.04);
+      vertical-align: middle;
+    }
+    .data-table tr:hover td {
+      background: rgba(255,255,255,0.02);
+    }
+    .manager-user-cell {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .manager-avatar-sm {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(29, 185, 84, 0.2);
+      color: var(--primary);
+      font-weight: 800;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .status-pill.active {
+      background: rgba(29, 185, 84, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(29, 185, 84, 0.3);
+    }
+    .status-pill.pending {
+      background: rgba(245, 158, 11, 0.15);
+      color: #f59e0b;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    .table-actions {
+      display: flex;
+      gap: 8px;
+    }
+  </style>
+</head>
+<body style="background-color: #060606; color: #fff;">
+
+  <div class="admin-container">
+    
+    <!-- ADMIN NAVBAR HEADER -->
+    <header class="admin-topbar">
+      <a href="/landing.html" class="agency-brand" style="text-decoration:none;">
+        <i data-lucide="disc" style="color: var(--primary);"></i>
+        <span>PressKit<span style="color: var(--primary);">Live</span></span>
+        <span style="font-size:10px; background:var(--primary); color:#000; padding:2px 8px; border-radius:12px; font-weight:900; margin-left:8px;">SUPER ADMIN</span>
+      </a>
+
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <a href="/agency_dashboard.html" class="btn btn-outline btn-small">
+          <i data-lucide="layout-dashboard"></i> Menajer Paneli
+        </a>
+        <a href="https://dijitalgru.com/" target="_blank" class="dijitalgru-top-pill">
+          <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru">
+          <span>DijitalGru™ Admin</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- SAAS STATS DASHBOARD (ITEM 3 FIX: ADDED DYNAMIC IDs & ACCURATE STATS) -->
+    <div class="admin-stats-grid">
+      <div class="admin-stat-card">
+        <div class="admin-stat-icon green">
+          <i data-lucide="users"></i>
+        </div>
+        <div class="admin-stat-details">
+          <span class="admin-stat-label">TOPLAM AKTİF MENAJER</span>
+          <span class="admin-stat-value" id="statTotalManagers">...</span>
+          <span class="admin-stat-sub" id="statTotalManagersSub">Yükleniyor...</span>
+        </div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="admin-stat-icon blue">
+          <i data-lucide="music-2"></i>
+        </div>
+        <div class="admin-stat-details">
+          <span class="admin-stat-label">TOPLAM SANATÇI PRESSKIT'İ</span>
+          <span class="admin-stat-value" id="statTotalArtists">...</span>
+          <span class="admin-stat-sub">300 DPI Medya Depolama</span>
+        </div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="admin-stat-icon gold">
+          <i data-lucide="credit-card"></i>
+        </div>
+        <div class="admin-stat-details">
+          <span class="admin-stat-label">AYLIK GELİR (MRR)</span>
+          <span class="admin-stat-value" id="statMRR">₺0 <span style="font-size:13px; color:var(--text-muted);">+KDV</span></span>
+          <span class="admin-stat-sub">iyzico Otomatik Tahsilat</span>
+        </div>
+      </div>
+
+      <div class="admin-stat-card">
+        <div class="admin-stat-icon purple">
+          <i data-lucide="shield-check"></i>
+        </div>
+        <div class="admin-stat-details">
+          <span class="admin-stat-label">iyzico BAŞARI ORANI</span>
+          <span class="admin-stat-value" id="statSuccessRate">%100</span>
+          <span class="admin-stat-sub">3D Secure Doğrulanmış</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MANAGERS & SUBSCRIPTIONS TABLE -->
+    <div class="admin-table-card">
+      
+      <div class="table-header-bar">
+        <div>
+          <h3 style="font-family:var(--font-display); font-size:18px; font-weight:800; color:#fff;">Menajer Üyelik & Abonelik Listesi</h3>
+          <p style="font-size:13px; color:var(--text-muted); margin-top:2px;">Sistemde kayıtlı menajerleri yönetin, ücretsiz üyelik atayın veya teknik destek için giriş yapın.</p>
+        </div>
+
+        <div style="display:flex; align-items:center; gap:12px;">
+          <div class="table-search-box">
+            <i data-lucide="search" style="color:var(--text-subdued); width:16px;"></i>
+            <input type="text" id="inputSearchManager" placeholder="Menajer veya e-posta ara..." onkeyup="filterManagersTable()">
+          </div>
+
+          <button class="btn btn-primary btn-small" id="btnOpenGrantFreeModal" onclick="openGrantFreeModal()">
+            <i data-lucide="gift"></i> + Ücretsiz Üyelik Ekle
+          </button>
+        </div>
+      </div>
+
+      <div style="overflow-x: auto;">
+        <table class="data-table" id="managersTable">
+          <thead>
+            <tr>
+              <th>Menajer / Kullanıcı</th>
+              <th>E-posta & Telefon</th>
+              <th>Aktif Paket</th>
+              <th>Sanatçı Kotası</th>
+              <th>Abonelik Durumu</th>
+              <th>Kayıt Tarihi</th>
+              <th>Aksiyoner (İmpersonation)</th>
+            </tr>
+          </thead>
+          <tbody id="managerTableBody">
+            <tr>
+              <td colspan="7" style="text-align:center; padding:40px; color:var(--text-muted);">
+                <i data-lucide="loader-2" class="spin-anim" style="width:28px; height:28px; color:var(--primary);"></i>
+                <p style="margin-top:8px;">Menajer üyeleri yükleniyor...</p>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+
+    <!-- GRANT FREE MEMBERSHIP MODAL (SECTION B.2 & C.3) -->
+    <div class="modal-backdrop" id="grantFreeModal">
+      <div class="modal-card" style="max-width:520px;">
+        <button class="modal-close-btn" onclick="closeGrantFreeModal()">&times;</button>
+        <div style="display:flex; align-items:center; gap:12px; margin-bottom:16px;">
+          <div style="width:44px; height:44px; border-radius:50%; background:rgba(59,130,246,0.15); color:var(--accent-blue); display:flex; align-items:center; justify-content:center;">
+            <i data-lucide="gift" style="width:24px; height:24px;"></i>
+          </div>
+          <div>
+            <h3 style="font-family:var(--font-display); font-size:20px; font-weight:800; color:#fff;">Ücretsiz / Hediye Üyelik Oluştur</h3>
+            <p style="font-size:12px; color:var(--text-muted);">Ödeme almadan menajer/sanatçı hesabı tanımlayın</p>
+          </div>
+        </div>
+
+        <form id="grantFreeForm" onsubmit="handleGrantFreeSubmit(event)">
+          <div class="form-group">
+            <label>Ad Soyad *</label>
+            <input type="text" id="freeName" placeholder="Örn: Aycan Yağcı" required>
+          </div>
+
+          <div class="form-group">
+            <label>E-posta Adresi *</label>
+            <input type="email" id="freeEmail" placeholder="ornek@ajans.com" required>
+          </div>
+
+          <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px;">
+            <div class="form-group">
+              <label>Hesap Tipi</label>
+              <select id="freeAccountType" style="background:var(--bg-base); color:#fff; border:1px solid var(--border-subtle); padding:10px; border-radius:8px; width:100%;">
+                <option value="agency">Menajer / Ajans</option>
+                <option value="solo">Bağımsız Sanatçı / DJ</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Abonelik Paketi</label>
+              <select id="freePlan" style="background:var(--bg-base); color:#fff; border:1px solid var(--border-subtle); padding:10px; border-radius:8px; width:100%;">
+                <option value="starter">Starter (4 Sanatçı)</option>
+                <option value="bireysel">Bireysel (1 Sanatçı)</option>
+                <option value="pro" selected>Pro (10 Sanatçı)</option>
+                <option value="enterprise">Enterprise (Sınırsız)</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="grantFreeResultBox" style="display:none; margin:16px 0; padding:14px; background:rgba(34,197,94,0.12); border:1px solid rgba(34,197,94,0.4); border-radius:8px; font-size:13px; color:#fff;"></div>
+
+          <button type="submit" class="btn btn-spotify btn-block btn-large" style="margin-top:12px;" id="btnGrantSubmit">
+            <i data-lucide="check-circle"></i> Ücretsiz Üyeliği Oluştur
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- PREMIUM DIJITALGRU FOOTER -->
+    <footer class="app-footer-premium" style="max-width: 1400px; margin: 60px auto;">
+      <div class="footer-container">
+        <div class="footer-brand-col">
+          <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru Logo" class="footer-brand-logo">
+          <p class="footer-brand-desc">
+            <strong>PressKitLive</strong> — Sanatçılar ve menajerler için <strong>DijitalGru™</strong> tarafından geliştirilmiş 300 DPI medya depo ve presskit altyapısı.
+          </p>
+        </div>
+
+        <div class="footer-links-col">
+          <div class="footer-col-title">Resmi Bağlantılar</div>
+          <div class="footer-links-list">
+            <a href="https://dijitalgru.com/" target="_blank" class="footer-link">
+              <i data-lucide="globe"></i> dijitalgru.com
+            </a>
+            <a href="https://www.instagram.com/dijitalgru/" target="_blank" class="footer-link">
+              <i data-lucide="instagram"></i> Instagram (@dijitalgru)
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-contact-col">
+          <div class="footer-col-title">İletişim & Destek</div>
+          <div class="footer-links-list">
+            <a href="mailto:dijitalgru@gmail.com" class="footer-link">
+              <i data-lucide="mail"></i> dijitalgru@gmail.com
+            </a>
+            <a href="tel:+905376274415" class="footer-link">
+              <i data-lucide="phone"></i> 0537 627 44 15
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <span>© 2026 PressKitLive. Tüm Hakları Saklıdır.</span>
+        <span style="color: rgba(255,255,255,0.2);">•</span>
+        <span>Bir <a href="https://dijitalgru.com/" target="_blank" style="color:var(--primary); font-weight:700;">DijitalGru™ Yazılım Teknolojisi</a></span>
+      </div>
+
+      <div class="footer-bottom-bar" style="border-top:none; padding-top:0;">
+        <span style="font-size:12px;">
+          <a href="hakkimizda.html" style="color:var(--text-subdued);">Hakkımızda</a> ·
+          <a href="gizlilik-politikasi.html" style="color:var(--text-subdued);">Gizlilik Politikası</a> ·
+          <a href="mesafeli-satis-sozlesmesi.html" style="color:var(--text-subdued);">Mesafeli Satış Sözleşmesi</a> ·
+          <a href="teslimat-iade-sartlari.html" style="color:var(--text-subdued);">Teslimat ve İade Şartları</a>
+        </span>
+      </div>
+    </footer>
+
+  </div>
+
+  <script>
+    let allManagers = [];
+
+    document.addEventListener('DOMContentLoaded', () => {
+      if (window.lucide) lucide.createIcons();
+      loadManagersData();
+    });
+
+    async function loadManagersData() {
+      try {
+        const res = await fetch('/api/admin/managers');
+        if (!res.ok) {
+          if (res.status === 403 || res.status === 401) {
+            window.location.href = '/login.html';
+          }
+          return;
+        }
+        const data = await res.json();
+        if (data.status === 'success') {
+          allManagers = data.managers || [];
+          renderManagersTable(allManagers);
+          updateAdminStats(allManagers);
+        }
+      } catch (err) {
+        console.error("Admin data load error:", err);
+      }
+    }
+
+    function updateAdminStats(managers) {
+      const activeSubs = managers.filter(m => m.subscriptionStatus === 'active' || m.subscriptionStatus === 'complimentary');
+      const activeCount = activeSubs.length;
+
+      const elTotalMgr = document.getElementById('statTotalManagers');
+      const elTotalMgrSub = document.getElementById('statTotalManagersSub');
+      const elTotalArt = document.getElementById('statTotalArtists');
+      const elMRR = document.getElementById('statMRR');
+      const elSuccessRate = document.getElementById('statSuccessRate');
+
+      if (elTotalMgr) elTotalMgr.innerText = `${managers.length} Menajer`;
+      if (elTotalMgrSub) elTotalMgrSub.innerText = `${activeCount} Aktif Abonelik • ${managers.length - activeCount} Pasif/İptal`;
+      
+      const totalArtists = managers.reduce((acc, m) => acc + (m.artistCount || 0), 0);
+      if (elTotalArt) elTotalArt.innerText = `${totalArtists} Sanatçı`;
+
+      // Dynamic MRR calculation from active paid subscriptions
+      const planPrices = { bireysel: 1080, starter: 1900, pro: 3800, enterprise: 9500 };
+      const mrr = managers
+        .filter(m => m.subscriptionStatus === 'active')
+        .reduce((sum, m) => sum + (planPrices[m.plan] || 1900), 0);
+
+      if (elMRR) elMRR.innerHTML = `₺${mrr.toLocaleString('tr-TR')} <span style="font-size:13px; color:var(--text-muted);">+KDV</span>`;
+      if (elSuccessRate) elSuccessRate.innerText = `%100`;
+    }
+
+    function renderManagersTable(managers) {
+      const tbody = document.getElementById('managerTableBody');
+      if (!managers || managers.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" style="text-align:center; padding:40px; color:var(--text-subdued);">Sistemde kayıtlı menajer bulunamadı.</td></tr>`;
+        return;
+      }
+
+      let html = '';
+      managers.forEach(m => {
+        const name = escapeHTML(m.name || 'Kullanıcı');
+        const email = escapeHTML(m.email || '');
+        const phone = escapeHTML(m.phone || '-');
+        const agency = escapeHTML(m.agency_name || (m.accountType === 'solo' ? 'Bağımsız Sanatçı' : 'Ajans Yok'));
+        const plan = escapeHTML((m.plan || 'starter').toUpperCase());
+        const artistCount = m.artistCount || 0;
+        const subStatus = m.subscriptionStatus || 'none';
+        const createdAt = escapeHTML(m.createdAt || '-');
+        const initials = name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+
+        let statusBadge = '';
+        if (subStatus === 'active') {
+          statusBadge = `<span class="status-pill active"><i data-lucide="check-circle-2" style="width:12px;"></i> iyzico Aktif</span>`;
+        } else if (subStatus === 'complimentary') {
+          statusBadge = `<span class="status-pill" style="background:rgba(59,130,246,0.15); color:#3B82F6; border:1px solid rgba(59,130,246,0.3);"><i data-lucide="gift" style="width:12px;"></i> Ücretsiz/Hediye</span>`;
+        } else if (subStatus === 'payment_failed') {
+          statusBadge = `<span class="status-pill" style="background:rgba(239,68,68,0.15); color:#EF4444; border:1px solid rgba(239,68,68,0.3);"><i data-lucide="alert-octagon" style="width:12px;"></i> Ödeme Başarısız</span>`;
+        } else if (subStatus === 'cancelling') {
+          statusBadge = `<span class="status-pill pending"><i data-lucide="clock" style="width:12px;"></i> İptal Ediliyor</span>`;
+        } else {
+          statusBadge = `<span class="status-pill" style="background:rgba(255,255,255,0.08); color:#a1a1aa; border:1px solid var(--border-subtle);">Pasif (${subStatus})</span>`;
+        }
+
+        html += `
+          <tr>
+            <td>
+              <div class="manager-user-cell">
+                <div class="manager-avatar-sm">${initials}</div>
+                <div>
+                  <strong style="color:#fff;">${name} ${m.isSuperAdmin ? '<span style="font-size:10px; background:var(--primary); color:#000; padding:2px 6px; border-radius:10px; font-weight:800; margin-left:4px;">ADMIN</span>' : ''}</strong>
+                  <div style="font-size:12px; color:var(--text-subdued);">${agency}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div style="color:#fff;">${phone}</div>
+              <div style="font-size:12px; color:var(--primary); font-weight:600;">${email}</div>
+            </td>
+            <td>
+              <span style="color:var(--accent-blue); font-weight:700;">${plan}</span>
+            </td>
+            <td>
+              <strong style="color:#fff;">${artistCount} Sanatçı</strong>
+            </td>
+            <td>${statusBadge}</td>
+            <td>${createdAt}</td>
+            <td>
+              <div class="table-actions">
+                <button type="button" class="btn btn-spotify btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleImpersonateClick(this)" title="Teknik Destek İçin Gir">
+                  <i data-lucide="user-check"></i> Olarak Görüntüle
+                </button>
+                <button type="button" class="btn btn-outline btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleGrantComplimentaryClick(this)" title="Ücretsiz Yap">
+                  <i data-lucide="gift"></i> Ücretsiz Yap
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      });
+
+      tbody.innerHTML = html;
+      if (window.lucide) lucide.createIcons();
+    }
+
+    function filterManagersTable() {
+      const q = document.getElementById('inputSearchManager').value.toLowerCase();
+      const filtered = allManagers.filter(m => 
+        (m.name || '').toLowerCase().includes(q) || 
+        (m.email || '').toLowerCase().includes(q) ||
+        (m.agency_name || '').toLowerCase().includes(q)
+      );
+      renderManagersTable(filtered);
+    }
+
+    function openGrantFreeModal() {
+      document.getElementById('grantFreeResultBox').style.display = 'none';
+      document.getElementById('grantFreeModal').classList.add('active');
+    }
+
+    function closeGrantFreeModal() {
+      document.getElementById('grantFreeModal').classList.remove('active');
+    }
+
+    async function handleGrantFreeSubmit(e) {
+      e.preventDefault();
+      const name = document.getElementById('freeName').value.trim();
+      const email = document.getElementById('freeEmail').value.trim();
+      const plan = document.getElementById('freePlan').value;
+      const accountType = document.getElementById('freeAccountType').value;
+      const resBox = document.getElementById('grantFreeResultBox');
+      const btn = document.getElementById('btnGrantSubmit');
+
+      btn.disabled = true;
+      resBox.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/admin/managers/grant-free', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, plan, accountType })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          resBox.innerHTML = `
+            <strong>✅ Ücretsiz Üyelik Başarıyla Oluşturuldu!</strong><br>
+            <div style="margin-top:8px; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px; font-family:monospace; font-size:14px; user-select:all;">
+              E-posta: ${escapeHTML(data.manager.email)}<br>
+              Geçici Şifre: <strong>${escapeHTML(data.manager.tempPassword)}</strong>
+            </div>
+            <p style="font-size:11px; margin-top:6px; color:#a1a1aa;">Lütfen bu şifreyi kopyalayıp kullanıcıya iletiniz.</p>
+          `;
+          resBox.style.display = 'block';
+          loadManagersData();
+        } else {
+          alert(data.message || "Üyelik oluşturulamadı.");
+        }
+      } catch (err) {
+        alert("Sunucu hatası.");
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function handleGrantComplimentaryClick(btn) {
+      const targetId = btn.getAttribute('data-manager-id');
+      const targetName = btn.getAttribute('data-manager-name');
+
+      if (!confirm(`"${targetName}" kullanıcısını ücretsiz/hediye statüsüne geçirmek istediğinize emin misiniz?`)) return;
+
+      try {
+        const res = await fetch('/api/admin/managers/set-complimentary', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ managerId: targetId, plan: 'pro' })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          alert(`"${targetName}" ücretsiz üye olarak güncellendi.`);
+          loadManagersData();
+        } else {
+          alert(data.message || "İşlem gerçekleştirilemedi.");
+        }
+      } catch (err) {
+        alert("Sunucuya bağlanılamadı.");
+      }
+    }
+
+    async function handleImpersonateClick(btn) {
+      const targetId = btn.getAttribute('data-manager-id');
+      const targetName = btn.getAttribute('data-manager-name');
+
+      if (!confirm(`⚠️ TEKNİK DESTEK UYARISI:\n\n"${targetName}" kullanıcısının hesabına giriş yapmak üzeresiniz.\n\nBu işlem denetim günlüğüne (impersonation_log) kaydedilecektir. Devam etmek istiyor musunuz?`)) return;
+
+      try {
+        const res = await fetch('/api/admin/impersonate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ managerId: targetId })
+        });
+        const data = await res.json();
+        if (data.status === 'success' && data.redirect) {
+          window.location.href = data.redirect;
+        } else {
+          alert(data.message || "Hesaba giriş yapılamadı.");
+        }
+      } catch (err) {
+        alert("Sunucuya bağlanılamadı.");
+      }
+    }
+
+    function escapeHTML(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>

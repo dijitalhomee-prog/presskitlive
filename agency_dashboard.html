@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <script>
+    if (window.location.protocol === 'file:') {
+      const page = window.location.pathname.split('/').pop() || 'agency_dashboard.html';
+      window.location.href = 'http://localhost:8080/' + page + window.location.search + window.location.hash;
+    }
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ajans Yönetim Paneli | PressKitLive</title>
+  <meta name="description" content="Menajerlik ajansı tüm sanatçılar kontrol paneli. Sanatçı ekleme, kotalar, düzenleme ve şifreli klasör yönetimi.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <!-- Lucide Icons (Version Locked) -->
+  <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/style.css">
+  <style>
+    .agency-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 32px 24px 80px 24px;
+    }
+
+    .agency-topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--border-subtle);
+      margin-bottom: 32px;
+    }
+    .agency-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-family: var(--font-display);
+      font-size: 24px;
+      font-weight: 900;
+      color: #fff;
+    }
+    
+    .agency-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .stat-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .stat-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-subdued);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .stat-value {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 900;
+      color: #fff;
+    }
+    .stat-sub {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .plan-usage-box {
+      background: linear-gradient(135deg, rgba(29, 185, 84, 0.1) 0%, rgba(59, 130, 246, 0.1) 100%);
+      border: 1px solid rgba(29, 185, 84, 0.3);
+      border-radius: var(--radius-lg);
+      padding: 28px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 40px;
+    }
+    .plan-usage-info h4 {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 800;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .plan-usage-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .quota-progress-bar {
+      width: 100%;
+      max-width: 400px;
+      height: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 4px;
+      overflow: hidden;
+      margin-top: 12px;
+    }
+    .quota-progress-fill {
+      height: 100%;
+      background: var(--primary);
+      width: 20%;
+      transition: width 0.3s ease;
+    }
+
+    .artists-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      gap: 28px;
+    }
+
+    .agency-artist-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: var(--transition-normal);
+      position: relative;
+    }
+    .agency-artist-card:hover {
+      border-color: var(--border-glass);
+      transform: translateY(-4px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+    }
+    .artist-card-cover {
+      height: 160px;
+      background-size: cover;
+      background-position: center;
+      position: relative;
+    }
+    .artist-card-cover::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.3) 0%, rgba(18,18,18,1) 100%);
+    }
+    .artist-card-top-badges {
+      position: absolute;
+      top: 16px;
+      left: 16px;
+      right: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 2;
+    }
+
+    .type-badge-cool {
+      font-size: 11px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: var(--radius-full);
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      text-transform: uppercase;
+    }
+    .type-badge-cool.live {
+      background: rgba(29, 185, 84, 0.2);
+      color: var(--primary);
+      border: 1px solid rgba(29, 185, 84, 0.4);
+    }
+    .type-badge-cool.dj {
+      background: rgba(59, 130, 246, 0.2);
+      color: var(--accent-blue);
+      border: 1px solid rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-edit-icon {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: var(--transition-normal);
+    }
+    .btn-edit-icon:hover {
+      background: var(--primary);
+      color: #000;
+    }
+    .btn-trash-icon {
+      background: rgba(239, 68, 68, 0.2);
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #EF4444;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: var(--transition-normal);
+    }
+    .btn-trash-icon:hover {
+      background: #EF4444;
+      color: #fff;
+    }
+
+    .artist-card-avatar {
+      position: absolute;
+      bottom: -24px;
+      left: 24px;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 4px solid var(--bg-surface);
+      object-fit: cover;
+      z-index: 3;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+    .artist-card-body {
+      padding: 36px 24px 24px 24px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+    .artist-card-name-cool {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 800;
+      color: #fff;
+      margin-bottom: 4px;
+    }
+    .artist-card-stats-cool {
+      font-size: 13px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .artist-card-action-bar {
+      margin-top: 24px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+      display: flex;
+      gap: 10px;
+    }
+    .btn-card-cool-primary {
+      flex: 1;
+      background: rgba(29, 185, 84, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(29, 185, 84, 0.3);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: var(--transition-normal);
+    }
+    .btn-card-cool-primary:hover {
+      background: var(--primary);
+      color: #000;
+    }
+    .btn-card-cool-secondary {
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border-subtle);
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      font-weight: 600;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: var(--transition-normal);
+    }
+    .btn-card-cool-secondary:hover {
+      color: #fff;
+      border-color: var(--border-glass);
+    }
+
+    @media (max-width: 768px) {
+      .plan-usage-box {
+        flex-direction: column;
+        text-align: center;
+      }
+      .plan-usage-info h4 {
+        justify-content: center;
+      }
+      .quota-progress-bar {
+        margin: 12px auto 0 auto;
+      }
+    }
+  </style>
+</head>
+<body style="background-color: #060606; color: #fff;">
+
+  <!-- IMPERSONATION BANNER (SECTION D.6) -->
+  <div id="impersonationBanner" style="display:none; background: #f59e0b; color: #000; padding: 12px 24px; font-weight: 700; font-size: 14px; text-align: center; align-items: center; justify-content: center; gap: 16px; position: sticky; top: 0; z-index: 99999;">
+    <span>⚠️ TEKNİK DESTEK MODUNDASINIZ — <strong id="impersonationTargetName">...</strong> hesabını görüntülüyorsunuz.</span>
+    <button type="button" class="btn btn-small" style="background:#000; color:#fff; border:none; padding:4px 14px; border-radius:20px; font-weight:700; cursor:pointer;" onclick="endImpersonation()">Kendi Hesabıma Dön</button>
+  </div>
+
+  <div class="agency-container">
+    
+    <!-- DASHBOARD NAVBAR HEADER -->
+    <header class="agency-topbar">
+      <a href="landing.html" class="agency-brand" style="text-decoration:none;">
+        <i data-lucide="disc" style="color: var(--primary);"></i>
+        <span>PressKit<span style="color: var(--primary);">Live</span></span>
+      </a>
+
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <button class="btn btn-outline btn-small" id="btnOpenChangePassModal" title="Şifre Değiştir">
+          <i data-lucide="key-round"></i> Şifre Değiştir
+        </button>
+        <a href="https://dijitalgru.com/" target="_blank" class="dijitalgru-top-pill" id="headerManagerPill">
+          <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru">
+          <span id="headerManagerName">Menajer Paneli</span>
+        </a>
+        <button class="btn btn-ghost btn-small" onclick="logoutHandler()" title="Çıkış Yap">
+          <i data-lucide="log-out"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- PAYMENT FAILED BANNER (SECTION D.3) -->
+    <div id="paymentFailedBanner" style="display:none; margin-bottom:24px; padding:16px 24px; background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.4); border-radius:var(--radius-lg); color:#ef4444; display:flex; align-items:center; justify-content:space-between; gap:16px;">
+      <div style="display:flex; align-items:center; gap:12px;">
+        <i data-lucide="alert-octagon" style="width:28px; height:28px; flex-shrink:0;"></i>
+        <div>
+          <strong style="font-size:15px; color:#fff;">⚠️ Abonelik Ödemeniz Alınamadı!</strong>
+          <p style="margin:2px 0 0 0; font-size:13px; color:#fca5a5;">Kart bakiyeniz yetersiz veya kartınız onaylanmadı. Lütfen ödeme bilgilerinizi güncelleyin.</p>
+        </div>
+      </div>
+      <a href="landing.html#fiyatlandirma" class="btn btn-spotify btn-small">Ödeme Bilgilerini Güncelle</a>
+    </div>
+
+    <!-- DASHBOARD STATS -->
+    <div class="agency-stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">MENAJER & AJANS</span>
+        <span class="stat-value" id="statManagerName">Menajer Yükleniyor...</span>
+        <span class="stat-sub" id="statManagerEmail">...</span>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-label">AKTİF ABONELİK</span>
+        <span class="stat-value" id="statPlanName" style="color:var(--accent-blue);">Pro Ajans Paketi</span>
+        <span class="stat-sub" id="statPlanPriceSub">
+          <img src="/assets/images/iyzico/iyzico_ile_ode_white.svg" alt="iyzico" style="height:14px;"> ₺1.900 + KDV / Ay (Aktif)
+        </span>
+      </div>
+
+      <div class="stat-card">
+        <span class="stat-label">SANATÇI KOTASI</span>
+        <span class="stat-value" id="statQuotaVal">0 / 10 Sanatçı</span>
+        <span class="stat-sub" id="statQuotaSub">10 Sanatçı Ekleme Hakkı Var</span>
+      </div>
+    </div>
+
+    <!-- PRO PLAN USAGE BANNER -->
+    <div class="plan-usage-box">
+      <div class="plan-usage-info">
+        <h4><i data-lucide="award" style="color:var(--accent-blue);"></i> <span id="bannerPlanTitle">Pro Ajans Paketi</span> Aktif</h4>
+        <p id="planUsageText">Hesabınızdaki sanatçılar veritabanından yükleniyor...</p>
+        <div class="quota-progress-bar">
+          <div class="quota-progress-fill" id="quotaProgressFill"></div>
+        </div>
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <button class="btn btn-accent" id="btnOpenCreateArtistModal">
+          <i data-lucide="plus-circle"></i> + Yeni Sanatçı Sayfası Oluştur
+        </button>
+        <a href="landing.html#fiyatlandirma" class="btn btn-outline">
+          <i data-lucide="sparkles"></i> Enterprise Pakete Geç
+        </a>
+      </div>
+    </div>
+
+    <!-- MANAGED ARTISTS SECTION (DYNAMIC SQLITE RENDERING) -->
+    <section>
+      <div class="section-header" style="margin-bottom: 28px;">
+        <div>
+          <h2 class="section-title"><i data-lucide="users"></i> Yönetilen Sanatçılar (<span id="artistsCountHeader">0</span>)</h2>
+          <p class="section-subtitle">Menajerliğini yaptığınız sanatçıların presskit sayfaları</p>
+        </div>
+      </div>
+
+      <!-- DYNAMIC ARTISTS GRID CONTAINER -->
+      <div class="artists-grid" id="agencyArtistsGrid">
+        <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+          <i data-lucide="loader-2" class="spin-anim" style="width:36px; height:36px; color:var(--primary);"></i>
+          <p style="margin-top:12px; color:var(--text-muted);">Sanatçılarınız yükleniyor...</p>
+        </div>
+      </div>
+    <!-- SUBSCRIPTION MANAGEMENT SECTION (SECTION D.2) -->
+    <section style="margin-top: 50px;">
+      <div class="section-header" style="margin-bottom: 24px;">
+        <div>
+          <h2 class="section-title"><i data-lucide="credit-card"></i> Abonelik & Paket Yönetimi</h2>
+          <p class="section-subtitle">Mevcut abonelik durumunuzu görüntüleyin, paketinizi yükseltin veya yönetin</p>
+        </div>
+      </div>
+
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 28px 32px; display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; align-items: center;">
+        <div>
+          <div style="font-size: 11px; font-weight: 800; color: var(--text-subdued); text-transform: uppercase; letter-spacing: 0.5px;">Mevcut Aktif Planınız</div>
+          <h3 id="subSectionPlanTitle" style="font-family: var(--font-display); font-size: 24px; font-weight: 900; color: #fff; margin: 6px 0 8px 0;">Pro Menajer Ajansı</h3>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <span id="subSectionStatusBadge" style="background: rgba(29, 185, 84, 0.15); color: var(--primary); border: 1px solid rgba(29, 185, 84, 0.3); font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 20px; text-transform: uppercase;">
+              ● Aktif Abonelik
+            </span>
+            <span style="font-size: 12px; color: var(--text-muted);">iyzico Güvencesiyle</span>
+          </div>
+        </div>
+
+        <div style="display: flex; flex-wrap: wrap; gap: 10px; justify-content: flex-end;">
+          <button type="button" class="btn btn-outline btn-small" onclick="upgradePlanQuick('starter')">Starter (₺1.900)</button>
+          <button type="button" class="btn btn-primary btn-small" onclick="upgradePlanQuick('pro')">Pro (₺4.900)</button>
+          <button type="button" class="btn btn-accent btn-small" onclick="upgradePlanQuick('enterprise')">Enterprise (₺9.900)</button>
+          <button type="button" class="btn btn-ghost btn-small" style="color: #ef4444; border:1px solid rgba(239,68,68,0.3);" onclick="cancelSubscriptionQuick()">İptal Et</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PREMIUM FOOTER -->
+    <footer class="app-footer-premium" style="margin-top: 60px; border-radius: 20px;">
+      <div class="footer-container">
+        <div class="footer-brand-col">
+          <a href="https://dijitalgru.com/" target="_blank">
+            <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru Logo" class="footer-brand-logo">
+          </a>
+          <p class="footer-brand-desc">
+            <strong>PressKitLive</strong> — Sanatçılar ve menajerler için <a href="https://dijitalgru.com/" target="_blank" style="color:var(--primary); font-weight:700;">DijitalGru™</a> tarafından geliştirilmiş 300 DPI medya depo ve presskit altyapısı.
+          </p>
+        </div>
+
+        <div class="footer-links-col">
+          <div class="footer-col-title">Resmi Bağlantılar</div>
+          <div class="footer-links-list">
+            <a href="https://dijitalgru.com/" target="_blank" class="footer-link">
+              <i data-lucide="globe"></i> dijitalgru.com
+            </a>
+            <a href="https://www.instagram.com/dijitalgru/" target="_blank" class="footer-link">
+              <i data-lucide="instagram"></i> Instagram (@dijitalgru)
+            </a>
+          </div>
+        </div>
+
+        <div class="footer-contact-col">
+          <div class="footer-col-title">İletişim & Destek</div>
+          <div class="footer-links-list">
+            <a href="mailto:dijitalgru@gmail.com" class="footer-link">
+              <i data-lucide="mail"></i> dijitalgru@gmail.com
+            </a>
+            <a href="tel:+905376274415" class="footer-link">
+              <i data-lucide="phone"></i> 0537 627 44 15
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom-bar">
+        <span>© 2026 PressKitLive. Tüm Hakları Saklıdır.</span>
+        <span style="color: rgba(255,255,255,0.2);">•</span>
+        <span>Bir <a href="https://dijitalgru.com/" target="_blank" style="color:var(--primary); font-weight:700;">DijitalGru™ Yazılım Teknolojisi</a></span>
+      </div>
+
+      <div class="footer-bottom-bar" style="border-top:none; padding-top:0;">
+        <span style="font-size:12px;">
+          <a href="hakkimizda.html" style="color:var(--text-subdued);">Hakkımızda</a> ·
+          <a href="gizlilik-politikasi.html" style="color:var(--text-subdued);">Gizlilik Politikası</a> ·
+          <a href="mesafeli-satis-sozlesmesi.html" style="color:var(--text-subdued);">Mesafeli Satış Sözleşmesi</a> ·
+          <a href="teslimat-iade-sartlari.html" style="color:var(--text-subdued);">Teslimat ve İade Şartları</a>
+        </span>
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- MODAL: EDIT ARTIST NAME & DJ/LIVE TYPE -->
+  <div class="modal-backdrop" id="editArtistModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3><i data-lucide="edit-3"></i> Sanatçı Bilgilerini Düzenle</h3>
+          <p>Sanatçının adını ve DJ / LIVE performans türünü güncelleyin.</p>
+        </div>
+        <button class="modal-close" id="btnCloseEditArtistModal">&times;</button>
+      </div>
+
+      <form id="editArtistForm" class="modal-body">
+        <input type="hidden" id="editArtistId">
+        
+        <div class="form-group">
+          <label>Sanatçı Sahne Adı *</label>
+          <input type="text" id="editArtistName" placeholder="Örn: Yağmur Hızal" required>
+        </div>
+
+        <div class="form-group">
+          <label>Performans Türü *</label>
+          <select id="editArtistPerformType">
+            <option value="LIVE">LIVE (Canlı Vokal / Orkestra)</option>
+            <option value="DJ">DJ (Performans & Set)</option>
+            <option value="Pop / Indie">Pop / Indie</option>
+          </select>
+        </div>
+
+        <div class="modal-footer" style="padding:16px 0 0 0; background:transparent; border-top:none;">
+          <button type="button" class="btn btn-outline" id="btnCancelEditArtist">İptal</button>
+          <button type="submit" class="btn btn-spotify"><i data-lucide="check"></i> Değişiklikleri Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CHANGE PASSWORD -->
+  <div class="modal-backdrop" id="changePassModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3><i data-lucide="key-round"></i> Şifre Değiştir</h3>
+          <p>Hesabınızın giriş şifresini güncelleyin.</p>
+        </div>
+        <button class="modal-close" id="btnCloseChangePassModal">&times;</button>
+      </div>
+
+      <form id="changePassForm" class="modal-body">
+        <div class="form-group">
+          <label>Yeni Şifre (En az 8 Karakter) *</label>
+          <input type="password" id="newPass" placeholder="••••••••" required minlength="8">
+        </div>
+
+        <div class="form-group">
+          <label>Yeni Şifre (Tekrar) *</label>
+          <input type="password" id="confirmPass" placeholder="••••••••" required minlength="8">
+        </div>
+
+        <div class="modal-footer" style="padding:16px 0 0 0; background:transparent; border-top:none;">
+          <button type="button" class="btn btn-outline" id="btnCancelChangePass">İptal</button>
+          <button type="submit" class="btn btn-spotify"><i data-lucide="check"></i> Şifreyi Güncelle</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: CREATE NEW ARTIST -->
+  <div class="modal-backdrop" id="createArtistModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <div>
+          <h3><i data-lucide="user-plus"></i> Yeni Sanatçı Sayfası Oluştur</h3>
+          <p>Ajansınıza yeni bir sanatçı ekleyin ve 300 DPI medya deposunu açın.</p>
+        </div>
+        <button class="modal-close" id="btnCloseCreateArtistModal">&times;</button>
+      </div>
+
+      <form id="createArtistForm" class="modal-body">
+        <div id="createArtistErrorBox" style="display:none; margin-bottom:16px;"></div>
+        <div class="form-group">
+          <label>Sanatçı Sahne Adı *</label>
+          <input type="text" id="newArtistName" placeholder="Örn: Efe Soylu" required>
+        </div>
+
+        <div class="form-group">
+          <label>Performans Türü *</label>
+          <select id="newArtistPerformType">
+            <option value="LIVE">LIVE (Canlı Vokal / Orkestra)</option>
+            <option value="DJ">DJ (Performans & Set)</option>
+            <option value="Pop / Indie">Pop / Indie</option>
+          </select>
+        </div>
+
+        <div class="modal-footer" style="padding:16px 0 0 0; background:transparent; border-top:none;">
+          <button type="button" class="btn btn-outline" id="btnCancelCreateArtist">İptal</button>
+          <button type="submit" class="btn btn-spotify"><i data-lucide="check"></i> Sanatçı Sayfasını Aç</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- JAVASCRIPT: DYNAMIC MANAGER & ARTISTS FETCHING -->
+  <script>
+    if (window.lucide) lucide.createIcons();
+
+    let currentManager = null;
+    let managerArtists = [];
+    let planQuotaLimit = 10;
+
+    document.addEventListener('DOMContentLoaded', async () => {
+      await loadDashboardData();
+    });
+
+    async function loadDashboardData() {
+      try {
+        // 1. Fetch Session Info
+        const sessionRes = await fetch('/api/session');
+        if (sessionRes.ok) {
+          const sessJson = await sessionRes.json();
+          if (sessJson.authenticated && sessJson.user) {
+            currentManager = sessJson.user;
+            if (sessJson.user.quotaLimit) {
+              planQuotaLimit = sessJson.user.quotaLimit;
+            }
+            renderManagerHeaderAndStats();
+          } else {
+            window.location.href = '/login.html';
+            return;
+          }
+        }
+
+        // 2. Fetch Manager's Artists from SQLite
+        const artistsRes = await fetch('/api/my-artists');
+        if (artistsRes.ok) {
+          const artJson = await artistsRes.json();
+          managerArtists = artJson.artists || [];
+          if (artJson.quotaLimit) {
+            planQuotaLimit = artJson.quotaLimit;
+          }
+          renderDynamicArtistsGrid();
+        }
+      } catch (err) {
+        console.error("Dashboard loading error:", err);
+      }
+    }
+
+    function escapeHTML(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function renderManagerHeaderAndStats() {
+      if (!currentManager) return;
+
+      const mgrName = currentManager.name || "Kullanıcı";
+      const mgrEmail = currentManager.email || "";
+      const isSolo = (currentManager.accountType === 'solo');
+      const subStatus = currentManager.subscriptionStatus || 'active';
+
+      document.getElementById('statManagerName').innerText = mgrName;
+      document.getElementById('statManagerEmail').innerText = mgrEmail;
+      document.getElementById('headerManagerName').innerText = isSolo ? `${mgrName} (Sanatçı)` : `${mgrName}`;
+
+      const planName = isSolo ? 'Bireysel Sanatçı / DJ Paketi' :
+                       currentManager.plan === 'starter' ? 'Starter Paketi' :
+                       currentManager.plan === 'enterprise' ? 'Enterprise Ajans' : 'Pro Ajans Paketi';
+
+      document.getElementById('statPlanName').innerText = planName;
+      document.getElementById('bannerPlanTitle').innerText = planName;
+      document.getElementById('subSectionPlanTitle').innerText = planName;
+
+      // Dynamic Plan Price Display (Item 2 Fix)
+      const planPrices = {
+        bireysel: '₺1.080 + KDV / Ay',
+        starter: '₺1.900 + KDV / Ay',
+        pro: '₺3.800 + KDV / Ay',
+        enterprise: '₺9.500 + KDV / Ay'
+      };
+      const rawPlanKey = currentManager.plan || (isSolo ? 'bireysel' : 'starter');
+      const planPriceText = subStatus === 'complimentary' ? 'Ücretsiz (Hediye)' : (planPrices[rawPlanKey] || '₺1.900 + KDV / Ay');
+
+      const elPriceSub = document.getElementById('statPlanPriceSub');
+      if (elPriceSub) {
+        elPriceSub.innerHTML = `<img src="/assets/images/iyzico/iyzico_ile_ode_white.svg" alt="iyzico" style="height:14px;"> ${planPriceText} (${subStatus === 'active' ? 'Aktif' : subStatus === 'complimentary' ? 'Hediye' : subStatus})`;
+      }
+
+      // Handle subscription status badges and alert banner (Section D.2 & D.3)
+      const statusBadge = document.getElementById('subSectionStatusBadge');
+      const failedBanner = document.getElementById('paymentFailedBanner');
+
+      if (subStatus === 'payment_failed') {
+        statusBadge.style.background = 'rgba(239, 68, 68, 0.15)';
+        statusBadge.style.color = '#ef4444';
+        statusBadge.style.borderColor = 'rgba(239, 68, 68, 0.3)';
+        statusBadge.innerText = '⚠️ Ödeme Başarısız (Kartınızı Güncelleyin)';
+        if (failedBanner) failedBanner.style.display = 'flex';
+      } else if (subStatus === 'cancelling') {
+        statusBadge.style.background = 'rgba(234, 179, 8, 0.15)';
+        statusBadge.style.color = '#eab308';
+        statusBadge.style.borderColor = 'rgba(234, 179, 8, 0.3)';
+        statusBadge.innerText = '⏳ İptal Talebi Alındı (Dönem Sonu Sonlanacak)';
+        if (failedBanner) failedBanner.style.display = 'none';
+      } else {
+        statusBadge.style.background = 'rgba(29, 185, 84, 0.15)';
+        statusBadge.style.color = 'var(--primary)';
+        statusBadge.style.borderColor = 'rgba(29, 185, 84, 0.3)';
+        statusBadge.innerText = '● Aktif Abonelik';
+        if (failedBanner) failedBanner.style.display = 'none';
+      }
+
+      // Hide "+ Yeni Sanatçı Ekle" for solo accounts with 1 artist
+      if (isSolo) {
+        document.getElementById('btnOpenCreateArtistModal').style.display = 'none';
+      }
+
+      // Check Impersonation Banner (Section D.6)
+      const impBanner = document.getElementById('impersonationBanner');
+      if (currentManager.impersonation && currentManager.impersonation.active) {
+        document.getElementById('impersonationTargetName').innerText = mgrName;
+        if (impBanner) impBanner.style.display = 'flex';
+      } else {
+        if (impBanner) impBanner.style.display = 'none';
+      }
+    }
+
+    async function endImpersonation() {
+      try {
+        const res = await fetch('/api/admin/end-impersonation', { method: 'POST' });
+        const data = await res.json();
+        if (data.status === 'success' && data.redirect) {
+          window.location.href = data.redirect;
+        } else {
+          alert(data.message || "Yönetici hesabına dönülemedi.");
+        }
+      } catch (err) {
+        alert("Sunucuya bağlanılamadı.");
+      }
+    }
+
+    async function upgradePlanQuick(newPlanId) {
+      if (!confirm(`Abonelik paketinizi ${newPlanId.toUpperCase()} olarak güncellemek istediğinize emin misiniz?`)) return;
+
+      try {
+        const res = await fetch('/api/subscription/upgrade', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ planId: newPlanId })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          alert(data.message || "Planınız başarıyla güncellendi.");
+          await loadDashboardData();
+        } else {
+          alert(data.message || "Plan güncellenemedi.");
+        }
+      } catch (err) {
+        alert("Sunucuya bağlanılamadı.");
+      }
+    }
+
+    async function cancelSubscriptionQuick() {
+      if (!confirm("Aboneliğinizi iptal etmek istediğinize emin misiniz?\n\nİptal işlemi cari fatura döneminizin sonunda geçerli olacaktır ve bu süre boyunca erişiminiz devam edecektir.")) return;
+
+      try {
+        const res = await fetch('/api/subscription/cancel', {
+          method: 'POST'
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          alert(data.message || "İptal talebiniz alındı.");
+          await loadDashboardData();
+        } else {
+          alert(data.message || "İptal işlemi gerçekleştirilemedi.");
+        }
+      } catch (err) {
+        alert("Sunucuya bağlanılamadı.");
+      }
+    }
+
+    function renderDynamicArtistsGrid() {
+      const grid = document.getElementById('agencyArtistsGrid');
+      const countHeader = document.getElementById('artistsCountHeader');
+      const quotaVal = document.getElementById('statQuotaVal');
+      const quotaSub = document.getElementById('statQuotaSub');
+      const usageText = document.getElementById('planUsageText');
+      const progressFill = document.getElementById('quotaProgressFill');
+
+      const count = managerArtists.length;
+      countHeader.innerText = count;
+
+      const remaining = Math.max(0, planQuotaLimit - count);
+      quotaVal.innerText = `${count} / ${planQuotaLimit} Sanatçı`;
+      quotaSub.innerText = `${remaining} Sanatçı Ekleme Hakkı Var`;
+      usageText.innerText = `Hesabınızda ${count} sanatçı kayıtlı. ${remaining} sanatçı daha ekleme hakkınız bulunmaktadır.`;
+
+      const pct = Math.min(100, Math.round((count / planQuotaLimit) * 100));
+      progressFill.style.width = `${pct}%`;
+
+      // EMPTY STATE RENDERING FOR NEW MANAGERS WITH 0 ARTISTS
+      if (count === 0) {
+        grid.innerHTML = `
+          <div style="grid-column: 1/-1; text-align: center; padding: 60px 24px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);">
+            <div style="width:64px; height:64px; border-radius:50%; background:rgba(29, 185, 84, 0.12); color:var(--primary); display:flex; align-items:center; justify-content:center; margin:0 auto 16px auto;">
+              <i data-lucide="user-plus" style="width: 32px; height: 32px;"></i>
+            </div>
+            <h3 style="font-family: var(--font-display); font-size: 22px; font-weight: 800; color: #fff; margin-bottom: 8px;">Henüz Kayıtlı Sanatçınız Bulunmuyor</h3>
+            <p style="font-size: 15px; color: var(--text-muted); max-width: 480px; margin: 0 auto 24px auto; line-height:1.6;">300 DPI afiş ve medya deposunu oluşturmak için ilk sanatçı sayfanızı hemen ekleyin.</p>
+            <button class="btn btn-spotify btn-large" onclick="document.getElementById('createArtistModal').classList.add('active')">
+              <i data-lucide="plus-circle"></i> İlk Sanatçı Sayfasını Oluştur
+            </button>
+          </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        return;
+      }
+
+      // RENDER DYNAMIC ARTIST CARDS WITH XSS SANITIZATION & AVATAR PLACEHOLDER (Item 4 Fix)
+      let html = '';
+      managerArtists.forEach(art => {
+        const safeId = escapeHTML(art.id);
+        const safeName = escapeHTML(art.name);
+
+        const rawCover = art.banner || art.avatar || '';
+        let coverStyle = 'background: linear-gradient(135deg, #18181b 0%, #27272a 100%);';
+        if (rawCover) {
+          const coverUrl = rawCover.startsWith('http') || rawCover.startsWith('/') ? rawCover : '/' + rawCover;
+          coverStyle = `background-image: url('${coverUrl}');`;
+        }
+
+        const rawAvatar = art.avatar || '';
+        let avatarHTML = '';
+        if (rawAvatar) {
+          const avatarUrl = rawAvatar.startsWith('http') || rawAvatar.startsWith('/') ? rawAvatar : '/' + rawAvatar;
+          avatarHTML = `<img src="${avatarUrl}" alt="${safeName}" class="artist-card-avatar">`;
+        } else {
+          const initials = safeName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+          avatarHTML = `<div class="artist-card-avatar" style="background:linear-gradient(135deg, #1DB954 0%, #059669 100%); color:#000; font-weight:900; font-size:20px; display:flex; align-items:center; justify-content:center; border:3px solid #18181b;">${initials}</div>`;
+        }
+
+        const performType = escapeHTML(art.genre || 'LIVE');
+        const badgeClass = performType.toUpperCase().includes('DJ') ? 'dj' : 'live';
+        const badgeIcon = performType.toUpperCase().includes('DJ') ? 'disc' : 'mic-2';
+        const photosCount = (art.pressPhotos || []).length;
+        const foldersCount = (art.folders || []).length;
+
+        html += `
+          <div class="agency-artist-card" id="artistCard-${safeId}">
+            <div class="artist-card-cover" style="${coverStyle}">
+              
+              <div class="artist-card-top-badges">
+                <span class="type-badge-cool ${badgeClass}">
+                  <i data-lucide="${badgeIcon}" style="width:12px;"></i> ${performType}
+                </span>
+                
+                <div style="display:flex; gap:6px;">
+                  <button type="button" class="btn-edit-icon" title="Sanatçı İsmini Düzenle" data-artist-id="${safeId}" data-artist-name="${safeName}" data-artist-genre="${performType}">
+                    <i data-lucide="edit-3" style="width:16px;"></i>
+                  </button>
+                </div>
+              </div>
+
+              ${avatarHTML}
+            </div>
+
+            <div class="artist-card-body">
+              <div class="artist-card-title-block">
+                <h3 class="artist-card-name-cool">${safeName}</h3>
+                <div class="artist-card-stats-cool">
+                  <i data-lucide="image" style="color:var(--primary); width:16px;"></i> 
+                  <span>${photosCount} Adet 300 DPI Fotoğraf • ${foldersCount} Klasör</span>
+                </div>
+              </div>
+
+              <div class="artist-card-action-bar">
+                <a href="/index.html?artistId=${safeId}" class="btn-card-cool-primary">
+                  <i data-lucide="sliders" style="width:16px;"></i> Yönet & Düzenle
+                </a>
+                <a href="/artist/${safeId}" target="_blank" class="btn-card-cool-secondary">
+                  <i data-lucide="external-link" style="width:16px;"></i> Grafiker Linki
+                </a>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+
+      grid.innerHTML = html;
+      if (window.lucide) lucide.createIcons();
+
+      // Bind click handlers using dataset to completely eliminate inline onclick XSS
+      grid.querySelectorAll('.btn-edit-icon').forEach(btn => {
+        btn.addEventListener('click', () => {
+          openEditModal(btn.dataset.artistId, btn.dataset.artistName, btn.dataset.artistGenre);
+        });
+      });
+    }
+
+    function openEditModal(artistId, name, genre) {
+      document.getElementById('editArtistId').value = artistId;
+      document.getElementById('editArtistName').value = name;
+      document.getElementById('editArtistModal').classList.add('active');
+    }
+
+    async function logoutHandler() {
+      try {
+        await fetch('/api/logout', { method: 'POST' });
+        window.location.href = '/login.html';
+      } catch (e) {
+        window.location.href = '/login.html';
+      }
+    }
+
+    // Modal Event Bindings
+    document.getElementById('btnCloseEditArtistModal').addEventListener('click', () => document.getElementById('editArtistModal').classList.remove('active'));
+    document.getElementById('btnCancelEditArtist').addEventListener('click', () => document.getElementById('editArtistModal').classList.remove('active'));
+
+    document.getElementById('editArtistForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const artistId = document.getElementById('editArtistId').value;
+      const name = document.getElementById('editArtistName').value.trim();
+      const genre = document.getElementById('editArtistPerformType').value;
+
+      try {
+        const res = await fetch('/api/artists/edit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ artistId, name, genre })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          document.getElementById('editArtistModal').classList.remove('active');
+          await loadDashboardData();
+        } else {
+          alert(data.message || "Güncellenemedi.");
+        }
+      } catch (err) {
+        alert("Hata oluştu.");
+      }
+    });
+
+    // Create Artist Form Submission (POST /api/artists/create)
+    const modal = document.getElementById('createArtistModal');
+    const btnOpen = document.getElementById('btnOpenCreateArtistModal');
+    const btnClose = document.getElementById('btnCloseCreateArtistModal');
+    const btnCancel = document.getElementById('btnCancelCreateArtist');
+    const form = document.getElementById('createArtistForm');
+
+    btnOpen.addEventListener('click', () => modal.classList.add('active'));
+    btnClose.addEventListener('click', () => modal.classList.remove('active'));
+    btnCancel.addEventListener('click', () => modal.classList.remove('active'));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('newArtistName').value.trim();
+      const performType = document.getElementById('newArtistPerformType').value;
+      const errBox = document.getElementById('createArtistErrorBox');
+      errBox.style.display = 'none';
+
+      if (!name) return;
+
+      try {
+        const res = await fetch('/api/artists/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name, genre: performType })
+        });
+
+        const data = await res.json();
+        if (data.status === 'success') {
+          modal.classList.remove('active');
+          form.reset();
+          await loadDashboardData();
+        } else {
+          errBox.innerHTML = `
+            <div style="padding: 12px 16px; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; color: #ef4444; font-size: 13px; line-height: 1.5;">
+              <strong>${escapeHTML(data.message || 'Sanatçı ekleme başarısız.')}</strong>
+              ${res.status === 403 ? `<div style="margin-top: 10px;"><a href="landing.html#fiyatlandirma" target="_blank" style="color: #000; background: var(--primary); padding: 8px 14px; border-radius: 20px; text-decoration: none; font-weight: 700; display: inline-block; font-size: 12px;">⚡ Paketinizi Yükseltin</a></div>` : ''}
+            </div>
+          `;
+          errBox.style.display = 'block';
+        }
+      } catch (err) {
+        errBox.innerHTML = `<div style="color:#ef4444; font-size:13px;">Sunucuya bağlanılamadı.</div>`;
+        errBox.style.display = 'block';
+      }
+    });
+
+    // Password Change Form Submission
+    const passModal = document.getElementById('changePassModal');
+    const btnOpenPass = document.getElementById('btnOpenChangePassModal');
+    const btnClosePass = document.getElementById('btnCloseChangePassModal');
+    const btnCancelPass = document.getElementById('btnCancelChangePass');
+    const passForm = document.getElementById('changePassForm');
+
+    btnOpenPass.addEventListener('click', () => passModal.classList.add('active'));
+    btnClosePass.addEventListener('click', () => passModal.classList.remove('active'));
+    btnCancelPass.addEventListener('click', () => passModal.classList.remove('active'));
+
+    passForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const newP = document.getElementById('newPass').value;
+      const confP = document.getElementById('confirmPass').value;
+
+      if (newP !== confP) {
+        alert("Yeni şifreler uyuşmuyor, lütfen tekrar kontrol edin.");
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/change-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ newPassword: newP })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          alert("Tebrikler! Şifreniz veritabanında kalıcı olarak güncellendi.");
+          passModal.classList.remove('active');
+          passForm.reset();
+        } else {
+          alert(data.message || "Şifre değiştirilemedi.");
+        }
+      } catch (err) {
+        alert("Sunucu hatası.");
+      }
+    });
+  </script>
+</body>
+</html>
