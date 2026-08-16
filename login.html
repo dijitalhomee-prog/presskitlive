@@ -334,7 +334,8 @@
         });
         const data = await res.json();
         if (data.status === 'success') {
-          window.location.href = data.redirect || '/agency_dashboard.html';
+          const isSuper = data.user && data.user.isSuperAdmin;
+          window.location.href = data.redirect || (isSuper ? '/admin.html' : '/agency_dashboard.html');
         } else {
           errBox.innerText = data.message || 'Giriş başarısız.';
           errBox.style.display = 'block';

@@ -472,15 +472,18 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                 self.reset_failed_attempts()
                 token = db.create_session(manager["id"])
                 cookie_str = f"presskit_session={token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000"
+                is_admin = bool(manager.get("is_super_admin"))
+                redirect_target = "/admin.html" if is_admin else "/agency_dashboard.html"
                 self.send_json(200, {
                     "status": "success",
                     "message": "Giriş başarılı",
                     "user": {
                         "id": manager["id"],
                         "email": manager["email"],
-                        "name": manager["name"]
+                        "name": manager["name"],
+                        "isSuperAdmin": is_admin
                     },
-                    "redirect": "/agency_dashboard.html"
+                    "redirect": redirect_target
                 }, set_cookie=cookie_str)
             else:
                 self.record_failed_attempt()

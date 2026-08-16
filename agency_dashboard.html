@@ -627,6 +627,10 @@
         if (sessionRes.ok) {
           const sessJson = await sessionRes.json();
           if (sessJson.authenticated && sessJson.user) {
+            if (sessJson.user.isSuperAdmin || sessJson.user.is_super_admin) {
+              window.location.href = '/admin.html';
+              return;
+            }
             currentManager = sessJson.user;
             if (sessJson.user.quotaLimit) {
               planQuotaLimit = sessJson.user.quotaLimit;

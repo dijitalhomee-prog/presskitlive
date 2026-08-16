@@ -291,14 +291,14 @@
               <th>Sanatçı Kotası</th>
               <th>Abonelik Durumu</th>
               <th>Kayıt Tarihi</th>
-              <th>Aksiyoner (İmpersonation)</th>
+              <th>Yönetim & Destek İşlemleri</th>
             </tr>
           </thead>
           <tbody id="managerTableBody">
             <tr>
               <td colspan="7" style="text-align:center; padding:40px; color:var(--text-muted);">
                 <i data-lucide="loader-2" class="spin-anim" style="width:28px; height:28px; color:var(--primary);"></i>
-                <p style="margin-top:8px;">Menajer üyeleri yükleniyor...</p>
+                <div style="margin-top:8px;">Menajer üyelik listesi yükleniyor...</div>
               </td>
             </tr>
           </tbody>
@@ -324,7 +324,7 @@
         <form id="grantFreeForm" onsubmit="handleGrantFreeSubmit(event)">
           <div class="form-group">
             <label>Ad Soyad *</label>
-            <input type="text" id="freeName" placeholder="Örn: Aycan Yağcı" required>
+            <input type="text" id="freeName" placeholder="Örn: Efe Soylu" required>
           </div>
 
           <div class="form-group">
@@ -524,12 +524,18 @@
             <td>${createdAt}</td>
             <td>
               <div class="table-actions">
-                <button type="button" class="btn btn-spotify btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleImpersonateClick(this)" title="Teknik Destek İçin Gir">
-                  <i data-lucide="user-check"></i> Olarak Görüntüle
-                </button>
-                <button type="button" class="btn btn-outline btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleGrantComplimentaryClick(this)" title="Ücretsiz Yap">
-                  <i data-lucide="gift"></i> Ücretsiz Yap
-                </button>
+                ${m.isSuperAdmin ? `
+                  <span style="font-size:12px; color:var(--primary); font-weight:700; background:rgba(29,185,84,0.1); border:1px solid rgba(29,185,84,0.3); padding:4px 10px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+                    <i data-lucide="shield-check" style="width:13px; height:13px;"></i> Tam Yetkili Süper Admin
+                  </span>
+                ` : `
+                  <button type="button" class="btn btn-spotify btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleImpersonateClick(this)" title="Teknik Destek İçin Gir">
+                    <i data-lucide="user-check"></i> Hesabına Giriş Yap
+                  </button>
+                  <button type="button" class="btn btn-outline btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleGrantComplimentaryClick(this)" title="Ücretsiz Yap">
+                    <i data-lucide="gift"></i> Ücretsiz Yap
+                  </button>
+                `}
               </div>
             </td>
           </tr>
