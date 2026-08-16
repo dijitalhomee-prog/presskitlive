@@ -205,22 +205,22 @@
 
         <div class="form-group">
           <label id="lblSignupName">Adınız Soyadınız *</label>
-          <input type="text" id="signupName" placeholder="Örn: Efe Soylu" required>
+          <input type="text" id="signupName" placeholder="Adınız ve Soyadınız" required>
         </div>
 
         <div class="form-group" id="grpSignupAgency">
           <label>Ajans / Şirket Unvanı</label>
-          <input type="text" id="signupAgency" placeholder="Örn: Soylu Music Management">
+          <input type="text" id="signupAgency" placeholder="Ajans veya Şirket Ünvanı">
         </div>
 
         <div class="form-group">
           <label>Telefon Numarası</label>
-          <input type="tel" id="signupPhone" placeholder="+90 532 000 00 00">
+          <input type="tel" id="signupPhone" placeholder="+90 500 000 00 00">
         </div>
 
         <div class="form-group">
           <label>E-posta Adresi *</label>
-          <input type="email" id="signupEmail" placeholder="efe@soylumusic.com" required>
+          <input type="email" id="signupEmail" placeholder="ornek@ajans.com" required>
         </div>
 
         <div class="form-group">
@@ -355,11 +355,11 @@
 
       if (type === 'solo') {
         lblName.innerText = 'Adınız Soyadınız / Sahne Adınız *';
-        inputName.placeholder = 'Örn: DJ Maya Yılmaz';
+        inputName.placeholder = 'Adınız / Sahne Adınız';
         grpAgency.style.display = 'none';
       } else {
         lblName.innerText = 'Adınız Soyadınız *';
-        inputName.placeholder = 'Örn: Efe Soylu';
+        inputName.placeholder = 'Adınız ve Soyadınız';
         grpAgency.style.display = 'block';
       }
     }
