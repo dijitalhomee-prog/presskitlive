@@ -199,15 +199,37 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                         self.send_error_json(404, "Sanatçı bulunamadı.")
                     return
 
-        # Serve /assets/images/ files dynamically from db.IMAGES_ROOT (Railway Volume Compatible)
+        # Serve /favicon.ico and /favicon.png at root level
+        if path in ("/favicon.ico", "/favicon.png"):
+            fav_path = os.path.join(os.path.dirname(__file__), "assets", "images", "favicon.png")
+            if not os.path.exists(fav_path):
+                fav_path = os.path.join(db.IMAGES_ROOT, "favicon.png")
+            if os.path.exists(fav_path):
+                try:
+                    with open(fav_path, "rb") as f:
+                        data = f.read()
+                    self.send_response(200)
+                    self.send_header("Content-Type", "image/png")
+                    self.send_header("Content-Length", str(len(data)))
+                    self.send_header("Cache-Control", "public, max-age=86400")
+                    self.end_headers()
+                    self.wfile.write(data)
+                    return
+                except Exception:
+                    pass
+
+        # Serve /assets/images/ files dynamically from db.IMAGES_ROOT (Railway Volume Compatible) or local project fallback
         if path.startswith("/assets/images/"):
             subpath = path[len("/assets/images/"):].lstrip("/")
             local_image_path = os.path.join(db.IMAGES_ROOT, subpath)
+            if not (os.path.exists(local_image_path) and os.path.isfile(local_image_path)):
+                local_image_path = os.path.join(os.path.dirname(__file__), "assets", "images", subpath)
+
             if os.path.exists(local_image_path) and os.path.isfile(local_image_path):
                 try:
                     ext = os.path.splitext(local_image_path)[1].lower()
                     content_type = "image/jpeg"
-                    if ext == ".png": content_type = "image/png"
+                    if ext in (".png", ".ico"): content_type = "image/png"
                     elif ext == ".webp": content_type = "image/webp"
                     elif ext == ".svg": content_type = "image/svg+xml"
                     elif ext == ".gif": content_type = "image/gif"
@@ -222,7 +244,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                     self.wfile.write(data)
                     return
                 except Exception as e:
-                    print(f"⚠️ Error serving image file: {e}")
+                    print(f"Error serving image {local_image_path}: {e}")
 
         # Protected Page Guards (Section A.5)
         protected_pages = ["/agency_dashboard.html", "/index.html"]
