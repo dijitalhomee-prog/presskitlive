@@ -946,6 +946,17 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             self.send_json(200, {"status": "success", "artist": updated})
             return
 
+        # POST /api/artists/delete
+        if path == "/api/artists/delete":
+            artist_id = req_body.get("artistId")
+            artist = db.get_artist_by_id(artist_id)
+            if not artist or not self.is_authorized_manager(mgr, artist):
+                self.send_error_json(403, "Bu sanatçıyı silme yetkiniz bulunmamaktadır.")
+                return
+            db.delete_artist(artist_id)
+            self.send_json(200, {"status": "success", "message": "Sanatçı profili başarıyla silindi."})
+            return
+
         # POST /api/folders/add
         if path == "/api/folders/add":
             artist_id = req_body.get("artistId")

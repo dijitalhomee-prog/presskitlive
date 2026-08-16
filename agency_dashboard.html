@@ -930,6 +930,9 @@
                   <button type="button" class="btn-edit-icon" title="Sanatçı İsmini Düzenle" data-artist-id="${safeId}" data-artist-name="${safeName}" data-artist-genre="${performType}">
                     <i data-lucide="edit-3" style="width:16px;"></i>
                   </button>
+                  <button type="button" class="btn-edit-icon" title="Sanatçı Profilini Sil" onclick="deleteArtistHandler('${safeId}', '${safeName}')" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; border-color: rgba(239, 68, 68, 0.4);">
+                    <i data-lucide="trash-2" style="width:16px;"></i>
+                  </button>
                 </div>
               </div>
 
@@ -974,6 +977,28 @@
       document.getElementById('editArtistName').value = name;
       document.getElementById('editArtistPerformType').value = genre || '';
       document.getElementById('editArtistModal').classList.add('active');
+    }
+
+    async function deleteArtistHandler(artistId, artistName) {
+      if (!confirm(`"${artistName}" sanatçı profilini ve bağlı tüm klasör ile fotoğraflarını silmek istediğinize emin misiniz?`)) return;
+
+      try {
+        const res = await fetch('/api/artists/delete', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ artistId: artistId })
+        });
+
+        const data = await res.json();
+        if (data.status === 'success') {
+          alert("Sanatçı profili başarıyla silindi.");
+          loadAgencyDashboardData();
+        } else {
+          alert(data.message || "Sanatçı silinemedi.");
+        }
+      } catch (err) {
+        alert("Sunucu hatası.");
+      }
     }
 
     async function logoutHandler() {

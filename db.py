@@ -552,6 +552,14 @@ def update_artist_info(artist_id, name=None, genre=None, avatar=None, banner=Non
         conn.commit()
     return get_artist_by_id(artist_id)
 
+def delete_artist(artist_id):
+    with get_connection() as conn:
+        conn.execute("DELETE FROM photos WHERE artist_id = ?", (artist_id,))
+        conn.execute("DELETE FROM folders WHERE artist_id = ?", (artist_id,))
+        conn.execute("DELETE FROM artists WHERE id = ?", (artist_id,))
+        conn.commit()
+    return True
+
 # FOLDERS & PHOTOS CRUD
 def get_folders_by_artist(artist_id):
     with get_connection() as conn:
