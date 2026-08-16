@@ -653,10 +653,6 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                 "status": "success",
                 "message": f"'{target['name']}' hesabı {status_label} duruma getirildi."
             })
-            return  "tempPassword": temp_password,
-                    "plan": plan
-                }
-            })
             return
 
         # POST /api/admin/managers/set-complimentary (Section B.3)
