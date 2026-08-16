@@ -164,6 +164,13 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Access-Control-Allow-Headers", "Content-Type, Authorization")
         self.end_headers()
 
+    def end_headers(self):
+        if hasattr(self, 'path') and self.path and (self.path.endswith('.js') or self.path.endswith('.html') or self.path in ('/', '/index.html', '/app.js', '/agency_dashboard.html')):
+            self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+            self.send_header("Pragma", "no-cache")
+            self.send_header("Expires", "0")
+        super().end_headers()
+
     def do_GET(self):
         parsed = urllib.parse.urlparse(self.path)
         path = parsed.path
