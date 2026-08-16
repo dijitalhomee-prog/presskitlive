@@ -1,2 +1,2 @@
 # PressKitLive SaaS Platform Dependencies
-iyzipay>=2.0.0
+iyzipay>=1.0.15
