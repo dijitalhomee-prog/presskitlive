@@ -640,7 +640,7 @@
         const data = await res.json();
         if (data.status === 'success') {
           resBox.innerHTML = `
-            <strong>✅ Ücretsiz Üyelik Başarıyla Oluşturuldu!</strong><br>
+            <strong>Ücretsiz Üyelik Başarıyla Oluşturuldu!</strong><br>
             <div style="margin-top:8px; background:rgba(0,0,0,0.3); padding:10px; border-radius:6px; font-family:monospace; font-size:14px; user-select:all;">
               E-posta: ${escapeHTML(data.manager.email)}<br>
               Geçici Şifre: <strong>${escapeHTML(data.manager.tempPassword)}</strong>
@@ -687,7 +687,7 @@
       const targetId = btn.getAttribute('data-manager-id');
       const targetName = btn.getAttribute('data-manager-name');
 
-      if (!confirm(`⚠️ TEKNİK DESTEK UYARISI:\n\n"${targetName}" kullanıcısının hesabına giriş yapmak üzeresiniz.\n\nBu işlem denetim günlüğüne (impersonation_log) kaydedilecektir. Devam etmek istiyor musunuz?`)) return;
+      if (!confirm(`TEKNİK DESTEK UYARISI:\n\n"${targetName}" kullanıcısının hesabına giriş yapmak üzeresiniz.\n\nBu işlem denetim günlüğüne (impersonation_log) kaydedilecektir. Devam etmek istiyor musunuz?`)) return;
 
       try {
         const res = await fetch('/api/admin/impersonate', {

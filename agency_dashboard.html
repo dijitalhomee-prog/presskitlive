@@ -325,7 +325,7 @@
 
   <!-- IMPERSONATION BANNER (SECTION D.6) -->
   <div id="impersonationBanner" style="display:none; background: #f59e0b; color: #000; padding: 12px 24px; font-weight: 700; font-size: 14px; text-align: center; align-items: center; justify-content: center; gap: 16px; position: sticky; top: 0; z-index: 99999;">
-    <span>⚠️ TEKNİK DESTEK MODUNDASINIZ — <strong id="impersonationTargetName">...</strong> hesabını görüntülüyorsunuz.</span>
+    <span>TEKNİK DESTEK MODUNDASINIZ — <strong id="impersonationTargetName">...</strong> hesabını görüntülüyorsunuz.</span>
     <button type="button" class="btn btn-small" style="background:#000; color:#fff; border:none; padding:4px 14px; border-radius:20px; font-weight:700; cursor:pointer;" onclick="endImpersonation()">Kendi Hesabıma Dön</button>
   </div>
 
@@ -360,7 +360,7 @@
       <div style="display:flex; align-items:center; gap:12px;">
         <i data-lucide="alert-octagon" style="width:28px; height:28px; flex-shrink:0;"></i>
         <div>
-          <strong style="font-size:15px; color:#fff;">⚠️ Abonelik Ödemeniz Alınamadı!</strong>
+          <strong style="font-size:15px; color:#fff;">Abonelik Ödemeniz Alınamadı!</strong>
           <p style="margin:2px 0 0 0; font-size:13px; color:#fca5a5;">Kart bakiyeniz yetersiz veya kartınız onaylanmadı. Lütfen ödeme bilgilerinizi güncelleyin.</p>
         </div>
       </div>
@@ -445,7 +445,7 @@
           <h3 id="subSectionPlanTitle" style="font-family: var(--font-display); font-size: 24px; font-weight: 900; color: #fff; margin: 6px 0 8px 0;">Pro Menajer Ajansı</h3>
           <div style="display:flex; align-items:center; gap:10px;">
             <span id="subSectionStatusBadge" style="background: rgba(29, 185, 84, 0.15); color: var(--primary); border: 1px solid rgba(29, 185, 84, 0.3); font-size: 12px; font-weight: 800; padding: 4px 12px; border-radius: 20px; text-transform: uppercase;">
-              ● Aktif Abonelik
+              Aktif Abonelik
             </span>
             <span style="font-size: 12px; color: var(--text-muted);">iyzico Güvencesiyle</span>
           </div>
@@ -560,7 +560,7 @@
 
       <form id="contactInfoForm" class="modal-body">
         <div id="contactNoticeBanner" style="display:none; background:rgba(234,179,8,0.15); border:1px solid rgba(234,179,8,0.4); color:#fef08a; padding:12px; border-radius:var(--radius-sm); font-size:13px; margin-bottom:16px;">
-          ⚠️ <strong>Lütfen İletişim Bilgilerinizi Tamamlayın:</strong> Yapımcılar ve organizatörler presskit sayfalarındaki WhatsApp, telefon ve e-posta bağlantılarında doğrudan bu yetkili bilgilerine ulaşır.
+          <strong>Lütfen İletişim Bilgilerinizi Tamamlayın:</strong> Yapımcılar ve organizatörler presskit sayfalarındaki WhatsApp, telefon ve e-posta bağlantılarında doğrudan bu yetkili bilgilerine ulaşır.
         </div>
         <div id="contactInfoErrorBox" style="display:none; margin-bottom:16px;"></div>
 
@@ -766,19 +766,19 @@
         statusBadge.style.background = 'rgba(239, 68, 68, 0.15)';
         statusBadge.style.color = '#ef4444';
         statusBadge.style.borderColor = 'rgba(239, 68, 68, 0.3)';
-        statusBadge.innerText = '⚠️ Ödeme Başarısız (Kartınızı Güncelleyin)';
+        statusBadge.innerText = 'Ödeme Başarısız (Kartınızı Güncelleyin)';
         if (failedBanner) failedBanner.style.display = 'flex';
       } else if (subStatus === 'cancelling') {
         statusBadge.style.background = 'rgba(234, 179, 8, 0.15)';
         statusBadge.style.color = '#eab308';
         statusBadge.style.borderColor = 'rgba(234, 179, 8, 0.3)';
-        statusBadge.innerText = '⏳ İptal Talebi Alındı (Dönem Sonu Sonlanacak)';
+        statusBadge.innerText = 'İptal Talebi Alındı (Dönem Sonu Sonlanacak)';
         if (failedBanner) failedBanner.style.display = 'none';
       } else {
         statusBadge.style.background = 'rgba(29, 185, 84, 0.15)';
         statusBadge.style.color = 'var(--primary)';
         statusBadge.style.borderColor = 'rgba(29, 185, 84, 0.3)';
-        statusBadge.innerText = '● Aktif Abonelik';
+        statusBadge.innerText = 'Aktif Abonelik';
         if (failedBanner) failedBanner.style.display = 'none';
       }
 
@@ -1049,7 +1049,7 @@
           errBox.innerHTML = `
             <div style="padding: 12px 16px; background: rgba(239, 68, 68, 0.12); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 8px; color: #ef4444; font-size: 13px; line-height: 1.5;">
               <strong>${escapeHTML(data.message || 'Sanatçı ekleme başarısız.')}</strong>
-              ${res.status === 403 ? `<div style="margin-top: 10px;"><a href="landing.html#fiyatlandirma" target="_blank" style="color: #000; background: var(--primary); padding: 8px 14px; border-radius: 20px; text-decoration: none; font-weight: 700; display: inline-block; font-size: 12px;">⚡ Paketinizi Yükseltin</a></div>` : ''}
+              ${res.status === 403 ? `<div style="margin-top: 10px;"><a href="landing.html#fiyatlandirma" target="_blank" style="color: #000; background: var(--primary); padding: 8px 14px; border-radius: 20px; text-decoration: none; font-weight: 700; display: inline-block; font-size: 12px;">Paketinizi Yükseltin</a></div>` : ''}
             </div>
           `;
           errBox.style.display = 'block';
