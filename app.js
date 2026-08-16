@@ -350,7 +350,7 @@ function renderFoldersBar() {
 
     let lockBadgeHTML = '';
     let deleteBtnHTML = '';
-    if (!state.isPublicView && state.isOwner) {
+    if (!state.isPublicView) {
       lockBadgeHTML = `
         <span class="folder-lock-btn ${isLocked ? 'locked' : 'unlocked'}" onclick="toggleFolderLockHandler(event, '${escapeHTML(f.id)}')" title="${isLocked ? 'Klasör Kilitli (Açmak İçin Tıklayın)' : 'Klasör Açık (Kilitlemek İçin Tıklayın)'}">
           <i data-lucide="${isLocked ? 'lock' : 'unlock'}" style="width:12px; height:12px;"></i>
@@ -387,7 +387,7 @@ function renderFoldersBar() {
   // Show/Hide top header "Seçili Klasörü Sil" button
   const headerDelBtn = document.getElementById('btnDeleteFolderHeader');
   if (headerDelBtn) {
-    if (!state.isPublicView && state.isOwner && state.activeFolderId && state.activeFolderId !== 'folder-all') {
+    if (!state.isPublicView && state.activeFolderId && state.activeFolderId !== 'folder-all') {
       headerDelBtn.style.display = 'inline-flex';
     } else {
       headerDelBtn.style.display = 'none';
@@ -486,7 +486,7 @@ function renderFilteredPhotos() {
   }
 
   if (photos.length === 0) {
-    const canDeleteThisFolder = !state.isPublicView && state.isOwner && state.activeFolderId !== 'folder-all';
+    const canDeleteThisFolder = !state.isPublicView && state.activeFolderId !== 'folder-all';
     galleryGrid.innerHTML = `
       <div style="grid-column: 1/-1; text-align: center; padding: 60px 20px; background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg);">
         <i data-lucide="image-off" style="width: 48px; height: 48px; color: var(--text-muted); margin-bottom: 12px;"></i>
