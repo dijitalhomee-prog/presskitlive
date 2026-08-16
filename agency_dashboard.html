@@ -530,17 +530,13 @@
         <input type="hidden" id="editArtistId">
         
         <div class="form-group">
-          <label>Sanatçı Sahne Adı *</label>
-          <input type="text" id="editArtistName" placeholder="Sanatçı veya Sahne Adı" required>
+          <label>Sanatçı veya İsim *</label>
+          <input type="text" id="editArtistName" placeholder="" required>
         </div>
 
         <div class="form-group">
-          <label>Performans Türü *</label>
-          <select id="editArtistPerformType">
-            <option value="LIVE">LIVE (Canlı Vokal / Orkestra)</option>
-            <option value="DJ">DJ (Performans & Set)</option>
-            <option value="Pop / Indie">Pop / Indie</option>
-          </select>
+          <label>Performans / Uzmanlık Türü *</label>
+          <input type="text" id="editArtistPerformType" placeholder="" required>
         </div>
 
         <div class="modal-footer" style="padding:16px 0 0 0; background:transparent; border-top:none;">
@@ -646,17 +642,13 @@
       <form id="createArtistForm" class="modal-body">
         <div id="createArtistErrorBox" style="display:none; margin-bottom:16px;"></div>
         <div class="form-group">
-          <label>Sanatçı Sahne Adı *</label>
-          <input type="text" id="newArtistName" placeholder="Sanatçı veya Sahne Adı" required>
+          <label>Sanatçı veya İsim *</label>
+          <input type="text" id="newArtistName" placeholder="" required>
         </div>
 
         <div class="form-group">
-          <label>Performans Türü *</label>
-          <select id="newArtistPerformType">
-            <option value="LIVE">LIVE (Canlı Vokal / Orkestra)</option>
-            <option value="DJ">DJ (Performans & Set)</option>
-            <option value="Pop / Indie">Pop / Indie</option>
-          </select>
+          <label>Performans / Uzmanlık Türü *</label>
+          <input type="text" id="newArtistPerformType" placeholder="" required>
         </div>
 
         <div class="modal-footer" style="padding:16px 0 0 0; background:transparent; border-top:none;">
@@ -980,6 +972,7 @@
     function openEditModal(artistId, name, genre) {
       document.getElementById('editArtistId').value = artistId;
       document.getElementById('editArtistName').value = name;
+      document.getElementById('editArtistPerformType').value = genre || '';
       document.getElementById('editArtistModal').classList.add('active');
     }
 
