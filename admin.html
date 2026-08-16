@@ -25,9 +25,10 @@
   <link rel="stylesheet" href="/style.css">
   <style>
     .admin-container {
-      max-width: 1400px;
+      width: 100%;
+      max-width: 1560px;
       margin: 0 auto;
-      padding: 32px 24px 80px 24px;
+      padding: 24px 20px 80px 20px;
     }
     .admin-topbar {
       display: flex;
@@ -95,7 +96,7 @@
       background: var(--bg-surface);
       border: 1px solid var(--border-glass);
       border-radius: var(--radius-lg);
-      padding: 28px;
+      padding: 20px 24px;
       box-shadow: 0 10px 30px rgba(0,0,0,0.4);
     }
     .table-header-bar {
@@ -127,12 +128,12 @@
 
     .data-table {
       width: 100%;
-      min-width: 1200px;
+      min-width: 100%;
       border-collapse: collapse;
       text-align: left;
     }
     .data-table th {
-      padding: 14px 16px;
+      padding: 12px 10px;
       font-size: 11px;
       font-weight: 800;
       color: var(--text-subdued);
@@ -142,7 +143,7 @@
       white-space: nowrap;
     }
     .data-table td {
-      padding: 16px;
+      padding: 12px 10px;
       font-size: 13px;
       border-bottom: 1px solid rgba(255,255,255,0.04);
       vertical-align: middle;
@@ -154,12 +155,12 @@
     .manager-user-cell {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 10px;
       white-space: nowrap;
     }
     .manager-avatar-sm {
-      width: 36px;
-      height: 36px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       background: rgba(29, 185, 84, 0.2);
       color: var(--primary);
@@ -168,15 +169,17 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-shrink: 0;
     }
     .status-pill {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      padding: 4px 10px;
+      gap: 5px;
+      padding: 3px 9px;
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 700;
+      white-space: nowrap;
     }
     .status-pill.active {
       background: rgba(29, 185, 84, 0.15);
@@ -191,18 +194,36 @@
     .table-actions {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       white-space: nowrap;
     }
-    .btn-small {
+    .btn-xs {
       white-space: nowrap !important;
-      font-size: 12px !important;
-      padding: 6px 14px !important;
-      height: 34px !important;
+      font-size: 11px !important;
+      padding: 5px 10px !important;
+      height: 30px !important;
       display: inline-flex !important;
       align-items: center !important;
-      gap: 6px !important;
+      gap: 4px !important;
       flex-shrink: 0 !important;
+      border-radius: 6px !important;
+      font-weight: 700 !important;
+    }
+    .btn-danger-soft {
+      background: rgba(239, 68, 68, 0.15) !important;
+      color: #EF4444 !important;
+      border: 1px solid rgba(239, 68, 68, 0.3) !important;
+    }
+    .btn-danger-soft:hover {
+      background: rgba(239, 68, 68, 0.3) !important;
+    }
+    .btn-blue-soft {
+      background: rgba(59, 130, 246, 0.15) !important;
+      color: #3B82F6 !important;
+      border: 1px solid rgba(59, 130, 246, 0.3) !important;
+    }
+    .btn-blue-soft:hover {
+      background: rgba(59, 130, 246, 0.3) !important;
     }
   </style>
 </head>
@@ -305,13 +326,13 @@
         <table class="data-table" id="managersTable">
           <thead>
             <tr>
-              <th>Menajer / Kullanıcı</th>
-              <th>E-posta & Telefon</th>
-              <th>Aktif Paket</th>
-              <th>Sanatçı Kotası</th>
-              <th>Abonelik Durumu</th>
+              <th>Menajer</th>
+              <th>İletişim</th>
+              <th>Paket</th>
+              <th>Kota</th>
+              <th>Durum</th>
               <th>Kayıt Tarihi</th>
-              <th>Yönetim & Destek İşlemleri</th>
+              <th>İşlemler</th>
             </tr>
           </thead>
           <tbody id="managerTableBody">
@@ -504,22 +525,21 @@
         const plan = escapeHTML((m.plan || 'starter').toUpperCase());
         const artistCount = m.artistCount || 0;
         const subStatus = m.subscriptionStatus || 'none';
-        const createdAt = escapeHTML(m.createdAt || '-');
-        const initials = name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
+        const displayDate = createdAt.split(' ')[0] || createdAt;
 
         let statusBadge = '';
         if (!m.isActive) {
-          statusBadge = `<span class="status-pill" style="background:rgba(239,68,68,0.15); color:#EF4444; border:1px solid rgba(239,68,68,0.3);"><i data-lucide="x-circle" style="width:12px;"></i> Pasif Hesap</span>`;
+          statusBadge = `<span class="status-pill" style="background:rgba(239,68,68,0.15); color:#EF4444; border:1px solid rgba(239,68,68,0.3);"><i data-lucide="x-circle" style="width:12px;"></i> Pasif</span>`;
         } else if (subStatus === 'active') {
           statusBadge = `<span class="status-pill active"><i data-lucide="check-circle-2" style="width:12px;"></i> iyzico Aktif</span>`;
         } else if (subStatus === 'complimentary') {
-          statusBadge = `<span class="status-pill" style="background:rgba(59,130,246,0.15); color:#3B82F6; border:1px solid rgba(59,130,246,0.3);"><i data-lucide="gift" style="width:12px;"></i> Ücretsiz/Hediye</span>`;
+          statusBadge = `<span class="status-pill" style="background:rgba(59,130,246,0.15); color:#3B82F6; border:1px solid rgba(59,130,246,0.3);"><i data-lucide="gift" style="width:12px;"></i> Ücretsiz</span>`;
         } else if (subStatus === 'payment_failed') {
-          statusBadge = `<span class="status-pill" style="background:rgba(239,68,68,0.15); color:#EF4444; border:1px solid rgba(239,68,68,0.3);"><i data-lucide="alert-octagon" style="width:12px;"></i> Ödeme Başarısız</span>`;
+          statusBadge = `<span class="status-pill" style="background:rgba(239,68,68,0.15); color:#EF4444; border:1px solid rgba(239,68,68,0.3);"><i data-lucide="alert-octagon" style="width:12px;"></i> Hata</span>`;
         } else if (subStatus === 'cancelling') {
-          statusBadge = `<span class="status-pill pending"><i data-lucide="clock" style="width:12px;"></i> İptal Ediliyor</span>`;
+          statusBadge = `<span class="status-pill pending"><i data-lucide="clock" style="width:12px;"></i> İptal</span>`;
         } else {
-          statusBadge = `<span class="status-pill" style="background:rgba(255,255,255,0.08); color:#a1a1aa; border:1px solid var(--border-subtle);">Aktif (Ücretsiz)</span>`;
+          statusBadge = `<span class="status-pill" style="background:rgba(255,255,255,0.08); color:#a1a1aa; border:1px solid var(--border-subtle);">Aktif</span>`;
         }
 
         html += `
@@ -544,27 +564,27 @@
               <strong style="color:#fff; white-space:nowrap;">${artistCount} Sanatçı</strong>
             </td>
             <td style="white-space:nowrap;">${statusBadge}</td>
-            <td style="white-space:nowrap; font-family:monospace; font-size:12px;">${createdAt}</td>
+            <td style="white-space:nowrap; font-family:monospace; font-size:12px;">${displayDate}</td>
             <td>
               <div class="table-actions">
                 ${m.isSuperAdmin ? `
-                  <span style="font-size:12px; color:var(--primary); font-weight:700; background:rgba(29,185,84,0.1); border:1px solid rgba(29,185,84,0.3); padding:6px 12px; border-radius:12px; display:inline-flex; align-items:center; gap:4px; white-space:nowrap;">
+                  <span style="font-size:11px; color:var(--primary); font-weight:700; background:rgba(29,185,84,0.1); border:1px solid rgba(29,185,84,0.3); padding:4px 10px; border-radius:10px; display:inline-flex; align-items:center; gap:4px; white-space:nowrap;">
                     <i data-lucide="shield-check" style="width:13px; height:13px;"></i> Tam Yetkili Süper Admin
                   </span>
                 ` : `
-                  <button type="button" class="btn btn-spotify btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleImpersonateClick(this)" title="Teknik Destek İçin Gir" style="white-space:nowrap;">
-                    <i data-lucide="user-check"></i> Hesabına Giriş Yap
+                  <button type="button" class="btn btn-spotify btn-xs" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleImpersonateClick(this)" title="Teknik Destek İçin Gir">
+                    <i data-lucide="user-check" style="width:13px; height:13px;"></i> Giriş
                   </button>
-                  <button type="button" class="btn btn-outline btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleGrantComplimentaryClick(this)" title="Ücretsiz Yap" style="white-space:nowrap;">
-                    <i data-lucide="gift"></i> Ücretsiz Yap
+                  <button type="button" class="btn btn-outline btn-xs" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleGrantComplimentaryClick(this)" title="Ücretsiz Yap">
+                    <i data-lucide="gift" style="width:13px; height:13px;"></i> Ücretsiz
                   </button>
                   ${m.isActive ? `
-                    <button type="button" class="btn btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleToggleStatusClick('${m.id}', false)" title="Hesabı Pasife Al" style="white-space:nowrap; background:rgba(239,68,68,0.15); color:#EF4444; border:1px solid rgba(239,68,68,0.3);">
-                      <i data-lucide="user-x"></i> Pasife Al
+                    <button type="button" class="btn btn-xs btn-danger-soft" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleToggleStatusClick('${m.id}', false)" title="Hesabı Pasife Al">
+                      <i data-lucide="user-x" style="width:13px; height:13px;"></i> Pasif
                     </button>
                   ` : `
-                    <button type="button" class="btn btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleToggleStatusClick('${m.id}', true)" title="Hesabı Aktif Et" style="white-space:nowrap; background:rgba(59,130,246,0.15); color:#3B82F6; border:1px solid rgba(59,130,246,0.3);">
-                      <i data-lucide="user-check"></i> Aktif Et
+                    <button type="button" class="btn btn-xs btn-blue-soft" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleToggleStatusClick('${m.id}', true)" title="Hesabı Aktif Et">
+                      <i data-lucide="user-check" style="width:13px; height:13px;"></i> Aktif
                     </button>
                   `}
                 `}
