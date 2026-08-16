@@ -579,11 +579,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             """
             self.send_response(200)
             self.send_header("Content-Type", "text/html; charset=utf-8")
-            self.end_headers()
-            self.wfile.write(html_content.encode('utf-8'))
-            return
-
-        # POST /api/admin/managers/grant-free (Section B.2)
+              # POST /api/admin/managers/grant-free (Section B.3)
         if path == "/api/admin/managers/grant-free":
             admin = self.get_current_super_admin()
             if not admin:
@@ -598,8 +594,17 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error_json(400, "E-posta ve isim girilmesi zorunludur.")
                 return
 
-            if db.get_manager_by_email(email):
-                self.send_error_json(409, "Bu e-posta ile zaten kayıtlı bir hesap var.")
+            existing = db.get_manager_by_email_any(email)
+            if existing:
+                # If account exists, update subscription status, plan, and reactivate
+                db.set_manager_subscription(existing["id"], status="complimentary")
+                db.update_manager_plan(existing["id"], plan)
+                db.toggle_manager_active_status(existing["id"], True)
+
+                self.send_json(200, {
+                    "status": "success",
+                    "message": f"'{existing['name']}' hesabı aktif hale getirildi ve {plan.upper()} ücretsiz paketi tanımlandı."
+                })
                 return
 
             temp_password = secrets.token_urlsafe(8)
@@ -617,6 +622,38 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                     "id": manager["id"],
                     "email": email,
                     "tempPassword": temp_password,
+                    "plan": plan
+                }
+            })
+            return
+
+        # POST /api/admin/managers/toggle-status (Active/Passive Toggle)
+        if path == "/api/admin/managers/toggle-status":
+            admin = self.get_current_super_admin()
+            if not admin:
+                self.send_error_json(403, "Bu işlem için yönetici yetkisi gerekiyor.")
+                return
+            
+            manager_id = req_body.get("managerId", "").strip()
+            is_active = bool(req_body.get("isActive", True))
+
+            target = db.get_manager_by_id_any(manager_id)
+            if not target:
+                self.send_error_json(404, "Kullanıcı bulunamadı.")
+                return
+
+            if target.get("is_super_admin"):
+                self.send_error_json(400, "Süper Admin hesabı pasife alınamaz.")
+                return
+
+            db.toggle_manager_active_status(manager_id, is_active)
+            status_label = "aktif" if is_active else "pasif"
+
+            self.send_json(200, {
+                "status": "success",
+                "message": f"'{target['name']}' hesabı {status_label} duruma getirildi."
+            })
+            return  "tempPassword": temp_password,
                     "plan": plan
                 }
             })

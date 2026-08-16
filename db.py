@@ -235,10 +235,26 @@ def get_manager_by_email(email):
         row = conn.execute("SELECT * FROM managers WHERE LOWER(email) = LOWER(?) AND is_active = 1", (email,)).fetchone()
         return dict(row) if row else None
 
+def get_manager_by_email_any(email):
+    with get_connection() as conn:
+        row = conn.execute("SELECT * FROM managers WHERE LOWER(email) = LOWER(?)", (email,)).fetchone()
+        return dict(row) if row else None
+
 def get_manager_by_id(manager_id):
     with get_connection() as conn:
         row = conn.execute("SELECT * FROM managers WHERE id = ? AND is_active = 1", (manager_id,)).fetchone()
         return dict(row) if row else None
+
+def get_manager_by_id_any(manager_id):
+    with get_connection() as conn:
+        row = conn.execute("SELECT * FROM managers WHERE id = ?", (manager_id,)).fetchone()
+        return dict(row) if row else None
+
+def toggle_manager_active_status(manager_id, is_active):
+    with get_connection() as conn:
+        conn.execute("UPDATE managers SET is_active = ? WHERE id = ?", (1 if is_active else 0, manager_id))
+        conn.commit()
+    return get_manager_by_id_any(manager_id)
 
 def create_manager(email, password, name, agency_name="", phone="", account_type="agency"):
     salt = secrets.token_hex(16)
@@ -332,9 +348,8 @@ def ensure_super_admins():
 def get_all_managers():
     with get_connection() as conn:
         rows = conn.execute("""
-            SELECT id, email, name, agency_name, phone, plan, account_type, subscription_status, iyzico_subscription_ref, is_super_admin, created_at
+            SELECT id, email, name, agency_name, phone, plan, account_type, subscription_status, iyzico_subscription_ref, is_super_admin, created_at, is_active
             FROM managers
-            WHERE is_active = 1
             ORDER BY created_at DESC
         """).fetchall()
         managers = [dict(r) for r in rows]
@@ -344,6 +359,7 @@ def get_all_managers():
             m["accountType"] = m.get("account_type", "agency")
             m["subscriptionStatus"] = m.get("subscription_status", "none")
             m["isSuperAdmin"] = bool(m.get("is_super_admin"))
+            m["isActive"] = bool(m.get("is_active", 1))
             m["createdAt"] = m.get("created_at", "")
         return managers
 

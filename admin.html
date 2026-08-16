@@ -186,7 +186,19 @@
     }
     .table-actions {
       display: flex;
+      align-items: center;
       gap: 8px;
+      white-space: nowrap;
+    }
+    .btn-small {
+      white-space: nowrap !important;
+      font-size: 12px !important;
+      padding: 6px 14px !important;
+      height: 34px !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 6px !important;
+      flex-shrink: 0 !important;
     }
   </style>
 </head>
@@ -275,7 +287,7 @@
             <input type="text" id="inputSearchManager" placeholder="Menajer veya e-posta ara..." onkeyup="filterManagersTable()">
           </div>
 
-          <button class="btn btn-outline btn-small" onclick="loadAdminData()" title="Canlı Listeyi Yenile">
+          <button class="btn btn-outline btn-small" onclick="loadManagersData()" title="Canlı Listeyi Yenile">
             <i data-lucide="refresh-cw"></i> Yenile
           </button>
 
@@ -492,7 +504,9 @@
         const initials = name.split(' ').map(n => n[0]).join('').substring(0,2).toUpperCase();
 
         let statusBadge = '';
-        if (subStatus === 'active') {
+        if (!m.isActive) {
+          statusBadge = `<span class="status-pill" style="background:rgba(239,68,68,0.15); color:#EF4444; border:1px solid rgba(239,68,68,0.3);"><i data-lucide="x-circle" style="width:12px;"></i> Pasif Hesap</span>`;
+        } else if (subStatus === 'active') {
           statusBadge = `<span class="status-pill active"><i data-lucide="check-circle-2" style="width:12px;"></i> iyzico Aktif</span>`;
         } else if (subStatus === 'complimentary') {
           statusBadge = `<span class="status-pill" style="background:rgba(59,130,246,0.15); color:#3B82F6; border:1px solid rgba(59,130,246,0.3);"><i data-lucide="gift" style="width:12px;"></i> Ücretsiz/Hediye</span>`;
@@ -501,7 +515,7 @@
         } else if (subStatus === 'cancelling') {
           statusBadge = `<span class="status-pill pending"><i data-lucide="clock" style="width:12px;"></i> İptal Ediliyor</span>`;
         } else {
-          statusBadge = `<span class="status-pill" style="background:rgba(255,255,255,0.08); color:#a1a1aa; border:1px solid var(--border-subtle);">Pasif (${subStatus})</span>`;
+          statusBadge = `<span class="status-pill" style="background:rgba(255,255,255,0.08); color:#a1a1aa; border:1px solid var(--border-subtle);">Aktif (Ücretsiz)</span>`;
         }
 
         html += `
@@ -530,16 +544,25 @@
             <td>
               <div class="table-actions">
                 ${m.isSuperAdmin ? `
-                  <span style="font-size:12px; color:var(--primary); font-weight:700; background:rgba(29,185,84,0.1); border:1px solid rgba(29,185,84,0.3); padding:4px 10px; border-radius:12px; display:inline-flex; align-items:center; gap:4px;">
+                  <span style="font-size:12px; color:var(--primary); font-weight:700; background:rgba(29,185,84,0.1); border:1px solid rgba(29,185,84,0.3); padding:6px 12px; border-radius:12px; display:inline-flex; align-items:center; gap:4px; white-space:nowrap;">
                     <i data-lucide="shield-check" style="width:13px; height:13px;"></i> Tam Yetkili Süper Admin
                   </span>
                 ` : `
-                  <button type="button" class="btn btn-spotify btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleImpersonateClick(this)" title="Teknik Destek İçin Gir">
+                  <button type="button" class="btn btn-spotify btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleImpersonateClick(this)" title="Teknik Destek İçin Gir" style="white-space:nowrap;">
                     <i data-lucide="user-check"></i> Hesabına Giriş Yap
                   </button>
-                  <button type="button" class="btn btn-outline btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleGrantComplimentaryClick(this)" title="Ücretsiz Yap">
+                  <button type="button" class="btn btn-outline btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleGrantComplimentaryClick(this)" title="Ücretsiz Yap" style="white-space:nowrap;">
                     <i data-lucide="gift"></i> Ücretsiz Yap
                   </button>
+                  ${m.isActive ? `
+                    <button type="button" class="btn btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleToggleStatusClick('${m.id}', false)" title="Hesabı Pasife Al" style="white-space:nowrap; background:rgba(239,68,68,0.15); color:#EF4444; border:1px solid rgba(239,68,68,0.3);">
+                      <i data-lucide="user-x"></i> Pasife Al
+                    </button>
+                  ` : `
+                    <button type="button" class="btn btn-small" data-manager-id="${escapeHTML(m.id)}" data-manager-name="${name}" onclick="handleToggleStatusClick('${m.id}', true)" title="Hesabı Aktif Et" style="white-space:nowrap; background:rgba(59,130,246,0.15); color:#3B82F6; border:1px solid rgba(59,130,246,0.3);">
+                      <i data-lucide="user-check"></i> Aktif Et
+                    </button>
+                  `}
                 `}
               </div>
             </td>
@@ -651,6 +674,27 @@
           window.location.href = data.redirect;
         } else {
           alert(data.message || "Hesaba giriş yapılamadı.");
+        }
+      } catch (err) {
+        alert("Sunucuya bağlanılamadı.");
+      }
+    }
+
+    async function handleToggleStatusClick(managerId, isActive) {
+      const actionText = isActive ? "aktif hale getirmek" : "pasife almak";
+      if (!confirm(`Bu kullanıcı hesabını ${actionText} istediğinizden emin misiniz?`)) return;
+
+      try {
+        const res = await fetch('/api/admin/managers/toggle-status', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ managerId, isActive })
+        });
+        const data = await res.json();
+        if (data.status === 'success') {
+          loadManagersData();
+        } else {
+          alert(data.message || "İşlem gerçekleştirilemedi.");
         }
       } catch (err) {
         alert("Sunucuya bağlanılamadı.");
