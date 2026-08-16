@@ -348,22 +348,20 @@ function renderFoldersBar() {
     const fPhotos = photos.filter(p => p.folderId === f.id);
     const isLocked = f.isLocked;
 
-    // Public view lock badge indicator
     let lockBadgeHTML = '';
-    if (isLocked) {
-      if (!state.isPublicView && state.isOwner) {
-        lockBadgeHTML = `
-          <span class="folder-lock-badge locked" title="Klasör Şifreli / Kilitli">
-            <i data-lucide="lock" style="width:12px; height:12px;"></i> Kilitli
-          </span>
-        `;
-      } else {
-        lockBadgeHTML = `
-          <span class="folder-lock-badge locked">
-            <i data-lucide="lock" style="width:12px; height:12px;"></i> Şifreli
-          </span>
-        `;
-      }
+    if (!state.isPublicView && state.isOwner) {
+      lockBadgeHTML = `
+        <span class="folder-lock-btn ${isLocked ? 'locked' : 'unlocked'}" onclick="toggleFolderLockHandler(event, '${escapeHTML(f.id)}')" title="${isLocked ? 'Klasör Kilitli (Açmak İçin Tıklayın)' : 'Klasör Açık (Kilitlemek İçin Tıklayın)'}">
+          <i data-lucide="${isLocked ? 'lock' : 'unlock'}" style="width:12px; height:12px;"></i>
+          <span>${isLocked ? 'Kilitli' : 'Açık'}</span>
+        </span>
+      `;
+    } else if (isLocked) {
+      lockBadgeHTML = `
+        <span class="folder-lock-badge locked">
+          <i data-lucide="lock" style="width:12px; height:12px;"></i> Şifreli
+        </span>
+      `;
     }
 
     html += `
@@ -382,6 +380,7 @@ function renderFoldersBar() {
   // Bind click handlers
   foldersBar.querySelectorAll('.folder-pill').forEach(btn => {
     btn.addEventListener('click', (e) => {
+      if (e.target.closest('.folder-lock-btn')) return; // Ignore pill select when toggle lock button clicked
       const targetBtn = e.target.closest('.folder-pill');
       if (!targetBtn) return;
       state.activeFolderId = targetBtn.dataset.folderId;
@@ -389,6 +388,28 @@ function renderFoldersBar() {
       renderFilteredPhotos();
     });
   });
+}
+
+async function toggleFolderLockHandler(e, folderId) {
+  if (e) e.stopPropagation();
+  try {
+    const res = await fetch('/api/folders/toggle-lock', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        folderId: folderId,
+        artistId: getActiveArtistId()
+      })
+    });
+    const data = await res.json();
+    if (data.status === 'success') {
+      await loadArtistData();
+    } else {
+      alert(data.message || "Kilit durumu değiştirilemedi.");
+    }
+  } catch (err) {
+    alert("Sunucu hatası.");
+  }
 }
 
 function renderFilteredPhotos() {
