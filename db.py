@@ -79,7 +79,7 @@ PLAN_QUOTAS = {
     "bireysel": 1,
     "starter": 4,
     "pro": 10,
-    "enterprise": 999999
+    "enterprise": 50
 }
 
 def get_connection():

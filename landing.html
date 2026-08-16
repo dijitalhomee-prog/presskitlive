@@ -299,6 +299,56 @@
         text-align: center;
       }
     }
+
+    .custom-quote-banner {
+      background: linear-gradient(135deg, rgba(29, 185, 84, 0.08) 0%, rgba(20, 20, 20, 0.95) 100%);
+      border: 1px solid rgba(29, 185, 84, 0.25);
+      border-radius: 20px;
+      padding: 28px 36px;
+      margin: 36px 0 24px 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+    }
+    .custom-quote-badge {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--primary);
+      background: rgba(29, 185, 84, 0.15);
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+    .custom-quote-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 900;
+      color: #fff;
+      margin: 4px 0 6px 0;
+    }
+    .custom-quote-sub {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+      max-width: 680px;
+    }
+
+    @media (max-width: 900px) {
+      .custom-quote-banner {
+        flex-direction: column;
+        text-align: center;
+        padding: 24px 20px;
+      }
+      .custom-quote-sub {
+        max-width: 100%;
+      }
+    }
   </style>
 </head>
 <body class="landing-body">
@@ -462,23 +512,43 @@
       <!-- PLAN 3: ENTERPRISE -->
       <div class="pricing-card">
         <div class="plan-name">Enterprise Ajans</div>
-        <div class="plan-artist-count">Sınırsız Sanatçı Limiti</div>
+        <div class="plan-artist-count">50 Sanatçı Limiti</div>
         <div class="plan-price">₺9.900 <span>/ ay</span></div>
         <div class="plan-vat">+ %20 KDV (Toplam ₺11.880)</div>
 
         <ul class="plan-features">
-          <li><i data-lucide="check"></i> Sınırsız Sanatçı & Medya Deposu</li>
+          <li><i data-lucide="check"></i> 50 Sanatçı Özel Medya Portalı</li>
           <li><i data-lucide="check"></i> Özel Ajans Markalama & Medya Sunucusu</li>
           <li><i data-lucide="check"></i> Beyaz Etiket (White-Label DijitalGru)</li>
           <li><i data-lucide="check"></i> Özel Sunucu & CDN Hızlandırma</li>
           <li><i data-lucide="check"></i> Özel Menajer Yetki Rolleri</li>
         </ul>
 
-        <button type="button" onclick="openIyzicoModal('enterprise', 'Enterprise Ajans', '₺11.880 (₺9.900 + %20 KDV)')" class="btn btn-outline btn-block" style="margin-top:auto;">
-          Kurumsal Teklif Al
+        <button type="button" onclick="openIyzicoModal('enterprise', 'Enterprise Ajans (50 Sanatçı)', '₺11.880 (₺9.900 + %20 KDV)')" class="btn btn-outline btn-block" style="margin-top:auto;">
+          Enterprise Paketle Başla
         </button>
       </div>
 
+    </div>
+
+    <!-- MARKANIZA ÖZEL TEKLİF ALIN HORIZONTAL BANNER -->
+    <div class="custom-quote-banner">
+      <div class="custom-quote-content" style="text-align:left;">
+        <div class="custom-quote-badge">
+          <i data-lucide="building-2" style="width:14px; height:14px;"></i> 50+ SANATÇI & KURUMSAL AJANSLAR İÇİN
+        </div>
+        <h3 class="custom-quote-title">Markanıza Özel Altyapı & Kurumsal Teklif Alın</h3>
+        <p class="custom-quote-sub">50'den fazla sanatçınız varsa veya ajansınıza özel domain, white-label medya sunucusu istiyorsanız doğrudan ekibimizle iletişime geçin.</p>
+      </div>
+
+      <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap; flex-shrink:0;">
+        <a href="mailto:dijitalgru@gmail.com?subject=PressKitLive%20Kurumsal%20%26%20%C3%96zel%20Teklif%20Talebi&body=Merhaba%2C%20ajans%C4%B1m%C4%B1z%20i%C3%A7in%20%C3%B6zel%20presskit%20altyap%C4%B1s%C4%B1%20ve%20teklif%20almak%20istiyoruz..." class="btn btn-spotify btn-large" style="white-space:nowrap; font-weight:800;">
+          <i data-lucide="mail"></i> Markanıza Özel Teklif Alın
+        </a>
+        <a href="https://wa.me/905376274415?text=Merhaba%20DijitalGru%2C%2050%2B%20sanat%C3%A7%C4%B1l%C4%B1%20kurumsal%20ajans%20teklifi%20almak%20istiyorum." target="_blank" class="btn btn-whatsapp btn-large" style="white-space:nowrap; font-weight:800;">
+          <i data-lucide="message-square"></i> WhatsApp İle Ulaşın
+        </a>
+      </div>
     </div>
 
     <!-- IYZICO & 3D SECURE PAYMENT INTEGRATION BANNER -->
