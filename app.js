@@ -137,11 +137,20 @@ function renderArtistHeader() {
 
   const name = state.artist.name || 'Profil Adı';
 
-  const titleEl = document.getElementById('artistTitleName');
+  const titleEl = document.getElementById('heroArtistName') || document.getElementById('artistTitleName');
   if (titleEl) titleEl.innerText = name;
 
   const genreEl = document.getElementById('artistGenreText');
-  if (genreEl) genreEl.innerText = state.artist.genre || 'Sanatçı / Oyuncu Portföyü';
+  if (genreEl) {
+    if (state.artist.genre) {
+      genreEl.innerText = state.artist.genre;
+      const genrePill = document.getElementById('genreMetaPill');
+      if (genrePill) genrePill.style.display = 'inline-flex';
+    } else {
+      const genrePill = document.getElementById('genreMetaPill');
+      if (genrePill) genrePill.style.display = 'none';
+    }
+  }
 
   const avatarEl = document.getElementById('heroAvatar') || document.getElementById('artistAvatarImg');
   if (avatarEl) {
