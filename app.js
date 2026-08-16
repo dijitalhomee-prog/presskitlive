@@ -199,64 +199,69 @@ function renderArtistHeader() {
   const logoCardTitle1 = document.getElementById('logoCardTitle1');
   if (logoCardTitle1) logoCardTitle1.innerText = `${name} Tipografi Logosu`;
 
-  // Dynamically update Socials & Platform links
+  // Dynamically render multi-sectoral platform links
+  renderPlatformLinks();
+}
+
+function renderPlatformLinks() {
+  const grid = document.getElementById('platformLinksGrid');
+  if (!grid || !state || !state.artist) return;
+
   const socials = state.artist.socials || {};
   
-  const linkInsta = document.getElementById('linkInstagram');
-  if (linkInsta) {
-    if (socials.instagram) {
-      linkInsta.href = socials.instagram;
-      const handle = socials.instagram.replace(/\/$/, '').split('/').pop();
-      const sub = linkInsta.querySelector('.platform-sub');
-      if (sub) sub.innerText = handle ? '@' + handle : 'Instagram';
-      linkInsta.style.display = 'flex';
-    } else {
-      linkInsta.style.display = 'none';
+  const platforms = [
+    { key: 'instagram', name: 'Instagram', icon: 'instagram', color: '#e1306c', defaultSub: '@profil' },
+    { key: 'youtube', name: 'YouTube / Showreel', icon: 'video', color: '#ff0000', defaultSub: 'Resmi Kanal & Video Klip' },
+    { key: 'behance', name: 'Behance', icon: 'palette', color: '#0057ff', defaultSub: 'Visual & Tasarım Portföyü' },
+    { key: 'linkedin', name: 'LinkedIn', icon: 'linkedin', color: '#0a66c2', defaultSub: 'Kurumsal & Profesyonel Profil' },
+    { key: 'imdb', name: 'IMDb', icon: 'film', color: '#f3ce13', defaultSub: 'Sinema & Cast Kaydı' },
+    { key: 'vimeo', name: 'Vimeo', icon: 'video', color: '#1ab7ea', defaultSub: 'Showreel & Video Deposu' },
+    { key: 'spotify', name: 'Spotify', icon: 'disc', color: '#1db954', defaultSub: 'Müzik Profili' },
+    { key: 'website', name: 'Web Sitesi / Portföy', icon: 'globe', color: '#60a5fa', defaultSub: 'Resmi İnternet Sitesi' }
+  ];
+
+  let html = '';
+  let count = 0;
+
+  platforms.forEach(p => {
+    const url = socials[p.key];
+    if (url && String(url).trim()) {
+      count++;
+      let subText = p.defaultSub;
+      if (p.key === 'instagram') {
+        const handle = String(url).replace(/\/$/, '').split('/').pop();
+        subText = handle ? '@' + handle : '@instagram';
+      } else if (p.key === 'website') {
+        subText = String(url).replace(/^https?:\/\//, '').replace(/\/$/, '');
+      }
+
+      html += `
+        <a href="${escapeHTML(url)}" target="_blank" class="platform-card ${p.key}" style="border-left: 3px solid ${p.color};">
+          <div class="platform-icon" style="color: ${p.color};"><i data-lucide="${p.icon}"></i></div>
+          <div class="platform-info">
+            <span class="platform-name">${p.name}</span>
+            <span class="platform-sub">${escapeHTML(subText)}</span>
+          </div>
+          <i data-lucide="external-link" class="arrow-icon"></i>
+        </a>
+      `;
     }
+  });
+
+  if (count === 0) {
+    grid.innerHTML = `
+      <div style="grid-column: 1 / -1; text-align: center; padding: 32px 16px; background: rgba(24, 24, 27, 0.4); border: 1px dashed var(--border-subtle); border-radius: var(--radius-lg);">
+        <p style="color: var(--text-muted); font-size: 13px; margin-bottom: 12px;">Henüz eklenmiş dijital platform bağlantısı bulunmuyor.</p>
+        <button type="button" class="btn btn-spotify btn-small" onclick="if(typeof openEditSocialsModal==='function') openEditSocialsModal()">
+          <i data-lucide="plus"></i> + Bağlantı Ekle / Düzenle
+        </button>
+      </div>
+    `;
+  } else {
+    grid.innerHTML = html;
   }
 
-  const linkSpot = document.getElementById('linkSpotify');
-  if (linkSpot) {
-    if (socials.spotify) {
-      linkSpot.href = socials.spotify;
-      linkSpot.style.display = 'flex';
-    } else {
-      linkSpot.style.display = 'none';
-    }
-  }
-
-  const linkYt = document.getElementById('linkYoutube');
-  if (linkYt) {
-    if (socials.youtube) {
-      linkYt.href = socials.youtube;
-      linkYt.style.display = 'flex';
-    } else {
-      linkYt.style.display = 'none';
-    }
-  }
-
-  const linkDeezer = document.getElementById('linkDeezer');
-  if (linkDeezer) {
-    if (socials.deezer) {
-      linkDeezer.href = socials.deezer;
-      linkDeezer.style.display = 'flex';
-    } else {
-      linkDeezer.style.display = 'none';
-    }
-  }
-
-  const linkWeb = document.getElementById('linkWebsite');
-  if (linkWeb) {
-    const webUrl = socials.website || socials.deezer;
-    if (webUrl) {
-      linkWeb.href = webUrl;
-      const subWeb = document.getElementById('subWebsite');
-      if (subWeb) subWeb.innerText = webUrl.replace(/^https?:\/\//, '').replace(/\/$/, '');
-      linkWeb.style.display = 'flex';
-    } else {
-      linkWeb.style.display = 'none';
-    }
-  }
+  if (window.lucide) lucide.createIcons();
 }
 
 function renderManagerInfo() {

@@ -741,11 +741,11 @@
 
   <!-- MODAL: EDIT DIGITAL PLATFORM LINKS -->
   <div class="modal-backdrop" id="editSocialsModal">
-    <div class="modal-card">
+    <div class="modal-card" style="max-width:560px;">
       <div class="modal-header">
         <div>
-          <h3><i data-lucide="globe"></i> Dijital Platform & Bağlantı Yönetimi</h3>
-          <p>Profilinizde görüntülenecek resmi kanal ve dijital platform bağlantılarını ekleyin.</p>
+          <h3><i data-lucide="globe"></i> Dijital Platform & Sektörel Bağlantı Yönetimi</h3>
+          <p>Visual Artist, Cast Ajansı, Reklam, Sinema veya Müzik sektörünüze uygun bağlantıları ekleyin.</p>
         </div>
         <button class="modal-close" id="btnCloseEditSocialsModal">&times;</button>
       </div>
@@ -753,24 +753,48 @@
       <form id="editSocialsForm" class="modal-body">
         <div id="editSocialsErrorBox" style="display:none; margin-bottom:16px;"></div>
 
-        <div class="form-group">
-          <label><i data-lucide="instagram" style="width:14px; inline-size:14px; color:#e1306c;"></i> Instagram Adresi</label>
-          <input type="url" id="inputSocialInstagram" placeholder="https://instagram.com/kullaniciadi">
+        <div class="form-row">
+          <div class="form-group">
+            <label><i data-lucide="palette" style="width:14px; color:#0057ff;"></i> Behance (Visual Artist / Portföy)</label>
+            <input type="url" id="inputSocialBehance" placeholder="https://behance.net/kullanici">
+          </div>
+          <div class="form-group">
+            <label><i data-lucide="linkedin" style="width:14px; color:#0a66c2;"></i> LinkedIn (Profesyonel Kayıt)</label>
+            <input type="url" id="inputSocialLinkedin" placeholder="https://linkedin.com/in/kullanici">
+          </div>
         </div>
 
-        <div class="form-group">
-          <label><i data-lucide="video" style="width:14px; inline-size:14px; color:#ff0000;"></i> YouTube Kanalı / İletişim Video Linki</label>
-          <input type="url" id="inputSocialYoutube" placeholder="https://youtube.com/@kanal">
+        <div class="form-row">
+          <div class="form-group">
+            <label><i data-lucide="film" style="width:14px; color:#f3ce13;"></i> IMDb (Cast & Sinema Profili)</label>
+            <input type="url" id="inputSocialImdb" placeholder="https://imdb.com/name/nm...">
+          </div>
+          <div class="form-group">
+            <label><i data-lucide="video" style="width:14px; color:#1ab7ea;"></i> Vimeo / Showreel Linki</label>
+            <input type="url" id="inputSocialVimeo" placeholder="https://vimeo.com/showreel">
+          </div>
         </div>
 
-        <div class="form-group">
-          <label><i data-lucide="disc" style="width:14px; inline-size:14px; color:#1db954;"></i> Spotify / Müzik Profili Linki</label>
-          <input type="url" id="inputSocialSpotify" placeholder="https://open.spotify.com/artist/...">
+        <div class="form-row">
+          <div class="form-group">
+            <label><i data-lucide="instagram" style="width:14px; color:#e1306c;"></i> Instagram Adresi</label>
+            <input type="url" id="inputSocialInstagram" placeholder="https://instagram.com/kullanici">
+          </div>
+          <div class="form-group">
+            <label><i data-lucide="video" style="width:14px; color:#ff0000;"></i> YouTube Kanalı / Klip</label>
+            <input type="url" id="inputSocialYoutube" placeholder="https://youtube.com/@kanal">
+          </div>
         </div>
 
-        <div class="form-group">
-          <label><i data-lucide="globe" style="width:14px; inline-size:14px; color:#60a5fa;"></i> Resmi Web Sitesi / Portföy Linki</label>
-          <input type="url" id="inputSocialWebsite" placeholder="https://www.sanatciwebsite.com">
+        <div class="form-row">
+          <div class="form-group">
+            <label><i data-lucide="disc" style="width:14px; color:#1db954;"></i> Spotify / Müzik Linki</label>
+            <input type="url" id="inputSocialSpotify" placeholder="https://open.spotify.com/artist/...">
+          </div>
+          <div class="form-group">
+            <label><i data-lucide="globe" style="width:14px; color:#60a5fa;"></i> Resmi Web Sitesi / Portföy</label>
+            <input type="url" id="inputSocialWebsite" placeholder="https://www.sanatciwebsite.com">
+          </div>
         </div>
 
         <div class="modal-footer" style="padding:16px 0 0 0; background:transparent; border-top:none;">
@@ -957,6 +981,10 @@
     function openEditSocialsModal() {
       if (typeof state !== 'undefined' && state.artist && state.artist.socials) {
         const s = state.artist.socials;
+        document.getElementById('inputSocialBehance').value = s.behance || '';
+        document.getElementById('inputSocialLinkedin').value = s.linkedin || '';
+        document.getElementById('inputSocialImdb').value = s.imdb || '';
+        document.getElementById('inputSocialVimeo').value = s.vimeo || '';
         document.getElementById('inputSocialInstagram').value = s.instagram || '';
         document.getElementById('inputSocialYoutube').value = s.youtube || '';
         document.getElementById('inputSocialSpotify').value = s.spotify || '';
@@ -974,12 +1002,16 @@
         e.preventDefault();
         if (typeof state === 'undefined' || !state.artist) return;
 
+        const behance = document.getElementById('inputSocialBehance').value.trim();
+        const linkedin = document.getElementById('inputSocialLinkedin').value.trim();
+        const imdb = document.getElementById('inputSocialImdb').value.trim();
+        const vimeo = document.getElementById('inputSocialVimeo').value.trim();
         const instagram = document.getElementById('inputSocialInstagram').value.trim();
         const youtube = document.getElementById('inputSocialYoutube').value.trim();
         const spotify = document.getElementById('inputSocialSpotify').value.trim();
         const website = document.getElementById('inputSocialWebsite').value.trim();
 
-        const socialsObj = { instagram, youtube, spotify, website };
+        const socialsObj = { behance, linkedin, imdb, vimeo, instagram, youtube, spotify, website };
 
         try {
           const res = await fetch('/api/artists/update-socials', {
