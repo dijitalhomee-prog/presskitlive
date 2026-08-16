@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupNavigation();
   setupActions();
   setupFolderModals();
+  setupPhotoModals();
 });
 
 async function checkImpersonationStatus() {
@@ -461,11 +462,11 @@ function setupNavigation() {}
 function setupActions() {}
 
 function setupFolderModals() {
-  const modal = document.getElementById('addFolderModal');
-  const btnOpen = document.getElementById('btnOpenAddFolderModal');
-  const btnClose = document.getElementById('btnCloseAddFolderModal');
-  const btnCancel = document.getElementById('btnCancelAddFolder');
-  const form = document.getElementById('addFolderForm');
+  const modal = document.getElementById('addFolderModal') || document.getElementById('newFolderModal');
+  const btnOpen = document.getElementById('btnOpenAddFolderModal') || document.getElementById('btnOpenNewFolderModal');
+  const btnClose = document.getElementById('btnCloseAddFolderModal') || document.getElementById('btnCloseNewFolderModal');
+  const btnCancel = document.getElementById('btnCancelAddFolder') || document.getElementById('btnCancelNewFolder');
+  const form = document.getElementById('addFolderForm') || document.getElementById('newFolderForm');
 
   if (btnOpen && modal) {
     btnOpen.addEventListener('click', () => modal.classList.add('active'));
@@ -480,8 +481,14 @@ function setupFolderModals() {
   if (form && modal) {
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const folderName = document.getElementById('folderNameInput').value.trim();
-      const isLocked = document.getElementById('folderLockedCheckbox').checked;
+      const inputName = document.getElementById('folderNameInput') || document.getElementById('inputFolderName');
+      const folderName = inputName ? inputName.value.trim() : '';
+
+      const lockEl = document.getElementById('folderLockedCheckbox') || document.getElementById('inputFolderLock');
+      let isLocked = false;
+      if (lockEl) {
+        isLocked = (lockEl.type === 'checkbox') ? lockEl.checked : (lockEl.value === 'true');
+      }
 
       if (!folderName) return;
 
@@ -505,6 +512,71 @@ function setupFolderModals() {
           alert("Bu sanatçı üzerinde klasör oluşturma yetkiniz bulunmamaktadır.");
         } else {
           alert(data.message || "Klasör eklenemedi.");
+        }
+      } catch (err) {
+        alert("Sunucu hatası.");
+      }
+    });
+  }
+}
+
+function setupPhotoModals() {
+  const modal = document.getElementById('addPhotoModal');
+  const btnOpen = document.getElementById('btnOpenAddPhotoModal');
+  const btnClose = document.getElementById('btnCloseAddPhotoModal');
+  const btnCancel = document.getElementById('btnCancelAddPhoto');
+  const form = document.getElementById('addPhotoForm');
+
+  if (btnOpen && modal) {
+    btnOpen.addEventListener('click', () => {
+      const select = document.getElementById('selectTargetFolder');
+      if (select && state && state.artist && state.artist.folders) {
+        select.innerHTML = state.artist.folders.map(f => `<option value="${escapeHTML(f.id)}">${escapeHTML(f.name)}</option>`).join('');
+      }
+      modal.classList.add('active');
+    });
+  }
+
+  if (btnClose && modal) btnClose.addEventListener('click', () => modal.classList.remove('active'));
+  if (btnCancel && modal) btnCancel.addEventListener('click', () => modal.classList.remove('active'));
+
+  if (form && modal) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const selectEl = document.getElementById('selectTargetFolder');
+      const folderId = selectEl ? selectEl.value : '';
+      const titleEl = document.getElementById('inputPhotoTitle');
+      const title = titleEl ? titleEl.value.trim() : '';
+      const resVal = document.getElementById('inputPhotoRes').value.trim() || '3808 x 5712 px (300 DPI)';
+      const badge = document.getElementById('inputPhotoBadge').value.trim() || 'Yeni Görsel';
+      const photoUrl = (typeof uploadedPhotoDataUrl !== 'undefined') ? uploadedPhotoDataUrl : '/assets/images/yagmur-hizal/Kort1 2.JPG';
+
+      if (!folderId || !title) {
+        alert("Lütfen klasör seçin ve görsel başlığını girin.");
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/photos/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            artistId: state.artist.id,
+            folderId: folderId,
+            title: title,
+            url: photoUrl,
+            resolution: resVal,
+            badge: badge
+          })
+        });
+
+        const data = await res.json();
+        if (data.status === 'success') {
+          modal.classList.remove('active');
+          form.reset();
+          await loadArtistData();
+        } else {
+          alert(data.message || "Fotoğraf eklenemedi.");
         }
       } catch (err) {
         alert("Sunucu hatası.");
