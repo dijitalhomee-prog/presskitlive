@@ -122,31 +122,112 @@ async function loadArtistData() {
 // --------------------------------------------------------------------------
 // UI Renderers
 // --------------------------------------------------------------------------
+function generateInitialsAvatar(name) {
+  const initials = (name || 'P').split(' ').filter(Boolean).map(n => n[0]).join('').substring(0, 2).toUpperCase() || 'P';
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+    <rect width="200" height="200" fill="#18181b"/>
+    <circle cx="100" cy="100" r="88" fill="#27272a" stroke="#1db854" stroke-width="5"/>
+    <text x="50%" y="54%" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="70" font-weight="900" fill="#1db854">${initials}</text>
+  </svg>`;
+  return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+}
+
 function renderArtistHeader() {
   if (!state.artist) return;
 
+  const name = state.artist.name || 'Profil Adı';
+
   const titleEl = document.getElementById('artistTitleName');
-  if (titleEl) titleEl.innerText = state.artist.name;
+  if (titleEl) titleEl.innerText = name;
 
   const genreEl = document.getElementById('artistGenreText');
-  if (genreEl) genreEl.innerText = state.artist.genre || 'Pop / DJ';
+  if (genreEl) genreEl.innerText = state.artist.genre || 'Sanatçı / Oyuncu Portföyü';
 
   const avatarEl = document.getElementById('artistAvatarImg');
-  if (avatarEl && state.artist.avatar) {
-    const rawAv = state.artist.avatar;
-    avatarEl.src = (rawAv.startsWith('http') || rawAv.startsWith('/')) ? rawAv : '/' + rawAv;
+  if (avatarEl) {
+    if (state.artist.avatar) {
+      const rawAv = state.artist.avatar;
+      avatarEl.src = (rawAv.startsWith('http') || rawAv.startsWith('/') || rawAv.startsWith('data:')) ? rawAv : '/' + rawAv;
+    } else {
+      avatarEl.src = generateInitialsAvatar(name);
+    }
   }
 
   const heroBg = document.getElementById('heroBg');
-  if (heroBg && state.artist.banner) {
-    const rawBg = state.artist.banner;
-    const bgUrl = (rawBg.startsWith('http') || rawBg.startsWith('/')) ? rawBg : '/' + rawBg;
-    heroBg.style.backgroundImage = `url('${bgUrl}')`;
+  if (heroBg) {
+    if (state.artist.banner) {
+      const rawBg = state.artist.banner;
+      const bgUrl = (rawBg.startsWith('http') || rawBg.startsWith('/')) ? rawBg : '/' + rawBg;
+      heroBg.style.backgroundImage = `url('${bgUrl}')`;
+    } else {
+      heroBg.style.backgroundImage = 'linear-gradient(180deg, #18181b 0%, #09090b 100%)';
+    }
   }
 
   const listenersEl = document.getElementById('monthlyListenersText');
-  if (listenersEl && state.artist.monthlyListeners) {
-    listenersEl.innerText = `${state.artist.monthlyListeners} Aylık Dinleyici`;
+  if (listenersEl) {
+    if (state.artist.monthlyListeners) {
+      listenersEl.innerText = `${state.artist.monthlyListeners} Takipçi / Dinleyici`;
+      listenersEl.style.display = 'inline-block';
+    } else {
+      listenersEl.style.display = 'none';
+    }
+  }
+
+  // Dynamically update Logo & Tipografi text previews
+  const logoGoldPrev = document.getElementById('logoGoldPreview');
+  if (logoGoldPrev) logoGoldPrev.innerText = name.toUpperCase();
+
+  const logoTextPrev = document.getElementById('logoTextPreview');
+  if (logoTextPrev) logoTextPrev.innerText = name.toUpperCase();
+
+  const logoCardTitle1 = document.getElementById('logoCardTitle1');
+  if (logoCardTitle1) logoCardTitle1.innerText = `${name} Tipografi Logosu`;
+
+  // Dynamically update Socials & Platform links
+  const socials = state.artist.socials || {};
+  
+  const linkInsta = document.getElementById('linkInstagram');
+  if (linkInsta) {
+    if (socials.instagram) {
+      linkInsta.href = socials.instagram;
+      const handle = socials.instagram.replace(/\/$/, '').split('/').pop();
+      const sub = linkInsta.querySelector('.platform-sub');
+      if (sub) sub.innerText = handle ? '@' + handle : 'Instagram';
+      linkInsta.style.display = 'flex';
+    } else {
+      linkInsta.style.display = 'none';
+    }
+  }
+
+  const linkSpot = document.getElementById('linkSpotify');
+  if (linkSpot) {
+    if (socials.spotify) {
+      linkSpot.href = socials.spotify;
+      linkSpot.style.display = 'flex';
+    } else {
+      linkSpot.style.display = 'none';
+    }
+  }
+
+  const linkYt = document.getElementById('linkYoutube');
+  if (linkYt) {
+    if (socials.youtube) {
+      linkYt.href = socials.youtube;
+      linkYt.style.display = 'flex';
+    } else {
+      linkYt.style.display = 'none';
+    }
+  }
+
+  const linkDeezer = document.getElementById('linkDeezer');
+  if (linkDeezer) {
+    if (socials.deezer) {
+      linkDeezer.href = socials.deezer;
+      linkDeezer.style.display = 'flex';
+    } else {
+      linkDeezer.style.display = 'none';
+    }
   }
 }
 
