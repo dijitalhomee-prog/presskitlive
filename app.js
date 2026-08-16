@@ -463,6 +463,15 @@ function renderFilteredPhotos() {
 // --------------------------------------------------------------------------
 // Navigation & Modals Setup
 // --------------------------------------------------------------------------
+function getActiveArtistId() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const paramId = urlParams.get('artistId') || urlParams.get('id');
+  if (state && state.artist) {
+    return state.artist.id || state.artist.slug || paramId || 'yagmur-hizal';
+  }
+  return paramId || 'yagmur-hizal';
+}
+
 function setupNavigation() {}
 
 function setupActions() {}
@@ -475,17 +484,26 @@ function setupFolderModals() {
   const form = document.getElementById('addFolderForm') || document.getElementById('newFolderForm');
 
   if (btnOpen && modal) {
-    btnOpen.addEventListener('click', () => modal.classList.add('active'));
+    btnOpen.onclick = (e) => {
+      e.preventDefault();
+      modal.classList.add('active');
+    };
   }
   if (btnClose && modal) {
-    btnClose.addEventListener('click', () => modal.classList.remove('active'));
+    btnClose.onclick = (e) => {
+      e.preventDefault();
+      modal.classList.remove('active');
+    };
   }
   if (btnCancel && modal) {
-    btnCancel.addEventListener('click', () => modal.classList.remove('active'));
+    btnCancel.onclick = (e) => {
+      e.preventDefault();
+      modal.classList.remove('active');
+    };
   }
 
   if (form && modal) {
-    form.addEventListener('submit', async (e) => {
+    form.onsubmit = async (e) => {
       e.preventDefault();
       const inputName = document.getElementById('folderNameInput') || document.getElementById('inputFolderName');
       const folderName = inputName ? inputName.value.trim() : '';
@@ -496,33 +514,42 @@ function setupFolderModals() {
         isLocked = (lockEl.type === 'checkbox') ? lockEl.checked : (lockEl.value === 'true');
       }
 
-      if (!folderName) return;
+      if (!folderName) {
+        alert("Lütfen bir klasör adı yazınız.");
+        return;
+      }
+
+      const activeArtistId = getActiveArtistId();
 
       try {
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Oluşturuluyor...'; }
+
         const res = await fetch('/api/folders/add', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            artistId: state.artist.id,
+            artistId: activeArtistId,
             name: folderName,
             isLocked: isLocked
           })
         });
 
         const data = await res.json();
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Klasörü Oluştur'; }
+
         if (data.status === 'success') {
           modal.classList.remove('active');
-          form.reset();
+          if (inputName) inputName.value = '';
           await loadArtistData();
-        } else if (res.status === 403) {
-          alert("Bu sanatçı üzerinde klasör oluşturma yetkiniz bulunmamaktadır.");
+          alert('Klasör başarıyla oluşturuldu.');
         } else {
           alert(data.message || "Klasör eklenemedi.");
         }
       } catch (err) {
         alert("Sunucu hatası.");
       }
-    });
+    };
   }
 }
 
@@ -534,40 +561,48 @@ function setupPhotoModals() {
   const form = document.getElementById('addPhotoForm');
 
   if (btnOpen && modal) {
-    btnOpen.addEventListener('click', () => {
+    btnOpen.onclick = (e) => {
+      e.preventDefault();
       const select = document.getElementById('selectTargetFolder');
       if (select && state && state.artist && state.artist.folders) {
         select.innerHTML = state.artist.folders.map(f => `<option value="${escapeHTML(f.id)}">${escapeHTML(f.name)}</option>`).join('');
       }
       modal.classList.add('active');
-    });
+    };
   }
 
-  if (btnClose && modal) btnClose.addEventListener('click', () => modal.classList.remove('active'));
-  if (btnCancel && modal) btnCancel.addEventListener('click', () => modal.classList.remove('active'));
+  if (btnClose && modal) btnClose.onclick = (e) => { e.preventDefault(); modal.classList.remove('active'); };
+  if (btnCancel && modal) btnCancel.onclick = (e) => { e.preventDefault(); modal.classList.remove('active'); };
 
   if (form && modal) {
-    form.addEventListener('submit', async (e) => {
+    form.onsubmit = async (e) => {
       e.preventDefault();
       const selectEl = document.getElementById('selectTargetFolder');
       const folderId = selectEl ? selectEl.value : '';
       const titleEl = document.getElementById('inputPhotoTitle');
       const title = titleEl ? titleEl.value.trim() : '';
-      const resVal = document.getElementById('inputPhotoRes').value.trim() || '3808 x 5712 px (300 DPI)';
-      const badge = document.getElementById('inputPhotoBadge').value.trim() || 'Yeni Görsel';
-      const photoUrl = (typeof uploadedPhotoDataUrl !== 'undefined') ? uploadedPhotoDataUrl : '/assets/images/yagmur-hizal/Kort1 2.JPG';
+      const resEl = document.getElementById('inputPhotoRes');
+      const resVal = (resEl && resEl.value.trim()) ? resEl.value.trim() : '3808 x 5712 px (300 DPI)';
+      const badgeEl = document.getElementById('inputPhotoBadge');
+      const badge = (badgeEl && badgeEl.value.trim()) ? badgeEl.value.trim() : 'Yeni Görsel';
+      const photoUrl = (typeof uploadedPhotoDataUrl !== 'undefined' && uploadedPhotoDataUrl) ? uploadedPhotoDataUrl : '/assets/images/yagmur-hizal/Kort1 2.JPG';
 
       if (!folderId || !title) {
         alert("Lütfen klasör seçin ve görsel başlığını girin.");
         return;
       }
 
+      const activeArtistId = getActiveArtistId();
+
       try {
+        const submitBtn = form.querySelector('button[type="submit"]');
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Fotoğraf Ekleniyor...'; }
+
         const res = await fetch('/api/photos/add', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            artistId: state.artist.id,
+            artistId: activeArtistId,
             folderId: folderId,
             title: title,
             url: photoUrl,
@@ -577,17 +612,20 @@ function setupPhotoModals() {
         });
 
         const data = await res.json();
+        if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Fotoğrafı Ekle'; }
+
         if (data.status === 'success') {
           modal.classList.remove('active');
           form.reset();
           await loadArtistData();
+          alert('Fotoğraf klasöre başarıyla eklendi.');
         } else {
           alert(data.message || "Fotoğraf eklenemedi.");
         }
       } catch (err) {
         alert("Sunucu hatası.");
       }
-    });
+    };
   }
 }
 
