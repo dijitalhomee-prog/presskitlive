@@ -143,7 +143,7 @@ function renderArtistHeader() {
   const genreEl = document.getElementById('artistGenreText');
   if (genreEl) genreEl.innerText = state.artist.genre || 'Sanatçı / Oyuncu Portföyü';
 
-  const avatarEl = document.getElementById('artistAvatarImg');
+  const avatarEl = document.getElementById('heroAvatar') || document.getElementById('artistAvatarImg');
   if (avatarEl) {
     if (state.artist.avatar) {
       const rawAv = state.artist.avatar;
@@ -152,6 +152,12 @@ function renderArtistHeader() {
       avatarEl.src = generateInitialsAvatar(name);
     }
   }
+
+  const breadcrumbEl = document.getElementById('breadcrumbArtist');
+  if (breadcrumbEl) breadcrumbEl.innerText = name;
+
+  const slugBadgeEl = document.getElementById('artistSlugBadge');
+  if (slugBadgeEl) slugBadgeEl.innerText = state.artist.id || 'profil';
 
   const heroBg = document.getElementById('heroBg');
   if (heroBg) {
