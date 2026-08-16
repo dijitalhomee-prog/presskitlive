@@ -320,7 +320,13 @@ function renderFoldersBar() {
   if (!foldersBar) return;
 
   const photos = state.artist.pressPhotos || [];
-  const folders = state.artist.folders || [];
+  const rawFolders = state.artist.folders || [];
+
+  // Filter out duplicate default folder named 'Tüm Görseller' or 'Tüm Klasörler'
+  const folders = rawFolders.filter(f => {
+    const name = (f.name || '').trim().toLowerCase();
+    return name !== 'tüm görseller' && name !== 'tüm klasörler';
+  });
 
   let html = `
     <button class="folder-pill ${state.activeFolderId === 'folder-all' ? 'active' : ''}" data-folder-id="folder-all">
