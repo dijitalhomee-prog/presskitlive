@@ -275,6 +275,10 @@
             <input type="text" id="inputSearchManager" placeholder="Menajer veya e-posta ara..." onkeyup="filterManagersTable()">
           </div>
 
+          <button class="btn btn-outline btn-small" onclick="loadAdminData()" title="Canlı Listeyi Yenile">
+            <i data-lucide="refresh-cw"></i> Yenile
+          </button>
+
           <button class="btn btn-primary btn-small" id="btnOpenGrantFreeModal" onclick="openGrantFreeModal()">
             <i data-lucide="gift"></i> + Ücretsiz Üyelik Ekle
           </button>
@@ -419,6 +423,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       if (window.lucide) lucide.createIcons();
       loadManagersData();
+      setInterval(loadManagersData, 8000);
     });
 
     async function loadManagersData() {

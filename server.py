@@ -308,23 +308,26 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
 
         # GET /api/artist (PUBLIC PRESSKIT ENDPOINT WITH LOCK REDACTION)
         if path in ["/api/artist", "/api/artists"]:
-            artist_id = query_params.get("artistId", [query_params.get("id", ["yagmur-hizal"])[0]])[0]
-            artist = db.get_artist_by_id(artist_id)
+            requested_id = query_params.get("artistId", [query_params.get("id", [""])[0]])[0]
+            artist = db.get_artist_by_id(requested_id) if requested_id else None
             
-            # Fallback if specific artist not found: pick first artist
-            if not artist and path == "/api/artists":
-                mgr = self.get_current_manager()
-                if mgr:
-                    artists = db.get_artists_by_manager(mgr["id"])
-                    if artists:
-                        artist = artists[0]
+            mgr = self.get_current_manager()
 
-            if not artist:
-                # Default fallback artist
+            # If logged in manager, default to manager's first artist if no specific valid id requested
+            if not artist and mgr:
+                artists = db.get_artists_by_manager(mgr["id"])
+                if artists:
+                    artist = artists[0]
+
+            # Public fallback to yagmur-hizal ONLY if requested explicitly or if guest user
+            if not artist and not mgr and requested_id == "yagmur-hizal":
                 artist = db.get_artist_by_id("yagmur-hizal")
 
             if not artist:
-                self.send_error_json(404, "Sanatçı bulunamadı.")
+                if mgr:
+                    self.send_json(200, {"status": "success", "artist": None, "isOwner": True})
+                else:
+                    self.send_error_json(404, "Sanatçı bulunamadı.")
                 return
 
             mgr = self.get_current_manager()

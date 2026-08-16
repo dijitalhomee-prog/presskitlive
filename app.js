@@ -70,11 +70,12 @@ async function endImpersonation() {
 async function loadArtistData() {
   try {
     const urlParams = new URLSearchParams(window.location.search);
-    const paramArtistId = urlParams.get('artistId') || urlParams.get('id') || 'yagmur-hizal';
+    const paramArtistId = urlParams.get('artistId') || urlParams.get('id');
 
     if (state.isPublicView) {
       // PUBLIC PRESSKIT VIEW
-      const apiRes = await fetch(`/api/artist?artistId=${encodeURIComponent(paramArtistId)}`);
+      const targetId = paramArtistId || 'yagmur-hizal';
+      const apiRes = await fetch(`/api/artist?artistId=${encodeURIComponent(targetId)}`);
       if (apiRes.ok) {
         const apiJson = await apiRes.json();
         if (apiJson.artist) {
@@ -89,13 +90,13 @@ async function loadArtistData() {
         const apiJson = await apiRes.json();
         if (apiJson.artists && apiJson.artists.length > 0) {
           state.myArtists = apiJson.artists;
-          state.artist = state.myArtists.find(a => a.id === paramArtistId) || state.myArtists[0];
+          state.artist = paramArtistId ? (state.myArtists.find(a => a.id === paramArtistId) || state.myArtists[0]) : state.myArtists[0];
           state.isOwner = true;
         }
       }
       
-      // Fallback if not logged in or fetching single artist
-      if (!state.artist) {
+      // Fallback if specific artistId requested in URL
+      if (!state.artist && paramArtistId) {
         const fallbackRes = await fetch(`/api/artist?artistId=${encodeURIComponent(paramArtistId)}`);
         if (fallbackRes.ok) {
           const fallJson = await fallbackRes.json();
@@ -153,24 +154,34 @@ function renderManagerInfo() {
   if (!state.artist || !state.artist.manager) return;
   const mgr = state.artist.manager;
 
-  const nameEl = document.getElementById('cardManagerName');
-  if (nameEl) nameEl.innerText = mgr.name;
+  const heroNameEl = document.getElementById('heroManagerName');
+  if (heroNameEl) heroNameEl.innerText = mgr.name || 'Menajer';
 
-  const phoneEl = document.getElementById('cardManagerPhone');
-  if (phoneEl) phoneEl.innerText = mgr.phone || 'Belirtilmedi';
+  const heroPhoneEl = document.getElementById('heroManagerPhone');
+  if (heroPhoneEl) heroPhoneEl.innerText = mgr.phone || '';
 
-  const emailEl = document.getElementById('cardManagerEmail');
-  if (emailEl) emailEl.innerText = mgr.email;
+  const cardNameEl = document.getElementById('cardManagerName');
+  if (cardNameEl) cardNameEl.innerText = mgr.name || 'Menajer';
 
-  const waLink = document.getElementById('gridWhatsappLink');
-  if (waLink) {
+  const cardPhoneEl = document.getElementById('cardManagerPhone');
+  if (cardPhoneEl) cardPhoneEl.innerText = mgr.phone || 'Belirtilmedi';
+
+  const cardEmailEl = document.getElementById('cardManagerEmail');
+  if (cardEmailEl) cardEmailEl.innerText = mgr.email || '';
+
+  const updateWaBtn = (btnEl) => {
+    if (!btnEl) return;
     if (mgr.phoneRaw) {
-      waLink.style.display = 'inline-flex';
-      waLink.href = `https://wa.me/${mgr.phoneRaw}?text=Merhaba%20${encodeURIComponent(mgr.name)}%2C%20${encodeURIComponent(state.artist.name)}%20presskit%20ve%20konser%20rezervasyonu%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum.`;
+      btnEl.style.display = 'inline-flex';
+      btnEl.href = `https://wa.me/${mgr.phoneRaw}?text=Merhaba%20${encodeURIComponent(mgr.name)}%2C%20${encodeURIComponent(state.artist.name)}%20presskit%20ve%20konser%20rezervasyonu%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum.`;
     } else {
-      waLink.style.display = 'none';
+      btnEl.style.display = 'none';
     }
-  }
+  };
+
+  updateWaBtn(document.getElementById('btnHeroWhatsapp'));
+  updateWaBtn(document.getElementById('btnPublicHeroWhatsapp'));
+  updateWaBtn(document.getElementById('gridWhatsappLink'));
 
   const phoneLink = document.getElementById('gridPhoneLink');
   if (phoneLink) {
