@@ -992,7 +992,12 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             folder_id = req_body.get("folderId")
             artist_id = req_body.get("artistId")
 
-            artist = db.get_artist_by_id(artist_id)
+            artist = db.get_artist_by_id(artist_id) if artist_id else None
+            if not artist and mgr:
+                my_artists = db.get_artists_by_manager(mgr["id"])
+                if my_artists:
+                    artist = my_artists[0]
+
             if not artist or not self.is_authorized_manager(mgr, artist):
                 self.send_error_json(403, "Bu klasörü silme yetkiniz bulunmamaktadır.")
                 return
@@ -1046,15 +1051,20 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
         # POST /api/photos/delete
         if path == "/api/photos/delete":
             photo_id = req_body.get("photoId")
-            artist_id = req_body.get("artistId", "yagmur-hizal")
+            artist_id = req_body.get("artistId")
 
-            artist = db.get_artist_by_id(artist_id)
+            artist = db.get_artist_by_id(artist_id) if artist_id else None
+            if not artist and mgr:
+                my_artists = db.get_artists_by_manager(mgr["id"])
+                if my_artists:
+                    artist = my_artists[0]
+
             if not artist or not self.is_authorized_manager(mgr, artist):
                 self.send_error_json(403, "Bu fotoğrafı silme yetkiniz yoktur.")
                 return
 
             db.delete_photo(photo_id)
-            self.send_json(200, {"status": "success", "message": "Fotoğraf silindi.", "artist": db.get_artist_by_id(artist_id)})
+            self.send_json(200, {"status": "success", "message": "Fotoğraf silindi.", "artist": db.get_artist_by_id(artist["id"])})
             return
 
         self.send_error_json(404, "Böyle bir API endpoint bulunamadı.")

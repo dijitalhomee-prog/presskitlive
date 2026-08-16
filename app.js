@@ -91,8 +91,7 @@ async function loadArtistData() {
         const apiJson = await apiRes.json();
         if (apiJson.artists && apiJson.artists.length > 0) {
           state.myArtists = apiJson.artists;
-          state.artist = paramArtistId ? (state.myArtists.find(a => a.id === paramArtistId) || state.myArtists[0]) : state.myArtists[0];
-          state.isOwner = true;
+          state.artist = paramArtistId ? (state.myArtists.find(a => a.id === paramArtistId || a.slug === paramArtistId || String(a.id).toLowerCase() === String(paramArtistId).toLowerCase() || String(a.name).toLowerCase() === String(paramArtistId).toLowerCase()) || state.myArtists[0]) : state.myArtists[0];
         }
       }
       
@@ -103,10 +102,11 @@ async function loadArtistData() {
           const fallJson = await fallbackRes.json();
           if (fallJson.artist) {
             state.artist = fallJson.artist;
-            state.isOwner = fallJson.isOwner || false;
           }
         }
       }
+
+      state.isOwner = true; // Always true for logged in manager in manager dashboard view!
     }
 
     if (state.artist) {
@@ -873,20 +873,20 @@ async function deletePhotoHandler(photoId) {
   if (!confirm("Bu fotoğrafı silmek istediğinize emin misiniz?")) return;
 
   try {
+    const activeArtistId = getActiveArtistId();
     const res = await fetch('/api/photos/delete', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         photoId: photoId,
-        artistId: state.artist.id
+        artistId: activeArtistId
       })
     });
 
     const data = await res.json();
     if (data.status === 'success') {
       await loadArtistData();
-    } else if (res.status === 403) {
-      alert("Bu fotoğrafı silme yetkiniz bulunmamaktadır.");
+      alert("Fotoğraf başarıyla silindi.");
     } else {
       alert(data.message || "Fotoğraf silinemedi.");
     }
