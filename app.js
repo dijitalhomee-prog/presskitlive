@@ -189,8 +189,9 @@ function renderArtistHeader() {
   const breadcrumbEl = document.getElementById('breadcrumbArtist');
   if (breadcrumbEl) breadcrumbEl.innerText = name;
 
+  const activeSlug = state.artist.slug || state.artist.id || 'profil';
   const slugBadgeEl = document.getElementById('artistSlugBadge');
-  if (slugBadgeEl) slugBadgeEl.innerText = state.artist.id || 'profil';
+  if (slugBadgeEl) slugBadgeEl.innerText = activeSlug;
 
   const heroBg = document.getElementById('heroBg');
   if (heroBg) {
@@ -609,9 +610,9 @@ function getActiveArtistId() {
   const urlParams = new URLSearchParams(window.location.search);
   const paramId = urlParams.get('artistId') || urlParams.get('id');
   if (state && state.artist) {
-    return state.artist.id || state.artist.slug || paramId || 'yagmur-hizal';
+    return state.artist.id || state.artist.slug || paramId || '';
   }
-  return paramId || 'yagmur-hizal';
+  return paramId || '';
 }
 
 function setupNavigation() {}

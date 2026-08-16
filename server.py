@@ -349,9 +349,6 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                     if my_artists:
                         artist = my_artists[0]
                 
-                if not artist:
-                    artist = db.get_artist_by_id("yagmur-hizal")
-
             if not artist:
                 all_artists = db.get_all_artists()
                 if all_artists:
@@ -951,7 +948,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
 
         # POST /api/folders/add
         if path == "/api/folders/add":
-            artist_id = req_body.get("artistId", "yagmur-hizal")
+            artist_id = req_body.get("artistId")
             folder_name = req_body.get("name")
             is_locked = req_body.get("isLocked", False)
 
@@ -1023,10 +1020,10 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
 
         # POST /api/photos/add
         if path == "/api/photos/add":
-            artist_id = req_body.get("artistId", "yagmur-hizal")
+            artist_id = req_body.get("artistId")
             folder_id = req_body.get("folderId", "folder-all")
             title = req_body.get("title", "Yeni Fotoğraf")
-            raw_url = req_body.get("url", "/assets/images/yagmur-hizal/Kort1_2.JPG")
+            raw_url = req_body.get("url", "")
             resolution = req_body.get("resolution", "3808 x 5712 px (300 DPI)")
             badge = req_body.get("badge", "Yeni Görsel")
 
