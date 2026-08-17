@@ -176,6 +176,13 @@ function initI18n() {
   setLanguage(currentLang);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+// Global Exports
+window.setLanguage = setLanguage;
+window.getTranslation = getTranslation;
+window.initI18n = initI18n;
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initI18n);
+} else {
   initI18n();
-});
+}

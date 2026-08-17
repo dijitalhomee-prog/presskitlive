@@ -1892,41 +1892,54 @@ a {
 }
 
 /* ==========================================================================
-   GLOBAL TR / EN LANGUAGE SWITCHER PILL STYLING
+   ULTRA-PREMIUM GLOBAL TR / EN LANGUAGE SWITCHER STYLING
    ========================================================================== */
 .lang-switcher-pill {
-  display: inline-flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  padding: 3px;
-  gap: 2px;
-  user-select: none;
-  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
-  margin-left: 8px;
+  display: inline-flex !important;
+  align-items: center !important;
+  background: rgba(18, 18, 20, 0.85) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  border-radius: 24px !important;
+  padding: 3px !important;
+  gap: 3px !important;
+  user-select: none !important;
+  backdrop-filter: blur(12px) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.1) !important;
+  margin: 0 6px !important;
+  vertical-align: middle !important;
 }
 
-.lang-toggle-btn {
-  background: transparent;
-  border: none;
-  color: var(--text-subdued);
-  font-size: 11px;
-  font-weight: 700;
-  padding: 3px 9px;
-  border-radius: 14px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  letter-spacing: 0.5px;
+button.lang-toggle-btn, .lang-toggle-btn {
+  background: transparent !important;
+  border: none !important;
+  outline: none !important;
+  color: #a1a1aa !important;
+  font-family: var(--font-sans, system-ui) !important;
+  font-size: 11px !important;
+  font-weight: 700 !important;
+  padding: 4px 10px !important;
+  border-radius: 18px !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 5px !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
 }
 
-.lang-toggle-btn.active {
-  background: var(--primary);
-  color: #000;
-  font-weight: 900;
-  box-shadow: 0 2px 8px rgba(29, 185, 84, 0.4);
+button.lang-toggle-btn.active, .lang-toggle-btn.active {
+  background: var(--primary, #1DB954) !important;
+  color: #000000 !important;
+  font-weight: 900 !important;
+  box-shadow: 0 2px 10px rgba(29, 185, 84, 0.4) !important;
 }
 
-.lang-toggle-btn:hover:not(.active) {
-  color: #fff;
+button.lang-toggle-btn:hover:not(.active), .lang-toggle-btn:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
 }
