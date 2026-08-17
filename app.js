@@ -444,7 +444,9 @@ async function deleteActiveFolderHandler() {
 
 async function deleteFolderHandler(e, folderId, folderName) {
   if (e) e.stopPropagation();
-  if (!confirm(`"${folderName}" klasörünü ve içerisindeki tüm görselleri silmek istediğinize emin misiniz?`)) return;
+  
+  const confirmMsg = `⚠️ DİKKAT: "${folderName}" klasörünü ve içerisindeki tüm görselleri silmek istediğinize emin misiniz?\n\nBu işlem geri alınamaz!`;
+  if (!confirm(confirmMsg)) return;
 
   try {
     const res = await fetch('/api/folders/delete', {
@@ -460,7 +462,7 @@ async function deleteFolderHandler(e, folderId, folderName) {
     if (data.status === 'success') {
       state.activeFolderId = 'folder-all';
       await loadArtistData();
-      alert('Klasör ve içerisindeki görseller başarıyla silindi.');
+      alert(`"${folderName}" klasörü ve içerisindeki tüm görseller başarıyla silindi.`);
     } else {
       alert(data.message || "Klasör silinemedi.");
     }

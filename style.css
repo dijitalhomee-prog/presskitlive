@@ -288,11 +288,12 @@ a {
 /* Spotify Artist Hero Header */
 .hero-header {
   position: relative;
-  height: 360px;
+  min-height: 380px;
+  height: auto;
   background-color: var(--bg-surface);
   display: flex;
   align-items: flex-end;
-  padding: 36px;
+  padding: 48px 36px 36px 36px;
   overflow: hidden;
 }
 .hero-bg {
@@ -1267,4 +1268,38 @@ a {
   background: rgba(0, 0, 0, 0.2);
   color: #000000;
   border-color: rgba(0, 0, 0, 0.3);
+}
+
+.folder-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  cursor: pointer;
+  margin-left: 6px;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.folder-delete-btn:hover {
+  background: #ef4444 !important;
+  color: #ffffff !important;
+  border-color: #ef4444 !important;
+  transform: scale(1.15);
+}
+
+.folder-pill.active .folder-delete-btn {
+  background: rgba(239, 68, 68, 0.25);
+  color: #dc2626;
+  border-color: rgba(220, 38, 38, 0.5);
+}
+
+.folder-pill.active .folder-delete-btn:hover {
+  background: #dc2626 !important;
+  color: #ffffff !important;
 }
