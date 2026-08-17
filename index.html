@@ -1305,19 +1305,21 @@
           const res = await fetch('/api/artists/update-socials', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ artistId: state.artist.id, socials: socialsObj })
+            body: JSON.stringify({ artistId: getActiveArtistId(), socials: socialsObj })
           });
           const data = await res.json();
           if (data.status === 'success') {
             state.artist.socials = socialsObj;
-            renderArtistHeader();
+            if (window.renderPlatformLinks) renderPlatformLinks();
+            if (window.showToast) showToast('Dijital platform bağlantıları veritabanına kaydedildi.', 'success');
             socialsModal.classList.remove('active');
-            alert('Dijital platform bağlantıları başarıyla güncellendi.');
+            await loadArtistData();
           } else {
-            alert(data.message || 'Bağlantılar güncellenemedi.');
+            if (window.showToast) showToast(data.message || 'Bağlantılar güncellenemedi.', 'error');
           }
         } catch (err) {
-          alert('Sunucu hatası.');
+          console.error(err);
+          if (window.showToast) showToast('Sunucu hatası. Bağlantılar kaydedilemedi.', 'error');
         }
       });
     }
