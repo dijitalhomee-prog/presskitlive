@@ -1598,3 +1598,42 @@ a {
   border-color: rgba(59, 130, 246, 0.6) !important;
   transform: translateX(4px) !important;
 }
+
+/* GREEN BACK ARROW SIDEBAR PILL */
+.sidebar-back-pill {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: rgba(29, 185, 84, 0.12);
+  border: 1px solid rgba(29, 185, 84, 0.3);
+  padding: 10px 14px;
+  border-radius: var(--radius-md, 12px);
+  margin-bottom: 20px;
+  color: #ffffff;
+  font-family: var(--font-main, 'Inter', sans-serif);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.sidebar-back-pill i,
+.sidebar-back-pill svg {
+  width: 18px;
+  height: 18px;
+  stroke: var(--primary, #1db954) !important;
+  color: var(--primary, #1db954) !important;
+  transition: transform 0.2s ease;
+}
+
+.sidebar-back-pill:hover {
+  background: rgba(29, 185, 84, 0.25);
+  border-color: rgba(29, 185, 84, 0.6);
+  box-shadow: 0 4px 14px rgba(29, 185, 84, 0.25);
+}
+
+.sidebar-back-pill:hover i,
+.sidebar-back-pill:hover svg {
+  transform: translateX(-4px);
+}

@@ -24,7 +24,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/style.css?v=20260817_0015">
+  <link rel="stylesheet" href="/style.css?v=20260817_0016">
   <style>
     .file-input-wrapper {
       position: relative;
@@ -444,6 +444,12 @@
       <a href="https://dijitalgru.com/" target="_blank" class="dijitalgru-sidebar-badge" title="dijitalgru.com sitesini ziyaret edin">
         <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru Logo" class="dg-logo-sm">
         <span>Yazılım Teknolojisi</span>
+      </a>
+
+      <!-- GREEN BACK ARROW BUTTON TO RETURN TO MANAGER DASHBOARD / PREVIOUS PAGE -->
+      <a href="agency_dashboard.html" class="sidebar-back-pill" onclick="if(document.referrer && document.referrer.includes(window.location.host)){ event.preventDefault(); window.history.back(); }" title="Önceki Sayfaya / Menajer Konsoluna Dön">
+        <i data-lucide="arrow-left"></i>
+        <span>Menajer Paneline Dön</span>
       </a>
 
       <!-- Navigation Links -->
@@ -990,7 +996,7 @@
   </div>
 
   <!-- JavaScript -->
-  <script src="/app.js?v=20260817_0015"></script>
+  <script src="/app.js?v=20260817_0016"></script>
   <script>
     let uploadedPhotoDataUrl = '';
     let uploadedLogoDataUrl = '';
