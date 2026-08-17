@@ -1817,3 +1817,24 @@ a {
   font-weight: 700;
   text-decoration: none;
 }
+
+/* ==========================================================================
+   GLOBAL LIGHTBOX MODAL STYLING
+   ========================================================================== */
+.lightbox-modal {
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  background: rgba(0, 0, 0, 0.94) !important;
+  backdrop-filter: blur(12px) !important;
+  z-index: 99999 !important;
+  display: none !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 24px !important;
+}
+
+.lightbox-modal.active {
+  display: flex !important;
+}
