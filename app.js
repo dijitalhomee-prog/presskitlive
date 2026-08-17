@@ -787,9 +787,59 @@ function getActiveArtistId() {
   return paramId || '';
 }
 
-function setupNavigation() {}
+function setupCopyUrlButton() {
+  const copyBtn = document.getElementById('btnCopyPageUrl');
+  if (!copyBtn) return;
 
-function setupActions() {}
+  copyBtn.onclick = async (e) => {
+    e.preventDefault();
+    const activeArtistId = getActiveArtistId() || 'zuhal';
+    const origin = window.location.origin;
+    const shareableUrl = `${origin}/public.html?artistId=${encodeURIComponent(activeArtistId)}`;
+
+    try {
+      if (navigator.clipboard && window.isSecureContext) {
+        await navigator.clipboard.writeText(shareableUrl);
+      } else {
+        const textArea = document.createElement('textarea');
+        textArea.value = shareableUrl;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-999999px';
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+        document.execCommand('copy');
+        textArea.remove();
+      }
+
+      if (window.showToast) {
+        showToast("Sanatçı Presskit Linki Panoya Kopyalandı! 📋", "success");
+      }
+
+      const copyLabel = copyBtn.querySelector('.btn-copy-label');
+      if (copyLabel) {
+        copyLabel.innerHTML = '<i data-lucide="check" style="width:12px; height:12px;"></i> Kopyalandı!';
+        copyLabel.style.background = '#1db954';
+        copyLabel.style.color = '#000000';
+        if (window.lucide) lucide.createIcons();
+
+        setTimeout(() => {
+          copyLabel.innerHTML = '<i data-lucide="copy" style="width:12px; height:12px;"></i> Kopyala';
+          copyLabel.style.background = '';
+          copyLabel.style.color = '';
+          if (window.lucide) lucide.createIcons();
+        }, 2000);
+      }
+    } catch (err) {
+      console.error("Copy error:", err);
+      if (window.showToast) showToast("Link kopyalanırken bir hata oluştu.", "error");
+    }
+  };
+}
+
+function setupActions() {
+  setupCopyUrlButton();
+}
 
 function setupFolderModals() {
   const modal = document.getElementById('addFolderModal') || document.getElementById('newFolderModal');

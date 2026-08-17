@@ -275,17 +275,50 @@ a {
 
 .domain-info-badge {
   background: var(--bg-surface);
-  border: 1px solid var(--border-subtle);
+  border: 1px solid var(--border-glass);
   padding: 6px 14px;
   border-radius: var(--radius-full);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-muted);
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
+  cursor: pointer;
+  user-select: all;
+  transition: all 0.2s ease;
 }
+
+.domain-info-badge:hover {
+  border-color: var(--primary);
+  background: rgba(29, 185, 84, 0.12);
+  color: #ffffff;
+  box-shadow: 0 0 16px rgba(29, 185, 84, 0.2);
+  transform: translateY(-1px);
+}
+
 .domain-info-badge strong {
+  color: #ffffff;
+}
+
+.btn-copy-label {
+  font-size: 11px;
+  font-weight: 800;
+  background: rgba(29, 185, 84, 0.2);
   color: var(--primary);
+  border: 1px solid rgba(29, 185, 84, 0.4);
+  padding: 3px 9px;
+  border-radius: 12px;
+  margin-left: 4px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.domain-info-badge:hover .btn-copy-label {
+  background: var(--primary);
+  color: #000000;
+  border-color: var(--primary);
 }
 
 /* Spotify Artist Hero Header */
