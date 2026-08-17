@@ -191,7 +191,7 @@
       border: 1px solid rgba(59, 130, 246, 0.4);
     }
 
-    .btn-edit-icon {
+    .btn-edit-icon, .btn-delete-icon {
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
       color: #fff;
@@ -208,6 +208,11 @@
     .btn-edit-icon:hover {
       background: var(--primary);
       color: #000;
+    }
+    .btn-delete-icon:hover {
+      background: #ef4444 !important;
+      color: #fff !important;
+      border-color: #ef4444 !important;
     }
     .btn-trash-icon {
       background: rgba(239, 68, 68, 0.2);
@@ -930,7 +935,7 @@
                   <button type="button" class="btn-edit-icon" title="Sanatçı İsmini Düzenle" data-artist-id="${safeId}" data-artist-name="${safeName}" data-artist-genre="${performType}">
                     <i data-lucide="edit-3" style="width:16px;"></i>
                   </button>
-                  <button type="button" class="btn-edit-icon" title="Sanatçı Profilini Sil" onclick="deleteArtistHandler('${safeId}', '${safeName}')" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; border-color: rgba(239, 68, 68, 0.4);">
+                  <button type="button" class="btn-delete-icon" title="Sanatçı Profilini Sil" data-artist-id="${safeId}" data-artist-name="${safeName}" style="background: rgba(239, 68, 68, 0.2); color: #ef4444; border-color: rgba(239, 68, 68, 0.4);">
                     <i data-lucide="trash-2" style="width:16px;"></i>
                   </button>
                 </div>
@@ -964,10 +969,16 @@
       grid.innerHTML = html;
       if (window.lucide) lucide.createIcons();
 
-      // Bind click handlers using dataset to completely eliminate inline onclick XSS
+      // Bind click handlers using dataset to completely eliminate inline onclick XSS & class collision
       grid.querySelectorAll('.btn-edit-icon').forEach(btn => {
         btn.addEventListener('click', () => {
           openEditModal(btn.dataset.artistId, btn.dataset.artistName, btn.dataset.artistGenre);
+        });
+      });
+
+      grid.querySelectorAll('.btn-delete-icon').forEach(btn => {
+        btn.addEventListener('click', () => {
+          deleteArtistHandler(btn.dataset.artistId, btn.dataset.artistName);
         });
       });
     }
