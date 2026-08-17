@@ -137,6 +137,8 @@ def init_db():
             cursor.execute("ALTER TABLE managers ADD COLUMN is_super_admin INTEGER NOT NULL DEFAULT 0;")
         if 'whatsapp_phone' not in columns:
             cursor.execute("ALTER TABLE managers ADD COLUMN whatsapp_phone TEXT DEFAULT NULL;")
+        if 'trial_ends_at' not in columns:
+            cursor.execute("ALTER TABLE managers ADD COLUMN trial_ends_at TEXT DEFAULT NULL;")
 
         # 2. Artists Table
         cursor.execute("""
@@ -235,26 +237,53 @@ def init_db():
 def hash_password(plain_pass, salt):
     return hashlib.pbkdf2_hmac('sha256', plain_pass.encode('utf-8'), salt.encode('utf-8'), 100000).hex()
 
+def check_and_expire_trial(manager):
+    if not manager:
+        return None
+    sub_status = manager.get("subscription_status", "none")
+    trial_ends = manager.get("trial_ends_at")
+    
+    if sub_status == "trial_active" and trial_ends:
+        try:
+            trial_dt = datetime.strptime(trial_ends, "%Y-%m-%d %H:%M:%S")
+            now_dt = datetime.utcnow()
+            if now_dt > trial_dt:
+                # 7-day trial expired! Transition subscription_status to 'trial_expired' in DB
+                with get_connection() as conn:
+                    conn.execute("UPDATE managers SET subscription_status = 'trial_expired' WHERE id = ?", (manager["id"],))
+                    conn.commit()
+                manager["subscription_status"] = "trial_expired"
+                manager["trial_days_left"] = 0
+            else:
+                diff = trial_dt - now_dt
+                manager["trial_days_left"] = max(0, diff.days + 1)
+                manager["trial_hours_left"] = max(0, int(diff.total_seconds() // 3600))
+        except Exception as e:
+            pass
+    elif sub_status == "trial_expired":
+        manager["trial_days_left"] = 0
+    return manager
+
 # MANAGER CRUD
 def get_manager_by_email(email):
     with get_connection() as conn:
         row = conn.execute("SELECT * FROM managers WHERE LOWER(email) = LOWER(?) AND is_active = 1", (email,)).fetchone()
-        return dict(row) if row else None
+        return check_and_expire_trial(dict(row)) if row else None
 
 def get_manager_by_email_any(email):
     with get_connection() as conn:
         row = conn.execute("SELECT * FROM managers WHERE LOWER(email) = LOWER(?)", (email,)).fetchone()
-        return dict(row) if row else None
+        return check_and_expire_trial(dict(row)) if row else None
 
 def get_manager_by_id(manager_id):
     with get_connection() as conn:
         row = conn.execute("SELECT * FROM managers WHERE id = ? AND is_active = 1", (manager_id,)).fetchone()
-        return dict(row) if row else None
+        return check_and_expire_trial(dict(row)) if row else None
 
 def get_manager_by_id_any(manager_id):
     with get_connection() as conn:
         row = conn.execute("SELECT * FROM managers WHERE id = ?", (manager_id,)).fetchone()
-        return dict(row) if row else None
+        return check_and_expire_trial(dict(row)) if row else None
 
 def toggle_manager_active_status(manager_id, is_active):
     with get_connection() as conn:
@@ -262,18 +291,26 @@ def toggle_manager_active_status(manager_id, is_active):
         conn.commit()
     return get_manager_by_id_any(manager_id)
 
-def create_manager(email, password, name, agency_name="", phone="", account_type="agency"):
+def create_manager(email, password, name, agency_name="", phone="", account_type="agency", is_trial=False):
     salt = secrets.token_hex(16)
     pwd_hash = hash_password(password, salt)
     manager_id = f"mgr-{uuid.uuid4().hex[:12]}"
     created_at = time.strftime("%Y-%m-%d %H:%M:%S")
     plan = 'bireysel' if account_type == 'solo' else 'starter'
+    sub_status = 'none'
+    trial_ends_at = None
+
+    if is_trial:
+        sub_status = 'trial_active'
+        plan = 'pro'
+        trial_dt = datetime.utcnow() + timedelta(days=7)
+        trial_ends_at = trial_dt.strftime("%Y-%m-%d %H:%M:%S")
 
     with get_connection() as conn:
         conn.execute("""
-            INSERT INTO managers (id, email, password_hash, salt, name, agency_name, phone, plan, account_type, created_at, is_active)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1)
-        """, (manager_id, email, pwd_hash, salt, name, agency_name, phone, plan, account_type, created_at))
+            INSERT INTO managers (id, email, password_hash, salt, name, agency_name, phone, plan, account_type, created_at, is_active, subscription_status, trial_ends_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?)
+        """, (manager_id, email, pwd_hash, salt, name, agency_name, phone, plan, account_type, created_at, sub_status, trial_ends_at))
         conn.commit()
 
     return get_manager_by_id(manager_id)

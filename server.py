@@ -317,6 +317,10 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                         "accountType": mgr.get("account_type", "agency"),
                         "quotaLimit": quota_limit,
                         "subscriptionStatus": mgr.get("subscription_status", "none"),
+                        "trialEndsAt": mgr.get("trial_ends_at"),
+                        "trialDaysLeft": mgr.get("trial_days_left"),
+                        "isTrialActive": mgr.get("subscription_status") == "trial_active",
+                        "isTrialExpired": mgr.get("subscription_status") == "trial_expired",
                         "iyzicoSubscriptionRef": mgr.get("iyzico_subscription_ref", ""),
                         "isSuperAdmin": bool(mgr.get("is_super_admin")),
                         "impersonation": impersonation_info
@@ -394,14 +398,15 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
         except Exception:
             req_body = {}
 
-        # POST /api/signup (MANAGER OR SOLO ARTIST REGISTRATION)
-        if path == "/api/signup":
+        # POST /api/signup OR /api/signup-trial (MANAGER OR SOLO ARTIST REGISTRATION)
+        if path in ["/api/signup", "/api/signup-trial"]:
             email = req_body.get("email", "").strip().lower()
             password = req_body.get("password", "").strip()
             name = req_body.get("name", "").strip()
             agency_name = req_body.get("agencyName", "").strip()
             phone = req_body.get("phone", "").strip()
             account_type = req_body.get("accountType", "agency").strip().lower()
+            is_trial = bool(req_body.get("isTrial") or path == "/api/signup-trial")
 
             # Strict accountType validation (Section A.7)
             if account_type not in ["agency", "solo"]:
@@ -425,11 +430,12 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error_json(409, "Bu e-posta adresi ile zaten bir kullanıcı hesabı mevcut.")
                 return
 
-            manager = db.create_manager(email, password, name, agency_name, phone, account_type=account_type)
+            manager = db.create_manager(email, password, name, agency_name, phone, account_type=account_type, is_trial=is_trial)
             token = db.create_session(manager["id"])
 
             # Send Welcome Email (Phase 4 Section C.1)
-            send_email(manager["email"], "PressKitLive'a Hoş Geldiniz!", render_welcome_email(manager["name"]))
+            subject = "PressKitLive 7 Günlük Ücretsiz Denemeniz Başladı!" if is_trial else "PressKitLive'a Hoş Geldiniz!"
+            send_email(manager["email"], subject, render_welcome_email(manager["name"]))
 
             redirect_url = "/agency_dashboard.html"
 
@@ -441,15 +447,21 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             cookie_str = f"presskit_session={token}; Path=/; HttpOnly; SameSite=Lax; Max-Age=2592000"
             self.send_json(200, {
                 "status": "success",
-                "message": "Hesabınız başarıyla oluşturuldu.",
+                "message": "7 günlük ücretsiz deneme hesabınız başarıyla oluşturuldu." if is_trial else "Hesabınız başarıyla oluşturuldu.",
                 "user": {
                     "id": manager["id"],
                     "email": manager["email"],
                     "name": manager["name"],
-                    "accountType": account_type
+                    "plan": manager["plan"],
+                    "accountType": manager["account_type"],
+                    "subscriptionStatus": manager.get("subscription_status", "none"),
+                    "trialEndsAt": manager.get("trial_ends_at"),
+                    "trialDaysLeft": manager.get("trial_days_left", 7)
                 },
+                "redirectUrl": redirect_url,
                 "redirect": redirect_url
             }, set_cookie=cookie_str)
+            return
             return
 
         # POST /api/forgot-password (Section B.2)

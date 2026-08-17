@@ -133,6 +133,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   state.isPublicView = document.body.dataset.view === 'public' || window.location.pathname.includes('public.html');
   
   await checkImpersonationStatus();
+  await checkTrialStatus();
   await loadArtistData();
   setupNavigation();
   setupActions();
@@ -151,6 +152,59 @@ async function checkImpersonationStatus() {
         if (impName) impName.innerText = data.user.name || 'Menajer';
         if (impBanner) impBanner.style.display = 'flex';
       }
+    }
+  } catch (e) {}
+}
+
+async function checkTrialStatus() {
+  try {
+    const res = await fetch('/api/session');
+    if (!res.ok) return;
+    const data = await res.json();
+    if (!data.authenticated || !data.user) return;
+
+    const user = data.user;
+    const mainContent = document.querySelector('.main-content') || document.querySelector('.app-container');
+    if (!mainContent) return;
+
+    // Check if banner already exists
+    if (document.getElementById('trialBannerWrapper')) return;
+
+    const bannerContainer = document.createElement('div');
+    bannerContainer.id = 'trialBannerWrapper';
+
+    if (user.subscriptionStatus === 'trial_active') {
+      const daysLeft = user.trialDaysLeft !== undefined ? user.trialDaysLeft : 7;
+      bannerContainer.innerHTML = `
+        <div class="trial-banner trial-active" style="background: linear-gradient(90deg, rgba(29, 185, 84, 0.15) 0%, rgba(15, 23, 42, 0.95) 100%); border: 1px solid rgba(29, 185, 84, 0.4); padding: 12px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 13px; color: #fff;">
+          <div style="display:flex; align-items:center; gap:10px;">
+            <i data-lucide="zap" style="color:var(--primary); width:20px; height:20px;"></i>
+            <span><strong>7 Günlük Ücretsiz Deneme Hesabı:</strong> Kalan süreniz <strong>${daysLeft} Gün</strong>. Tüm özellikler 7 gün ücretsiz kullanıma açıktır.</span>
+          </div>
+          <a href="/landing.html#fiyatlandirma" class="btn btn-primary btn-small" style="font-size:12px; font-weight:700; padding:6px 14px; white-space:nowrap; text-decoration:none;">
+            Aboneliğe Yükselt
+          </a>
+        </div>
+      `;
+      mainContent.insertBefore(bannerContainer, mainContent.firstChild);
+      if (window.lucide) lucide.createIcons();
+    } else if (user.subscriptionStatus === 'trial_expired' || user.subscriptionStatus === 'passive') {
+      bannerContainer.innerHTML = `
+        <div class="trial-banner trial-expired" style="background: linear-gradient(90deg, rgba(239, 68, 68, 0.2) 0%, rgba(15, 23, 42, 0.95) 100%); border: 1px solid rgba(239, 68, 68, 0.4); padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; font-size: 14px; color: #fff; box-shadow: 0 8px 24px rgba(239, 68, 68, 0.15);">
+          <div style="display:flex; align-items:center; gap:12px;">
+            <i data-lucide="alert-triangle" style="color:#ef4444; width:26px; height:26px; flex-shrink:0;"></i>
+            <div>
+              <strong style="color:#fff; font-size:15px; display:block;">⚠️ 7 Günlük Ücretsiz Deneme Süreniz Sona Ermiştir</strong>
+              <span style="color:var(--text-subdued); font-size:13px;">Hesabınız otomatik olarak pasif duruma düşmüştür. Portallarınızı canlı tutmak için lütfen bir abonelik paketi seçiniz.</span>
+            </div>
+          </div>
+          <a href="/landing.html#fiyatlandirma" class="btn btn-spotify" style="padding:10px 18px; font-weight:800; font-size:13px; white-space:nowrap; flex-shrink:0; text-decoration:none;">
+            <i data-lucide="credit-card"></i> Abonelik Paketlerini İncele
+          </a>
+        </div>
+      `;
+      mainContent.insertBefore(bannerContainer, mainContent.firstChild);
+      if (window.lucide) lucide.createIcons();
     }
   } catch (e) {}
 }

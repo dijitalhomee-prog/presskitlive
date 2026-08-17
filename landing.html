@@ -445,6 +445,26 @@
       </p>
     </div>
 
+    <!-- 7 DAYS FREE TRIAL PROMO BANNER -->
+    <div style="background: linear-gradient(135deg, rgba(29, 185, 84, 0.18) 0%, rgba(15, 23, 42, 0.95) 100%); border: 1px solid rgba(29, 185, 84, 0.4); border-radius: 16px; padding: 24px 30px; margin: 36px auto 40px auto; max-width: 960px; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; box-shadow: 0 12px 36px rgba(29, 185, 84, 0.15); text-align: left;">
+      <div style="max-width: 600px;">
+        <span style="background: var(--primary); color: #000; font-size: 11px; font-weight: 900; text-transform: uppercase; padding: 4px 12px; border-radius: 20px; letter-spacing: 0.8px; display: inline-block; margin-bottom: 10px;">
+          ⚡ Kredi Kartı Gerekmez • 7 Gün Ücretsiz
+        </span>
+        <h3 style="font-family: var(--font-display); font-size: 24px; font-weight: 800; color: #fff; margin: 0 0 6px 0;">
+          7 Gün Boyunca Sınırsız & Ücretsiz Deneyin
+        </h3>
+        <p style="color: var(--text-subdued); font-size: 14px; margin: 0; line-height: 1.5;">
+          1 dakikada ücretsiz kayıt olun, 7 gün boyunca tüm presskit ve 300 DPI medya özelliklerini tam yetkiyle test edin. 7 günün sonunda otomatik pasif konuma geçer.
+        </p>
+      </div>
+      <div style="flex-shrink: 0;">
+        <button type="button" onclick="openTrialModal()" class="btn btn-spotify btn-large" style="padding: 14px 28px; font-size: 15px; font-weight: 800; border-radius: 10px; box-shadow: 0 6px 20px rgba(29, 185, 84, 0.3);">
+          <i data-lucide="sparkles"></i> 7 Günlük Ücretsiz Denemeyi Başlat
+        </button>
+      </div>
+    </div>
+
     <div class="pricing-grid">
       
       <!-- PLAN 0: BIREYSEL -->
@@ -617,6 +637,58 @@
     </div>
   </div>
 
+  <!-- 7-DAY FREE TRIAL REGISTRATION MODAL -->
+  <div class="modal-backdrop" id="trialModal">
+    <div class="modal-card modal-compact" style="max-width:520px;">
+      <div class="modal-header" style="padding:14px 20px;">
+        <div>
+          <h3 style="font-size:16px; margin:0;"><i data-lucide="sparkles" style="color:var(--primary);"></i> 7 Gün Ücretsiz Deneme Hesabı</h3>
+          <p style="font-size:12px; color:var(--text-subdued); margin:2px 0 0 0;">Kredi kartı gerekmez. Hesabınızı anında oluşturun.</p>
+        </div>
+        <button class="modal-close" onclick="document.getElementById('trialModal').classList.remove('active')">&times;</button>
+      </div>
+
+      <div class="modal-body" style="padding:16px 20px;">
+        <form id="trialSignupForm" style="display:flex; flex-direction:column; gap:12px;">
+          <input type="hidden" id="trialAccountType" value="agency">
+
+          <div class="form-group">
+            <label style="font-size:11px;">Ad Soyad veya Sahne Adı *</label>
+            <input type="text" id="trialName" placeholder="Adınız ve Soyadınız" required style="padding:9px 12px; font-size:12px;">
+          </div>
+
+          <div class="form-group">
+            <label style="font-size:11px;">Ajans / Firma İsmi (Opsiyonel)</label>
+            <input type="text" id="trialAgency" placeholder="Örn: Dijital Gru Menajerlik" style="padding:9px 12px; font-size:12px;">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label style="font-size:11px;">E-posta Adresi *</label>
+              <input type="email" id="trialEmail" placeholder="ornek@ajans.com" required style="padding:9px 12px; font-size:12px;">
+            </div>
+
+            <div class="form-group">
+              <label style="font-size:11px;">Telefon Numarası *</label>
+              <input type="tel" id="trialPhone" placeholder="+90 500 000 00 00" required style="padding:9px 12px; font-size:12px;">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label style="font-size:11px;">Şifreniz (En az 8 krş & 1 rakam) *</label>
+            <input type="password" id="trialPassword" placeholder="••••••••" required style="padding:9px 12px; font-size:12px;">
+          </div>
+
+          <div id="trialErrorBox" style="display:none; color:#EF4444; font-size:12px; background:rgba(239,68,68,0.1); border:1px solid rgba(239,68,68,0.3); padding:8px 12px; border-radius:8px;"></div>
+
+          <button type="submit" class="btn btn-spotify btn-block" style="padding:12px 16px; font-size:14px; font-weight:800; border-radius:8px; margin-top:4px;" id="btnStartTrial">
+            <i data-lucide="zap"></i> 7 Günlük Denemeyi Başlat & Giriş Yap
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer class="app-footer-premium">
     <div class="footer-container">
@@ -773,6 +845,69 @@
         btn.innerHTML = `<i data-lucide="lock"></i> iyzico 3D Secure İle Güvenli Öde`;
       }
     });
+
+    function openTrialModal() {
+      document.getElementById('trialModal').classList.add('active');
+    }
+
+    const trialForm = document.getElementById('trialSignupForm');
+    if (trialForm) {
+      trialForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const name = document.getElementById('trialName').value.trim();
+        const agencyName = document.getElementById('trialAgency').value.trim();
+        const email = document.getElementById('trialEmail').value.trim();
+        const phone = document.getElementById('trialPhone').value.trim();
+        const password = document.getElementById('trialPassword').value.trim();
+
+        const errBox = document.getElementById('trialErrorBox');
+        errBox.style.display = 'none';
+
+        if (!email || !password || !name) {
+          errBox.innerText = "Lütfen zorunlu alanları doldurunuz.";
+          errBox.style.display = 'block';
+          return;
+        }
+
+        const btn = document.getElementById('btnStartTrial');
+        btn.disabled = true;
+        btn.innerHTML = `<i data-lucide="loader-2" class="spin-anim"></i> Deneme Hesabı Oluşturuluyor...`;
+        if (window.lucide) lucide.createIcons();
+
+        try {
+          const res = await fetch('/api/signup-trial', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: name,
+              agencyName: agencyName,
+              email: email,
+              phone: phone,
+              password: password,
+              accountType: 'agency',
+              isTrial: true
+            })
+          });
+          const data = await res.json();
+          if (data.status === 'success') {
+            window.location.href = data.redirectUrl || '/agency_dashboard.html';
+          } else {
+            errBox.innerText = data.message || "Deneme hesabı oluşturulamadı.";
+            errBox.style.display = 'block';
+            btn.disabled = false;
+            btn.innerHTML = `<i data-lucide="zap"></i> 7 Günlük Denemeyi Başlat & Giriş Yap`;
+            if (window.lucide) lucide.createIcons();
+          }
+        } catch (err) {
+          console.error(err);
+          errBox.innerText = "Sunucu bağlantı hatası oluştu.";
+          errBox.style.display = 'block';
+          btn.disabled = false;
+          btn.innerHTML = `<i data-lucide="zap"></i> 7 Günlük Denemeyi Başlat & Giriş Yap`;
+          if (window.lucide) lucide.createIcons();
+        }
+      });
+    }
   </script>
 </body>
 </html>
