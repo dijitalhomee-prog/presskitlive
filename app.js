@@ -1000,6 +1000,24 @@ window.copyArtistUrlToClipboard = async function(e) {
   }
 };
 
+function setupNavigation() {
+  const navItems = document.querySelectorAll('.sidebar-nav .nav-item[data-target]');
+  navItems.forEach(item => {
+    item.addEventListener('click', (e) => {
+      const targetId = item.getAttribute('data-target');
+      if (targetId) {
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          e.preventDefault();
+          targetEl.scrollIntoView({ behavior: 'smooth' });
+          navItems.forEach(i => i.classList.remove('active'));
+          item.classList.add('active');
+        }
+      }
+    });
+  });
+}
+
 function setupCopyUrlButton() {
   const copyBtn = document.getElementById('btnCopyPageUrl');
   if (copyBtn) {
