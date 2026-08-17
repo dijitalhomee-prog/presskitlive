@@ -24,7 +24,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/style.css?v=20260817_0018">
+  <link rel="stylesheet" href="/style.css?v=20260817_0019">
   <style>
     .file-input-wrapper {
       position: relative;
@@ -514,7 +514,7 @@
         </div>
 
         <div class="topbar-right">
-          <div class="domain-info-badge" id="btnCopyPageUrl" title="Sanatçı Presskit Bağlantısını Kopyala">
+          <div class="domain-info-badge" id="btnCopyPageUrl" onclick="copyArtistUrlToClipboard(event)" title="Sanatçı Presskit Bağlantısını Kopyalamak İçin Tıklayın">
             <i data-lucide="globe" style="color:var(--primary);"></i>
             <span>presskitlive.com/artist/<strong id="artistSlugBadge">...</strong></span>
             <span class="btn-copy-label"><i data-lucide="copy" style="width:12px; height:12px;"></i> Kopyala</span>
@@ -1003,7 +1003,7 @@
   </div>
 
   <!-- JavaScript -->
-  <script src="/app.js?v=20260817_0018"></script>
+  <script src="/app.js?v=20260817_0019"></script>
   <script>
     let uploadedPhotoDataUrl = '';
     let uploadedLogoDataUrl = '';

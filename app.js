@@ -787,54 +787,90 @@ function getActiveArtistId() {
   return paramId || '';
 }
 
+window.copyArtistUrlToClipboard = async function(e) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+
+  const activeArtistId = getActiveArtistId() || 'zuhal';
+  const origin = window.location.origin;
+  const shareableUrl = `${origin}/public.html?artistId=${encodeURIComponent(activeArtistId)}`;
+
+  let copied = false;
+
+  // Method 1: Navigator Clipboard API
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    try {
+      await navigator.clipboard.writeText(shareableUrl);
+      copied = true;
+    } catch (err) {
+      console.warn("Clipboard API writeText failed, trying execCommand fallback...", err);
+    }
+  }
+
+  // Method 2: Synchronous execCommand fallback
+  if (!copied) {
+    try {
+      const textArea = document.createElement('textarea');
+      textArea.value = shareableUrl;
+      textArea.style.position = 'fixed';
+      textArea.style.top = '0';
+      textArea.style.left = '0';
+      textArea.style.width = '2em';
+      textArea.style.height = '2em';
+      textArea.style.padding = '0';
+      textArea.style.border = 'none';
+      textArea.style.outline = 'none';
+      textArea.style.boxShadow = 'none';
+      textArea.style.background = 'transparent';
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      copied = document.execCommand('copy');
+      document.body.removeChild(textArea);
+    } catch (err) {
+      console.warn("execCommand failed...", err);
+    }
+  }
+
+  // Feedback Notification
+  if (copied) {
+    if (window.showToast) {
+      showToast("Sanatçı Presskit Linki Panoya Kopyalandı! 📋", "success");
+    } else {
+      alert("Sanatçı Presskit Linki Kopyalandı:\n" + shareableUrl);
+    }
+  } else {
+    // Method 3: Prompt fallback if browser security completely blocks clipboard
+    window.prompt("Sanatçı Presskit Bağlantısı (Kopyalamak için Cmd+C / Ctrl+C basın):", shareableUrl);
+  }
+
+  // Update UI badge visual state
+  const copyBtn = document.getElementById('btnCopyPageUrl') || document.querySelector('.domain-info-badge');
+  if (copyBtn) {
+    const copyLabel = copyBtn.querySelector('.btn-copy-label');
+    if (copyLabel) {
+      copyLabel.innerHTML = '<i data-lucide="check" style="width:12px; height:12px;"></i> Kopyalandı!';
+      copyLabel.style.background = '#1db954';
+      copyLabel.style.color = '#000000';
+      if (window.lucide) lucide.createIcons();
+
+      setTimeout(() => {
+        copyLabel.innerHTML = '<i data-lucide="copy" style="width:12px; height:12px;"></i> Kopyala';
+        copyLabel.style.background = '';
+        copyLabel.style.color = '';
+        if (window.lucide) lucide.createIcons();
+      }, 2500);
+    }
+  }
+};
+
 function setupCopyUrlButton() {
   const copyBtn = document.getElementById('btnCopyPageUrl');
-  if (!copyBtn) return;
-
-  copyBtn.onclick = async (e) => {
-    e.preventDefault();
-    const activeArtistId = getActiveArtistId() || 'zuhal';
-    const origin = window.location.origin;
-    const shareableUrl = `${origin}/public.html?artistId=${encodeURIComponent(activeArtistId)}`;
-
-    try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(shareableUrl);
-      } else {
-        const textArea = document.createElement('textarea');
-        textArea.value = shareableUrl;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-999999px';
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-        document.execCommand('copy');
-        textArea.remove();
-      }
-
-      if (window.showToast) {
-        showToast("Sanatçı Presskit Linki Panoya Kopyalandı! 📋", "success");
-      }
-
-      const copyLabel = copyBtn.querySelector('.btn-copy-label');
-      if (copyLabel) {
-        copyLabel.innerHTML = '<i data-lucide="check" style="width:12px; height:12px;"></i> Kopyalandı!';
-        copyLabel.style.background = '#1db954';
-        copyLabel.style.color = '#000000';
-        if (window.lucide) lucide.createIcons();
-
-        setTimeout(() => {
-          copyLabel.innerHTML = '<i data-lucide="copy" style="width:12px; height:12px;"></i> Kopyala';
-          copyLabel.style.background = '';
-          copyLabel.style.color = '';
-          if (window.lucide) lucide.createIcons();
-        }, 2000);
-      }
-    } catch (err) {
-      console.error("Copy error:", err);
-      if (window.showToast) showToast("Link kopyalanırken bir hata oluştu.", "error");
-    }
-  };
+  if (copyBtn) {
+    copyBtn.onclick = (e) => window.copyArtistUrlToClipboard(e);
+  }
 }
 
 function setupActions() {
