@@ -25,6 +25,107 @@ function escapeHTML(str) {
     .replace(/'/g, '&#039;');
 }
 
+// ==========================================================================
+// CUSTOM UI TOAST & CONFIRMATION MODAL SYSTEM
+// ==========================================================================
+function showToast(message, type = 'success', duration = 3500) {
+  let container = document.getElementById('toastContainer');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toastContainer';
+    document.body.appendChild(container);
+  }
+
+  const icons = {
+    success: 'check-circle-2',
+    error: 'alert-circle',
+    warning: 'alert-triangle',
+    info: 'info'
+  };
+
+  const iconName = icons[type] || 'info';
+
+  const toast = document.createElement('div');
+  toast.className = `custom-toast toast-${type}`;
+  toast.innerHTML = `
+    <div class="custom-toast-icon"><i data-lucide="${iconName}"></i></div>
+    <div class="custom-toast-message">${escapeHTML(message)}</div>
+    <button type="button" class="custom-toast-close" onclick="this.parentElement.remove()">&times;</button>
+  `;
+
+  container.appendChild(toast);
+  if (window.lucide) lucide.createIcons();
+
+  setTimeout(() => {
+    toast.classList.add('hiding');
+    setTimeout(() => toast.remove(), 300);
+  }, duration);
+}
+
+function showConfirm({
+  title = 'Emin misiniz?',
+  message = 'Bu işlemi gerçekleştirmek istediğinize emin misiniz?',
+  confirmText = 'Evet, Devam Et',
+  cancelText = 'Vazgeç',
+  isDanger = true,
+  icon = null
+}) {
+  return new Promise((resolve) => {
+    let backdrop = document.getElementById('customConfirmBackdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.id = 'customConfirmBackdrop';
+      backdrop.className = 'custom-confirm-backdrop';
+      document.body.appendChild(backdrop);
+    }
+
+    const iconType = isDanger ? 'danger' : 'info';
+    const iconName = icon || (isDanger ? 'alert-triangle' : 'help-circle');
+    const confirmBtnClass = isDanger ? 'custom-confirm-btn-danger' : 'custom-confirm-btn-primary';
+
+    backdrop.innerHTML = `
+      <div class="custom-confirm-card">
+        <div class="custom-confirm-icon-box ${iconType}">
+          <i data-lucide="${iconName}"></i>
+        </div>
+        <h3 class="custom-confirm-title">${escapeHTML(title)}</h3>
+        <div class="custom-confirm-message">${escapeHTML(message)}</div>
+        <div class="custom-confirm-actions">
+          <button type="button" class="custom-confirm-btn custom-confirm-btn-cancel" id="btnCustomConfirmCancel">
+            ${escapeHTML(cancelText)}
+          </button>
+          <button type="button" class="custom-confirm-btn ${confirmBtnClass}" id="btnCustomConfirmOk">
+            ${escapeHTML(confirmText)}
+          </button>
+        </div>
+      </div>
+    `;
+
+    if (window.lucide) lucide.createIcons();
+
+    requestAnimationFrame(() => backdrop.classList.add('active'));
+
+    const cleanup = (result) => {
+      backdrop.classList.remove('active');
+      setTimeout(() => {
+        backdrop.innerHTML = '';
+        resolve(result);
+      }, 250);
+    };
+
+    const cancelBtn = document.getElementById('btnCustomConfirmCancel');
+    const okBtn = document.getElementById('btnCustomConfirmOk');
+    if (cancelBtn) cancelBtn.onclick = () => cleanup(false);
+    if (okBtn) okBtn.onclick = () => cleanup(true);
+    backdrop.onclick = (e) => {
+      if (e.target === backdrop) cleanup(false);
+    };
+  });
+}
+
+window.showToast = showToast;
+window.showConfirm = showConfirm;
+
 // --------------------------------------------------------------------------
 // Initialization & Data Loading
 // --------------------------------------------------------------------------
@@ -445,8 +546,16 @@ async function deleteActiveFolderHandler() {
 async function deleteFolderHandler(e, folderId, folderName) {
   if (e) e.stopPropagation();
   
-  const confirmMsg = `⚠️ DİKKAT: "${folderName}" klasörünü ve içerisindeki tüm görselleri silmek istediğinize emin misiniz?\n\nBu işlem geri alınamaz!`;
-  if (!confirm(confirmMsg)) return;
+  const confirmed = await showConfirm({
+    title: 'Klasörü Sil',
+    message: `"${folderName}" klasörünü ve içerisindeki tüm görselleri silmek istediğinize emin misiniz?\n\nBu işlem geri alınamaz!`,
+    confirmText: 'Evet, Klasörü Sil',
+    cancelText: 'Vazgeç',
+    isDanger: true,
+    icon: 'trash-2'
+  });
+
+  if (!confirmed) return;
 
   try {
     const res = await fetch('/api/folders/delete', {
@@ -462,12 +571,12 @@ async function deleteFolderHandler(e, folderId, folderName) {
     if (data.status === 'success') {
       state.activeFolderId = 'folder-all';
       await loadArtistData();
-      alert(`"${folderName}" klasörü ve içerisindeki tüm görseller başarıyla silindi.`);
+      showToast(`"${folderName}" klasörü ve içerisindeki tüm görseller başarıyla silindi.`, 'success');
     } else {
-      alert(data.message || "Klasör silinemedi.");
+      showToast(data.message || "Klasör silinemedi.", 'error');
     }
   } catch (err) {
-    alert("Sunucu hatası.");
+    showToast("Sunucu hatası. Klasör silinemedi.", 'error');
   }
 }
 
@@ -894,7 +1003,16 @@ function setupPhotoModals() {
 
 // Handler for photo deletion
 async function deletePhotoHandler(photoId) {
-  if (!confirm("Bu fotoğrafı silmek istediğinize emin misiniz?")) return;
+  const confirmed = await showConfirm({
+    title: 'Fotoğrafı Sil',
+    message: 'Bu fotoğrafı depodan kalıcı olarak silmek istediğinize emin misiniz?',
+    confirmText: 'Evet, Sil',
+    cancelText: 'Vazgeç',
+    isDanger: true,
+    icon: 'trash-2'
+  });
+
+  if (!confirmed) return;
 
   try {
     const activeArtistId = getActiveArtistId();
@@ -910,11 +1028,11 @@ async function deletePhotoHandler(photoId) {
     const data = await res.json();
     if (data.status === 'success') {
       await loadArtistData();
-      alert("Fotoğraf başarıyla silindi.");
+      showToast("Fotoğraf başarıyla silindi.", 'success');
     } else {
-      alert(data.message || "Fotoğraf silinemedi.");
+      showToast(data.message || "Fotoğraf silinemedi.", 'error');
     }
   } catch (err) {
-    alert("İşlem gerçekleştirilemedi.");
+    showToast("İşlem gerçekleştirilemedi.", 'error');
   }
 }

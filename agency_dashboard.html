@@ -665,6 +665,7 @@
   </div>
 
   <!-- JAVASCRIPT: DYNAMIC MANAGER & ARTISTS FETCHING -->
+  <script src="/app.js?v=20260817_0012"></script>
   <script>
     if (window.lucide) lucide.createIcons();
 
@@ -991,7 +992,16 @@
     }
 
     async function deleteArtistHandler(artistId, artistName) {
-      if (!confirm(`"${artistName}" sanatçı profilini ve bağlı tüm klasör ile fotoğraflarını silmek istediğinize emin misiniz?`)) return;
+      const confirmed = await showConfirm({
+        title: 'Sanatçı Profilini Sil',
+        message: `"${artistName}" sanatçı profilini ve bağlı tüm medya klasörlerini silmek istediğinize emin misiniz?\n\nBu işlem geri alınamaz!`,
+        confirmText: 'Evet, Profili Sil',
+        cancelText: 'Vazgeç',
+        isDanger: true,
+        icon: 'trash-2'
+      });
+
+      if (!confirmed) return;
 
       try {
         const res = await fetch('/api/artists/delete', {
@@ -1002,13 +1012,13 @@
 
         const data = await res.json();
         if (data.status === 'success') {
-          alert("Sanatçı profili başarıyla silindi.");
+          showToast(`"${artistName}" sanatçı profili başarıyla silindi.`, 'success');
           loadAgencyDashboardData();
         } else {
-          alert(data.message || "Sanatçı silinemedi.");
+          showToast(data.message || "Sanatçı silinemedi.", 'error');
         }
       } catch (err) {
-        alert("Sunucu hatası.");
+        showToast("Sunucu hatası. İşlem gerçekleştirilemedi.", 'error');
       }
     }
 
