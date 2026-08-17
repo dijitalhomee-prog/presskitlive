@@ -11,6 +11,7 @@ import secrets
 import hashlib
 import time
 import re
+from datetime import datetime, timedelta
 
 def _resolve_data_root():
     env_root = os.getenv("DATA_ROOT") or os.getenv("RAILWAY_VOLUME_MOUNT_PATH")
@@ -190,17 +191,20 @@ def init_db():
             created_at TEXT NOT NULL,
             expires_at TEXT NOT NULL,
             impersonated_by TEXT DEFAULT NULL,
-            log_id TEXT DEFAULT NULL
+            log_id TEXT DEFAULT NULL,
+            last_activity_at TEXT DEFAULT NULL
         );
         """)
 
-        # Migration: Add impersonation columns to sessions if missing (MOVED AFTER CREATE TABLE - ITEM 1 FIX)
+        # Migration: Add impersonation and activity columns to sessions if missing
         cursor.execute("PRAGMA table_info(sessions);")
         sess_columns = [col[1] for col in cursor.fetchall()]
         if 'impersonated_by' not in sess_columns:
             cursor.execute("ALTER TABLE sessions ADD COLUMN impersonated_by TEXT DEFAULT NULL;")
         if 'log_id' not in sess_columns:
             cursor.execute("ALTER TABLE sessions ADD COLUMN log_id TEXT DEFAULT NULL;")
+        if 'last_activity_at' not in sess_columns:
+            cursor.execute("ALTER TABLE sessions ADD COLUMN last_activity_at TEXT DEFAULT NULL;")
 
         # 6. Impersonation Log Table (Section D.2)
         cursor.execute("""
@@ -361,7 +365,20 @@ def ensure_super_admins():
                 conn.commit()
 
 def get_all_managers():
+    five_min_ago = (datetime.now() - timedelta(minutes=5)).strftime("%Y-%m-%d %H:%M:%S")
+    now_str = time.strftime("%Y-%m-%d %H:%M:%S")
     with get_connection() as conn:
+        online_rows = conn.execute(
+            "SELECT DISTINCT manager_id FROM sessions WHERE last_activity_at > ? AND expires_at > ?",
+            (five_min_ago, now_str)
+        ).fetchall()
+        online_ids = set(r["manager_id"] for r in online_rows)
+
+        last_act_rows = conn.execute(
+            "SELECT manager_id, MAX(last_activity_at) as last_act FROM sessions GROUP BY manager_id"
+        ).fetchall()
+        last_act_map = {r["manager_id"]: r["last_act"] for r in last_act_rows if r["last_act"]}
+
         rows = conn.execute("""
             SELECT id, email, name, agency_name, phone, plan, account_type, subscription_status, iyzico_subscription_ref, is_super_admin, created_at, is_active
             FROM managers
@@ -376,9 +393,35 @@ def get_all_managers():
             m["isSuperAdmin"] = bool(m.get("is_super_admin"))
             m["isActive"] = bool(m.get("is_active", 1))
             m["createdAt"] = m.get("created_at", "")
+            m["isOnline"] = m["id"] in online_ids
+            m["lastActivityAt"] = last_act_map.get(m["id"]) or m.get("created_at", "")
         return managers
 
 # SESSION MANAGEMENT
+def touch_session_activity(token):
+    if not token:
+        return
+    now_dt = datetime.now()
+    now_str = now_dt.strftime("%Y-%m-%d %H:%M:%S")
+    with get_connection() as conn:
+        row = conn.execute("SELECT last_activity_at FROM sessions WHERE token = ?", (token,)).fetchone()
+        if row:
+            last_act = row["last_activity_at"]
+            should_update = False
+            if not last_act:
+                should_update = True
+            else:
+                try:
+                    last_dt = datetime.strptime(last_act, "%Y-%m-%d %H:%M:%S")
+                    if (now_dt - last_dt).total_seconds() > 60:
+                        should_update = True
+                except Exception:
+                    should_update = True
+
+            if should_update:
+                conn.execute("UPDATE sessions SET last_activity_at = ? WHERE token = ?", (now_str, token))
+                conn.commit()
+
 def create_session(manager_id, max_age_seconds=2592000, impersonated_by=None, log_id=None):
     token = secrets.token_hex(32)
     created_at = time.strftime("%Y-%m-%d %H:%M:%S")
@@ -386,8 +429,8 @@ def create_session(manager_id, max_age_seconds=2592000, impersonated_by=None, lo
 
     with get_connection() as conn:
         conn.execute(
-            "INSERT INTO sessions (token, manager_id, created_at, expires_at, impersonated_by, log_id) VALUES (?, ?, ?, ?, ?, ?)",
-            (token, manager_id, created_at, expires_at, impersonated_by, log_id)
+            "INSERT INTO sessions (token, manager_id, created_at, expires_at, impersonated_by, log_id, last_activity_at) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            (token, manager_id, created_at, expires_at, impersonated_by, log_id, created_at)
         )
         conn.commit()
     return token
@@ -440,7 +483,10 @@ def get_session(token):
     with get_connection() as conn:
         now_str = time.strftime("%Y-%m-%d %H:%M:%S")
         row = conn.execute("SELECT * FROM sessions WHERE token = ? AND expires_at > ?", (token, now_str)).fetchone()
-        return dict(row) if row else None
+        if row:
+            touch_session_activity(token)
+            return dict(row)
+        return None
 
 def delete_session(token):
     if not token:
