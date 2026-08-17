@@ -24,7 +24,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/style.css?v=20260817_0013">
+  <link rel="stylesheet" href="/style.css?v=20260817_0014">
   <style>
     .file-input-wrapper {
       position: relative;
@@ -978,7 +978,7 @@
   </div>
 
   <!-- JavaScript -->
-  <script src="/app.js?v=20260817_0013"></script>
+  <script src="/app.js?v=20260817_0014"></script>
   <script>
     let uploadedPhotoDataUrl = '';
     let uploadedLogoDataUrl = '';
@@ -1185,41 +1185,52 @@
     if (btnCancelLogo) btnCancelLogo.addEventListener('click', () => logoModal.classList.remove('active'));
 
     if (logoForm) {
-      logoForm.addEventListener('submit', (e) => {
+      logoForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const title = document.getElementById('inputLogoTitle').value;
+        const submitBtn = logoForm.querySelector('button[type="submit"]');
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.innerText = 'Logo Yükleniyor...'; }
+
+        const title = document.getElementById('inputLogoTitle').value || 'Yeni Logo';
         const desc = document.getElementById('inputLogoDesc').value || 'Afiş ve tasarım için yeni yüklenen marka logosu.';
-        const format = document.getElementById('inputLogoFormat').value;
-        const newCardId = `logoCard-${Date.now()}`;
+        const format = document.getElementById('inputLogoFormat').value || 'PNG';
 
-        const grid = document.getElementById('logoCardsGrid');
-        const card = document.createElement('div');
-        card.className = 'logo-card';
-        card.id = newCardId;
-        card.innerHTML = `
-          <div class="logo-preview-box dark-bg">
-            <img src="${uploadedLogoDataUrl}" alt="${title}" style="max-height:100px; object-fit:contain;">
-          </div>
-          <div class="logo-card-info">
-            <h4>${title}</h4>
-            <p>${desc}</p>
-            <div class="logo-card-actions">
-              <a href="${uploadedLogoDataUrl}" download="${title}.jpg" class="btn btn-outline" style="flex-grow:1;">
-                <i data-lucide="download"></i> ${format} İndir
-              </a>
-              <button type="button" class="btn-trash-logo" title="Logoyu Sil" onclick="deleteLogoCard('${newCardId}', '${title}')">
-                <i data-lucide="trash-2"></i>
-              </button>
-            </div>
-          </div>
-        `;
+        if (!uploadedLogoDataUrl) {
+          if (window.showToast) showToast("Lütfen bilgisayarınızdan bir logo dosyası seçin.", "error");
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Logoyu Depoya Ekle'; }
+          return;
+        }
 
-        grid.appendChild(card);
-        alert(`"${title}" logosu depoya başarıyla eklendi!`);
-        logoModal.classList.remove('active');
-        logoForm.reset();
-        document.getElementById('logoFileNameDisplay').innerText = "Bilgisayardan Logo Yükle (PNG / SVG / AI / JPG)";
-        if (window.lucide) lucide.createIcons();
+        try {
+          const res = await fetch('/api/photos/add', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              artistId: getActiveArtistId(),
+              folderId: 'folder-all',
+              title: title,
+              url: uploadedLogoDataUrl,
+              resolution: format,
+              badge: 'Logo & Marka'
+            })
+          });
+
+          const data = await res.json();
+          if (data.status === 'success') {
+            if (window.showToast) showToast(`"${title}" logosu sunucuya yüklendi ve kaydedildi.`, 'success');
+            logoModal.classList.remove('active');
+            logoForm.reset();
+            uploadedLogoDataUrl = '';
+            document.getElementById('logoFileNameDisplay').innerText = "Bilgisayardan Logo Yükle (PNG / SVG / AI / JPG)";
+            await loadArtistData();
+          } else {
+            if (window.showToast) showToast(data.message || "Logo yüklenemedi.", 'error');
+          }
+        } catch (err) {
+          console.error(err);
+          if (window.showToast) showToast("Sunucu hatası. Logo yüklenemedi.", 'error');
+        } finally {
+          if (submitBtn) { submitBtn.disabled = false; submitBtn.innerText = 'Logoyu Depoya Ekle'; }
+        }
       });
     }
 
