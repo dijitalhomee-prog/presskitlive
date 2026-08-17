@@ -505,6 +505,8 @@ def get_artist_by_id(artist_id):
                 "email": mgr["email"],
                 "accountType": mgr.get("account_type", "agency")
             }
+        return a
+
 def update_artist_socials(artist_id, socials_dict):
     socials_json = json.dumps(socials_dict or {})
     with get_connection() as conn:

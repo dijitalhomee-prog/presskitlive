@@ -139,7 +139,9 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
     def is_authorized_manager(self, mgr, artist):
         if not mgr or not artist:
             return False
-        return True
+        if mgr.get("is_super_admin"):
+            return True
+        return str(artist.get("manager_id")) == str(mgr.get("id"))
 
     def send_json(self, status_code, data, set_cookie=None):
         body = json.dumps(data, ensure_ascii=False).encode("utf-8")
@@ -971,13 +973,8 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             is_locked = req_body.get("isLocked", False)
 
             artist = db.get_artist_by_id(artist_id)
-            if not artist and mgr:
-                my_artists = db.get_artists_by_manager(mgr["id"])
-                if my_artists:
-                    artist = my_artists[0]
-
-            if not artist:
-                self.send_error_json(404, "Sanatçı profili bulunamadı.")
+            if not artist or not self.is_authorized_manager(mgr, artist):
+                self.send_error_json(403, "Bu sanatçı üzerinde işlem yapma yetkiniz yoktur.")
                 return
 
             if not folder_name:
@@ -1009,11 +1006,6 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             artist_id = req_body.get("artistId")
 
             artist = db.get_artist_by_id(artist_id) if artist_id else None
-            if not artist and mgr:
-                my_artists = db.get_artists_by_manager(mgr["id"])
-                if my_artists:
-                    artist = my_artists[0]
-
             if not artist or not self.is_authorized_manager(mgr, artist):
                 self.send_error_json(403, "Bu klasörü silme yetkiniz bulunmamaktadır.")
                 return
@@ -1046,13 +1038,8 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             badge = req_body.get("badge", "Yeni Görsel")
 
             artist = db.get_artist_by_id(artist_id)
-            if not artist and mgr:
-                my_artists = db.get_artists_by_manager(mgr["id"])
-                if my_artists:
-                    artist = my_artists[0]
-
-            if not artist:
-                self.send_error_json(404, "Sanatçı profili bulunamadı.")
+            if not artist or not self.is_authorized_manager(mgr, artist):
+                self.send_error_json(403, "Bu sanatçı üzerinde işlem yapma yetkiniz yoktur.")
                 return
 
             target_artist_id = artist["id"]
@@ -1070,11 +1057,6 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             artist_id = req_body.get("artistId")
 
             artist = db.get_artist_by_id(artist_id) if artist_id else None
-            if not artist and mgr:
-                my_artists = db.get_artists_by_manager(mgr["id"])
-                if my_artists:
-                    artist = my_artists[0]
-
             if not artist or not self.is_authorized_manager(mgr, artist):
                 self.send_error_json(403, "Bu fotoğrafı silme yetkiniz yoktur.")
                 return
