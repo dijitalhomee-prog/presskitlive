@@ -334,8 +334,82 @@ function renderArtistHeader() {
   const logoCardTitle1 = document.getElementById('logoCardTitle1');
   if (logoCardTitle1) logoCardTitle1.innerText = `${name} Tipografi Logosu`;
 
-  // Dynamically render multi-sectoral platform links
+  // Dynamically render multi-sectoral platform links and uploaded logos
   renderPlatformLinks();
+  renderLogos();
+}
+
+function renderLogos() {
+  const grid = document.getElementById('logoCardsGrid');
+  if (!grid || !state || !state.artist) return;
+
+  const pressPhotos = state.artist.pressPhotos || [];
+  // Filter photos that are tagged as Logo / Marka OR uploaded via Add Logo modal
+  const logos = pressPhotos.filter(p => {
+    if (!p) return false;
+    const badge = (p.badge || '').toLowerCase();
+    const title = (p.title || '').toLowerCase();
+    const folderId = (p.folderId || '').toLowerCase();
+    return badge.includes('logo') || badge.includes('marka') || title.includes('logo') || folderId.includes('logo');
+  });
+
+  if (logos.length === 0) {
+    if (state.isPublicView) {
+      grid.innerHTML = `
+        <div class="empty-state-box" style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: var(--bg-surface); border: 1px dashed var(--border-glass); border-radius: 12px; width: 100%;">
+          <i data-lucide="layers" style="width: 36px; height: 36px; color: var(--text-subdued); margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;"></i>
+          <h4 style="color: #fff; margin: 0 0 6px 0; font-size: 16px; font-weight: 700;">Logo & Marka Materyali Bulunmuyor</h4>
+          <p style="color: var(--text-subdued); font-size: 13px; margin: 0;">Bu sanatçı için henüz kamuya açık logo veya marka dosyası yüklenmemiştir.</p>
+        </div>
+      `;
+    } else {
+      grid.innerHTML = `
+        <div class="empty-state-box" style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: var(--bg-surface); border: 1px dashed var(--border-glass); border-radius: 12px; width: 100%;">
+          <i data-lucide="layers" style="width: 36px; height: 36px; color: var(--text-subdued); margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;"></i>
+          <h4 style="color: #fff; margin: 0 0 6px 0; font-size: 16px; font-weight: 700;">Henüz Logo veya Marka Materyali Eklenmedi</h4>
+          <p style="color: var(--text-subdued); font-size: 13px; margin: 0 0 16px 0;">Afiş ve tasarım işleri için sanatçınızın logosunu veya vektörel marka metnini ekleyin.</p>
+          <button class="btn btn-primary btn-small" onclick="document.getElementById('addLogoModal').classList.add('active')" style="margin: 0 auto; display: inline-flex;">
+            <i data-lucide="upload-cloud"></i> + Logo Ekle
+          </button>
+        </div>
+      `;
+    }
+    if (window.lucide) lucide.createIcons();
+    return;
+  }
+
+  // Render uploaded logos
+  let html = '';
+  logos.forEach(p => {
+    const rawUrl = p.url || '';
+    const imgUrl = (rawUrl.startsWith('http') || rawUrl.startsWith('/') || rawUrl.startsWith('data:')) ? rawUrl : '/' + rawUrl;
+    const format = p.resolution || 'PNG';
+
+    html += `
+      <div class="logo-card" id="logoCard-${escapeHTML(p.id)}">
+        <div class="logo-preview-box dark-bg" style="background:#09090b; padding:24px; display:flex; align-items:center; justify-content:center; border-radius:12px 12px 0 0; min-height:140px; border-bottom:1px solid var(--border-subtle);">
+          <img src="${imgUrl}" alt="${escapeHTML(p.title)}" style="max-height:100px; max-width:100%; object-fit:contain;">
+        </div>
+        <div class="logo-card-info" style="padding:16px;">
+          <h4 style="color:#fff; margin:0 0 6px 0; font-size:16px; font-weight:700;">${escapeHTML(p.title)}</h4>
+          <p style="color:var(--text-subdued); font-size:12px; margin:0 0 14px 0;">300 DPI Yüksek Çözünürlüklü Marka Dosyası (${escapeHTML(format)})</p>
+          <div class="logo-card-actions" style="display:flex; gap:8px; align-items:center;">
+            <a href="${imgUrl}" download="${escapeHTML(p.title)}" class="btn btn-outline" style="flex-grow:1; justify-content:center;">
+              <i data-lucide="download"></i> ${escapeHTML(format)} İndir
+            </a>
+            ${!state.isPublicView ? `
+              <button type="button" class="btn-delete-icon" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#ef4444; border-radius:8px; width:38px; height:38px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;" title="Logoyu Sil" onclick="deletePhotoHandler('${escapeHTML(p.id)}', '${escapeHTML(p.title)}')">
+                <i data-lucide="trash-2" style="width:16px; height:16px;"></i>
+              </button>
+            ` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+  });
+
+  grid.innerHTML = html;
+  if (window.lucide) lucide.createIcons();
 }
 
 function renderPlatformLinks() {

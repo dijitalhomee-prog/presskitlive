@@ -24,7 +24,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/style.css?v=20260817_0012">
+  <link rel="stylesheet" href="/style.css?v=20260817_0020">
   <style>
     .public-notice-bar {
       background: linear-gradient(90deg, rgba(29, 185, 84, 0.15) 0%, rgba(59, 130, 246, 0.15) 100%);
@@ -369,36 +369,8 @@
         </div>
       </div>
 
-      <div class="logo-cards-grid">
-        <div class="logo-card">
-          <div class="logo-preview-box dark-bg">
-            <div class="logo-text-preview" style="color:var(--primary); font-weight:900; letter-spacing:3px;" id="logoGoldPreview">PORTFÖY LOGOSU</div>
-          </div>
-          <div class="logo-card-info">
-            <h4 id="logoCardTitle1">Marka Tipografisi & Logosu</h4>
-            <p>Karanlık zeminli afişler ve sahne LED ekranları için yüksek çözünürlüklü marka yazısı.</p>
-            <div class="logo-card-actions">
-              <button type="button" class="btn btn-outline btn-block" onclick="alert('Logo indirme bağlantısı ZIP arşivinde yer almaktadır.')">
-                <i data-lucide="download"></i> Logo İndir (JPG)
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="logo-card">
-          <div class="logo-preview-box transparent-bg">
-            <div class="logo-text-preview" id="logoTextPreview">PORTFÖY İSMİ</div>
-          </div>
-          <div class="logo-card-info">
-            <h4>Şeffaf Vektör PNG Metin</h4>
-            <p>Tüm afiş tasarımları üstüne katman olarak eklenebilir transparan metin.</p>
-            <div class="logo-card-actions">
-              <button class="btn btn-outline btn-block" onclick="alert('PNG Şeffaf Logo ZIP paketine eklenmiştir.')">
-                <i data-lucide="file-check"></i> Vektör PNG İndir
-              </button>
-            </div>
-          </div>
-        </div>
+      <div class="logo-cards-grid" id="logoCardsGrid">
+        <!-- Dynamically rendered by renderLogos() in app.js -->
       </div>
     </section>
 
@@ -526,7 +498,7 @@
     </div>
   </div>
 
-  <script src="/app.js?v=20260817_0012"></script>
+  <script src="/app.js?v=20260817_0020"></script>
   <script>
     if (window.lucide) lucide.createIcons();
     // Bind real ZIP download function
