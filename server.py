@@ -167,10 +167,12 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
 
     def end_headers(self):
-        if hasattr(self, 'path') and self.path and (self.path.endswith('.js') or self.path.endswith('.html') or self.path in ('/', '/index.html', '/app.js', '/agency_dashboard.html')):
-            self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
-            self.send_header("Pragma", "no-cache")
-            self.send_header("Expires", "0")
+        if hasattr(self, 'path') and self.path:
+            p = self.path.lower()
+            if p.endswith('.js') or p.endswith('.html') or p.endswith('.css') or p in ('/', '/index.html', '/app.js', '/i18n.js', '/agency_dashboard.html', '/landing.html', '/public.html') or p.startswith('/artist/'):
+                self.send_header("Cache-Control", "no-cache, no-store, must-revalidate")
+                self.send_header("Pragma", "no-cache")
+                self.send_header("Expires", "0")
         super().end_headers()
 
     def do_GET(self):

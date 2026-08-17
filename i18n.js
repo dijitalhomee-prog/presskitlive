@@ -271,14 +271,34 @@ function setLanguage(lang) {
   // Update HTML lang attribute
   document.documentElement.lang = lang;
 
-  // Update all elements with data-i18n attribute
+  // Update all elements with data-i18n attribute safely without erasing icons
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (i18nTranslations[lang] && i18nTranslations[lang][key]) {
+      const text = i18nTranslations[lang][key];
       if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
-        el.placeholder = i18nTranslations[lang][key];
+        el.placeholder = text;
       } else {
-        el.innerText = i18nTranslations[lang][key];
+        // Check if element has child text nodes specifically to preserve child <i> or <svg> icons
+        let textUpdated = false;
+        for (let i = 0; i < el.childNodes.length; i++) {
+          const node = el.childNodes[i];
+          if (node.nodeType === 3 && node.nodeValue.trim().length > 0) { // Node.TEXT_NODE
+            node.nodeValue = " " + text;
+            textUpdated = true;
+            break;
+          }
+        }
+        if (!textUpdated) {
+          // If no existing text node found or element is simple span/div
+          if (el.children.length === 0) {
+            el.innerText = text;
+          } else {
+            // Append text node safely
+            const textNode = document.createTextNode(" " + text);
+            el.appendChild(textNode);
+          }
+        }
       }
     }
   });
@@ -300,6 +320,10 @@ function setLanguage(lang) {
     }
   });
 
+  if (window.lucide) {
+    try { lucide.createIcons(); } catch(e) {}
+  }
+
   // Trigger custom event if page scripts need re-render
   window.dispatchEvent(new CustomEvent('languageChanged', { detail: { lang: lang } }));
 }
@@ -318,3 +342,4 @@ if (document.readyState === 'loading') {
 } else {
   initI18n();
 }
+window.addEventListener('load', initI18n);
