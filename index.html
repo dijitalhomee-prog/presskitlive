@@ -24,7 +24,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/style.css?v=20260817_0012">
+  <link rel="stylesheet" href="/style.css?v=20260817_0013">
   <style>
     .file-input-wrapper {
       position: relative;
@@ -978,7 +978,7 @@
   </div>
 
   <!-- JavaScript -->
-  <script src="/app.js?v=20260817_0012"></script>
+  <script src="/app.js?v=20260817_0013"></script>
   <script>
     let uploadedPhotoDataUrl = '';
     let uploadedLogoDataUrl = '';
@@ -991,9 +991,24 @@
       }
     }
 
-    function saveCoverPosition() {
+    async function saveCoverPosition() {
       const ctrl = document.getElementById('coverPosControlBar');
       if (ctrl) ctrl.style.display = 'none';
+      if (typeof state !== 'undefined' && state.artist && state.artist.banner) {
+        try {
+          await fetch('/api/artists/edit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              artistId: state.artist.id,
+              banner: state.artist.banner
+            })
+          });
+          if (window.showToast) showToast("Kapak hizalaması kaydedildi.", "success");
+        } catch (e) {
+          console.error(e);
+        }
+      }
     }
 
     // INTERACTIVE AVATAR POSITION ADJUSTMENT
@@ -1004,54 +1019,119 @@
       }
     }
 
-    function saveAvatarPosition() {
+    async function saveAvatarPosition() {
       const ctrl = document.getElementById('avatarPosControlBar');
       if (ctrl) ctrl.style.display = 'none';
+      if (typeof state !== 'undefined' && state.artist && state.artist.avatar) {
+        try {
+          await fetch('/api/artists/edit', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              artistId: state.artist.id,
+              avatar: state.artist.avatar
+            })
+          });
+          if (window.showToast) showToast("Profil hizalaması kaydedildi.", "success");
+        } catch (e) {
+          console.error(e);
+        }
+      }
     }
 
-    // DIRECT AVATAR UPLOAD HANDLER
+    // DIRECT AVATAR UPLOAD HANDLER WITH BACKEND PERSISTENCE
     function handleAvatarUpload(input) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = async function(e) {
+          const dataUrl = e.target.result;
           const avatarImg = document.getElementById('heroAvatar');
           if (avatarImg) {
-            avatarImg.src = e.target.result;
+            avatarImg.src = dataUrl;
             avatarImg.style.objectFit = 'cover';
             avatarImg.style.objectPosition = 'center 20%';
           }
-          if (typeof state !== 'undefined' && state.artist) {
-            state.artist.avatar = e.target.result;
-          }
-          // SHOW POSITIONING BAR ONLY DURING UPLOAD MODE!
+          
           const ctrl = document.getElementById('avatarPosControlBar');
           if (ctrl) ctrl.style.display = 'flex';
           if (window.lucide) lucide.createIcons();
+
+          try {
+            const uploadRes = await fetch('/api/upload', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ dataUrl })
+            });
+            const uploadData = await uploadRes.json();
+            if (uploadData.status === 'success' && uploadData.url) {
+              const savedUrl = uploadData.url;
+              if (typeof state !== 'undefined' && state.artist) {
+                state.artist.avatar = savedUrl;
+                await fetch('/api/artists/edit', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    artistId: state.artist.id,
+                    avatar: savedUrl
+                  })
+                });
+              }
+              if (window.showToast) showToast("Profil fotoğrafı başarıyla kaydedildi.", "success");
+            }
+          } catch (err) {
+            console.error("Avatar persistence error:", err);
+            if (window.showToast) showToast("Profil fotoğrafı sunucuya kaydedilemedi.", "error");
+          }
         };
         reader.readAsDataURL(file);
       }
     }
 
-    // DIRECT COVER BANNER UPLOAD HANDLER
+    // DIRECT COVER BANNER UPLOAD HANDLER WITH BACKEND PERSISTENCE
     function handleCoverUpload(input) {
       if (input.files && input.files[0]) {
         const file = input.files[0];
         const reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = async function(e) {
+          const dataUrl = e.target.result;
           const heroBg = document.getElementById('heroBg');
           if (heroBg) {
-            heroBg.style.backgroundImage = `url('${e.target.result}')`;
+            heroBg.style.backgroundImage = `url('${dataUrl}')`;
             heroBg.style.backgroundSize = 'cover';
             heroBg.style.backgroundPosition = 'center 35%';
           }
-          if (typeof state !== 'undefined' && state.artist) {
-            state.artist.banner = e.target.result;
-          }
-          // SHOW POSITIONING BAR ONLY DURING UPLOAD MODE!
+          
           const ctrl = document.getElementById('coverPosControlBar');
           if (ctrl) ctrl.style.display = 'flex';
           if (window.lucide) lucide.createIcons();
+
+          try {
+            const uploadRes = await fetch('/api/upload', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ dataUrl })
+            });
+            const uploadData = await uploadRes.json();
+            if (uploadData.status === 'success' && uploadData.url) {
+              const savedUrl = uploadData.url;
+              if (typeof state !== 'undefined' && state.artist) {
+                state.artist.banner = savedUrl;
+                await fetch('/api/artists/edit', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({
+                    artistId: state.artist.id,
+                    banner: savedUrl
+                  })
+                });
+              }
+              if (window.showToast) showToast("Kapak fotoğrafı başarıyla kaydedildi.", "success");
+            }
+          } catch (err) {
+            console.error("Cover persistence error:", err);
+            if (window.showToast) showToast("Kapak fotoğrafı sunucuya kaydedilemedi.", "error");
+          }
         };
         reader.readAsDataURL(file);
       }
