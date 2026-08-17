@@ -510,7 +510,7 @@
           <div class="breadcrumb">
             <span id="breadcrumbArtist">...</span>
             <i data-lucide="chevron-right"></i>
-            <span class="active">Menajer Yönetim Paneli</span>
+            <span class="active" data-i18n="nav_manager_panel">Menajer Yönetim Paneli</span>
           </div>
         </div>
 
@@ -518,7 +518,7 @@
           <div class="domain-info-badge" id="btnCopyPageUrl" onclick="copyArtistUrlToClipboard(event)" title="Sanatçı Presskit Bağlantısını Kopyalamak İçin Tıklayın">
             <i data-lucide="globe" style="color:var(--primary);"></i>
             <span>presskitlive.com/artist/<strong id="artistSlugBadge">...</strong></span>
-            <span class="btn-copy-label"><i data-lucide="copy" style="width:12px; height:12px;"></i> Kopyala</span>
+            <span class="btn-copy-label"><i data-lucide="copy" style="width:12px; height:12px;"></i> <span data-i18n="btn_copy">Kopyala</span></span>
           </div>
 
           <!-- TR / EN LANGUAGE SWITCHER PILL -->
@@ -528,7 +528,7 @@
           </div>
 
           <button class="btn btn-outline" id="btnOpenAddArtistTop">
-            <i data-lucide="upload-cloud"></i> <span>Menajer İletişim</span>
+            <i data-lucide="upload-cloud"></i> <span data-i18n="btn_edit_contact">Menajer İletişim</span>
           </button>
         </div>
       </header>
@@ -552,7 +552,7 @@
           </div>
 
           <label for="inputCoverFile" class="hero-cover-edit-btn" title="Kapak Fotoğrafını Bilgisayardan Seç">
-            <i data-lucide="image"></i> Kapak Değiştir
+            <i data-lucide="image"></i> <span data-i18n="btn_change_cover">Kapak Değiştir</span>
             <input type="file" id="inputCoverFile" accept="image/*" style="display:none;" onchange="handleCoverUpload(this)">
           </label>
         </div>
@@ -586,17 +586,17 @@
             
             <p class="hero-meta" style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
               <span class="meta-item" id="genreMetaPill" style="background:rgba(29,185,84,0.15); color:var(--primary); border:1px solid rgba(29,185,84,0.3); padding:4px 12px; border-radius:20px; font-weight:800; font-size:12px; display:none;"><i data-lucide="sparkles" style="width:13px; height:13px;"></i> <span id="artistGenreText"></span></span>
-              <span class="meta-item"><i data-lucide="user-check"></i> Temsilci: <strong id="heroManagerName">...</strong></span>
+              <span class="meta-item"><i data-lucide="user-check"></i> <span data-i18n="badge_manager_label">Temsilci: </span><strong id="heroManagerName">...</strong></span>
             </p>
 
             <div class="hero-actions">
               <button class="btn btn-spotify btn-large" id="btnDownloadAllZip">
                 <i data-lucide="download-cloud"></i> 
-                <span>Tek Tıkla Tüm Presskit'i İndir (.ZIP)</span>
+                <span data-i18n="btn_download_full_zip">Tek Tıkla Tüm Presskit'i İndir (.ZIP)</span>
               </button>
               <a href="#" id="btnHeroWhatsapp" target="_blank" class="btn btn-whatsapp btn-large" style="display:none;">
                 <i data-lucide="message-square"></i>
-                <span>Menajer WhatsApp</span>
+                <span data-i18n="btn_whatsapp_manager">Menajer WhatsApp</span>
               </a>
             </div>
           </div>
@@ -610,15 +610,15 @@
         <section class="press-section" id="afis-fotograflari">
           <div class="section-header">
             <div>
-              <h2 class="section-title"><i data-lucide="folder"></i> Klasörler & Görseller</h2>
-              <p class="section-subtitle">Menajer klasör oluşturabilir, kilit koyabilir ve yeni fotoğraf ekleyebilir</p>
+              <h2 class="section-title"><i data-lucide="folder"></i> <span data-i18n="section_folders_photos">Klasörler & Görseller</span></h2>
+              <p class="section-subtitle" data-i18n="section_folders_desc">Menajer klasör oluşturabilir, kilit koyabilir ve yeni fotoğraf ekleyebilir</p>
             </div>
             <div class="section-actions" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
               <button class="btn btn-primary btn-small" id="btnOpenAddFolderModal">
-                <i data-lucide="folder-plus"></i> + Yeni Klasör Aç
+                <i data-lucide="folder-plus"></i> <span data-i18n="btn_new_folder">+ Yeni Klasör Aç</span>
               </button>
               <button class="btn btn-accent btn-small" id="btnOpenAddPhotoModal">
-                <i data-lucide="image-plus"></i> + Klasöre Fotoğraf Ekle
+                <i data-lucide="image-plus"></i> <span data-i18n="btn_add_photo">+ Klasöre Fotoğraf Ekle</span>
               </button>
               <button class="btn btn-outline btn-small" id="btnDeleteFolderHeader" onclick="deleteActiveFolderHandler()" style="display:none; border-color: rgba(239, 68, 68, 0.4); color: #ef4444;">
                 <i data-lucide="trash-2"></i> Seçili Klasörü Sil

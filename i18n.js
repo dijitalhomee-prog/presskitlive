@@ -13,6 +13,7 @@ const i18nTranslations = {
     nav_back_to_artists: "← Tüm Sanatçılara Dön",
     nav_get_started: "Hemen Başla",
     nav_software_by: "DijitalGru™ Yazılımı",
+    nav_manager_panel: "Menajer Yönetim Paneli",
 
     // Dashboard & Sidebar UI
     nav_contact_info: "Yetkili Bilgileri",
@@ -89,7 +90,29 @@ const i18nTranslations = {
     security_title: "%100 Güvenli Ödeme Altyapısı",
     security_desc: "Abonelik ödemeleriniz iyzico ve 256-bit SSL güvenlik sertifikası güvencesiyle 3D Secure onaylı olarak gerçekleştirilmektedir.",
 
-    // Section Titles (Public Presskit)
+    // Footer Section
+    footer_desc: "PressKitLive — Sanatçılar ve menajerler için DijitalGru™ tarafından geliştirilmiş 300 DPI medya depo ve presskit altyapısı.",
+    footer_official_links: "RESMİ BAĞLANTILAR",
+    footer_contact_support: "İLETİŞİM & DESTEK",
+    footer_rights: "© 2026 PressKitLive. Tüm Hakları Saklıdır.",
+    footer_powered_by: "Bir DijitalGru™ Yazılım Teknolojisi",
+    footer_about: "Hakkımızda",
+    footer_privacy: "Gizlilik Politikası",
+    footer_terms: "Mesafeli Satış Sözleşmesi",
+    footer_refund: "Teslimat ve İade Şartları",
+
+    // Login Page
+    login_tab_login: "Giriş Yap",
+    login_tab_register: "Yeni Menajer Kaydı",
+    login_title: "Menajer & Ajans Girişi",
+    login_subtitle: "Giriş yapmak için e-posta adresinizi ve şifrenizi giriniz.",
+    login_email_label: "E-posta Adresi *",
+    login_email_ph: "ornek@ajans.com",
+    login_pass_label: "Şifre *",
+    login_forgot_pass: "Şifremi Unuttum?",
+    login_submit_btn: "Hesabıma Giriş Yap",
+
+    // Section Titles (Public & Editor Presskit)
     section_bio: "Biyografi & Özgeçmiş",
     section_logos: "Logo & Marka Materyalleri",
     section_photos: "Yüksek Çözünürlüklü Basın Fotoğrafları (300 DPI)",
@@ -98,6 +121,8 @@ const i18nTranslations = {
     section_socials: "Dijital Platform Bağlantıları",
     section_contact: "Yetkili İletişim & Menajerlik",
     section_discography: "Diskografi & Popüler Şarkılar",
+    section_folders_photos: "Klasörler & Görseller",
+    section_folders_desc: "Menajer klasör oluşturabilir, kilit koyabilir ve yeni fotoğraf ekleyebilir",
 
     // Buttons & Actions
     btn_download_zip: "Tümünü ZIP Olarak İndir",
@@ -111,6 +136,46 @@ const i18nTranslations = {
     btn_edit_profile: "Profili Düzenle",
     btn_add_artist: "+ Yeni Profil / Portföy Ekle",
     btn_upgrade_plan: "Paketinizi Yükseltin",
+    btn_copy: "Kopyala",
+    btn_manager_contact: "Menajer İletişim",
+    btn_edit_contact: "Menajer İletişim",
+    btn_change_cover: "Kapak Değiştir",
+    btn_download_full_zip: "Tek Tıkla Tüm Presskit'i İndir (.ZIP)",
+    btn_whatsapp_manager: "Menajer WhatsApp",
+    btn_new_folder: "+ Yeni Klasör Aç",
+    btn_add_photo: "+ Klasöre Fotoğraf Ekle",
+    btn_manage_edit: "Yönet & Düzenle",
+    btn_public_link: "Presskit Linki",
+    btn_cancel_sub: "İptal Et",
+
+    // Tabs & Badges
+    tab_all_photos: "Tüm Görseller",
+    badge_folder_open: "Açık",
+    badge_folder_locked: "Kilitli",
+    badge_official: "Resmi Presskit Portalı",
+    badge_verified: "Onaylı Sanatçı Hesabı",
+    badge_locked_folder: "Şifreli Özel Klasör",
+    badge_300dpi: "300 DPI Orijinal Baskı Kalitesi",
+    badge_manager_label: "Temsilci: ",
+    badge_active_sub: "AKTİF ABONELİK",
+    badge_iyzico_secured: "iyzico Güvencesiyle",
+
+    // Dashboard UI
+    dash_title: "Ajans Yönetim Paneli",
+    dash_managed_portfolio: "Yönetilen Portföy",
+    dash_roster_desc: "Temsil ettiğiniz isimlerin ve portföyün medya sayfaları",
+    dash_agency_label: "AJANS & TEMSİLCİLİK",
+    dash_subscription_label: "AKTİF ABONELİK",
+    dash_quota_label: "PORTFÖY KOTASI",
+    dash_trial_active: "7 Günlük Ücretsiz Deneme Hesabı",
+    dash_trial_days_left: "Kalan Süre",
+    dash_trial_expired: "7 Günlük Ücretsiz Deneme Süreniz Sona Ermiştir",
+    dash_sub_mgmt: "Abonelik & Paket Yönetimi",
+    dash_sub_mgmt_desc: "Mevcut abonelik durumunuzu görüntüleyin, paketinizi yükseltin veya yönetin",
+    dash_current_plan: "MEVCUT AKTİF PLANINIZ",
+
+    card_photos_label: "Fotoğraf",
+    card_folders_label: "Klasör",
 
     // Empty States
     empty_logos_title: "Logo & Marka Materyali Bulunmuyor",
@@ -122,22 +187,6 @@ const i18nTranslations = {
     empty_riders_title: "Teknik Şartname Bulunmuyor",
     empty_riders_desc: "Henüz teknik şartname (rider) belgesi yüklenmedi.",
     empty_bio: "Henüz biyografi bilgisi girilmemiştir.",
-
-    // Badges & Statuses
-    badge_official: "Resmi Presskit Portalı",
-    badge_verified: "Onaylı Sanatçı Hesabı",
-    badge_locked_folder: "Şifreli Özel Klasör",
-    badge_300dpi: "300 DPI Orijinal Baskı Kalitesi",
-
-    // Dashboard UI
-    dash_title: "Ajans Yönetim Paneli",
-    dash_managed_portfolio: "Yönetilen Portföy",
-    dash_agency_label: "AJANS & TEMSİLCİLİK",
-    dash_subscription_label: "AKTİF ABONELİK",
-    dash_quota_label: "PORTFÖY KOTASI",
-    dash_trial_active: "7 Günlük Ücretsiz Deneme Hesabı",
-    dash_trial_days_left: "Kalan Süre",
-    dash_trial_expired: "7 Günlük Ücretsiz Deneme Süreniz Sona Ermiştir",
 
     // Language Names
     lang_tr: "Türkçe",
@@ -152,6 +201,7 @@ const i18nTranslations = {
     nav_back_to_artists: "← All Artists",
     nav_get_started: "Get Started",
     nav_software_by: "Powered by DijitalGru™",
+    nav_manager_panel: "Manager Control Panel",
 
     // Dashboard & Sidebar UI
     nav_contact_info: "Authorized Info",
@@ -228,7 +278,29 @@ const i18nTranslations = {
     security_title: "100% Secure Payment Infrastructure",
     security_desc: "Subscription payments are processed with 3D Secure 256-bit SSL encryption via iyzico.",
 
-    // Section Titles (Public Presskit)
+    // Footer Section
+    footer_desc: "PressKitLive — 300 DPI media repository and presskit infrastructure developed by DijitalGru™ for artists and managers.",
+    footer_official_links: "OFFICIAL LINKS",
+    footer_contact_support: "CONTACT & SUPPORT",
+    footer_rights: "© 2026 PressKitLive. All Rights Reserved.",
+    footer_powered_by: "A DijitalGru™ Software Technology",
+    footer_about: "About Us",
+    footer_privacy: "Privacy Policy",
+    footer_terms: "Terms of Service",
+    footer_refund: "Delivery & Refund Policy",
+
+    // Login Page
+    login_tab_login: "Sign In",
+    login_tab_register: "New Manager Registration",
+    login_title: "Manager & Agency Login",
+    login_subtitle: "Enter your email address and password to sign in.",
+    login_email_label: "Email Address *",
+    login_email_ph: "example@agency.com",
+    login_pass_label: "Password *",
+    login_forgot_pass: "Forgot Password?",
+    login_submit_btn: "Sign In to My Account",
+
+    // Section Titles (Public & Editor Presskit)
     section_bio: "Biography & Profile",
     section_logos: "Logos & Brand Assets",
     section_photos: "High-Resolution Press Photos (300 DPI)",
@@ -237,10 +309,14 @@ const i18nTranslations = {
     section_socials: "Digital Platform Links",
     section_contact: "Management & Authorized Contact",
     section_discography: "Discography & Highlights",
+    section_folders_photos: "Folders & Media",
+    section_folders_desc: "Manage folders, lock with passwords, and upload high-res photos",
 
     // Buttons & Actions
     btn_download_zip: "Download All as ZIP",
     btn_download_hd: "Download High-Res (300 DPI)",
+    btn_manager_contact: "Contact Manager",
+    btn_edit_contact: "Contact Manager via WhatsApp",
     btn_whatsapp_contact: "Contact Manager via WhatsApp",
     btn_whatsapp_direct: "Chat on WhatsApp",
     btn_copy_link: "Copy Link",
@@ -250,6 +326,45 @@ const i18nTranslations = {
     btn_edit_profile: "Edit Profile",
     btn_add_artist: "+ Add Profile / Portfolio",
     btn_upgrade_plan: "Upgrade Plan",
+    btn_copy: "Copy",
+    btn_manager_contact: "Manager Contact",
+    btn_change_cover: "Change Cover",
+    btn_download_full_zip: "One-Click Full Presskit Download (.ZIP)",
+    btn_whatsapp_manager: "Manager WhatsApp",
+    btn_new_folder: "+ New Folder",
+    btn_add_photo: "+ Upload Photos",
+    btn_manage_edit: "Manage & Edit",
+    btn_public_link: "Public Presskit Link",
+    btn_cancel_sub: "Cancel Plan",
+
+    // Tabs & Badges
+    tab_all_photos: "All Photos",
+    badge_folder_open: "Unlocked",
+    badge_folder_locked: "Password Locked",
+    badge_official: "Official Presskit Portal",
+    badge_verified: "Verified Artist Account",
+    badge_locked_folder: "Password Protected Folder",
+    badge_300dpi: "300 DPI Original Print Quality",
+    badge_manager_label: "Manager: ",
+    badge_active_sub: "ACTIVE SUBSCRIPTION",
+    badge_iyzico_secured: "Secured by iyzico",
+
+    // Dashboard UI
+    dash_title: "Agency Management Dashboard",
+    dash_managed_portfolio: "Managed Roster",
+    dash_roster_desc: "Media pages of your represented roster and talent",
+    dash_agency_label: "AGENCY & REPRESENTATION",
+    dash_subscription_label: "ACTIVE SUBSCRIPTION",
+    dash_quota_label: "ROSTER QUOTA",
+    dash_trial_active: "7-Day Free Trial Account",
+    dash_trial_days_left: "Time Remaining",
+    dash_trial_expired: "Your 7-Day Free Trial Period Has Expired",
+    dash_sub_mgmt: "Subscription & Plan Management",
+    dash_sub_mgmt_desc: "View your active subscription status, upgrade, or manage your plan",
+    dash_current_plan: "YOUR CURRENT ACTIVE PLAN",
+
+    card_photos_label: "Photos",
+    card_folders_label: "Folders",
 
     // Empty States
     empty_logos_title: "No Logo & Brand Assets Available",
@@ -261,22 +376,6 @@ const i18nTranslations = {
     empty_riders_title: "No Technical Rider Available",
     empty_riders_desc: "No technical rider or stage plan document has been uploaded yet.",
     empty_bio: "Biography information has not been added yet.",
-
-    // Badges & Statuses
-    badge_official: "Official Presskit Portal",
-    badge_verified: "Verified Artist Account",
-    badge_locked_folder: "Password Protected Folder",
-    badge_300dpi: "300 DPI Original Print Quality",
-
-    // Dashboard UI
-    dash_title: "Agency Management Dashboard",
-    dash_managed_portfolio: "Managed Roster",
-    dash_agency_label: "AGENCY & REPRESENTATION",
-    dash_subscription_label: "ACTIVE SUBSCRIPTION",
-    dash_quota_label: "ROSTER QUOTA",
-    dash_trial_active: "7-Day Free Trial Account",
-    dash_trial_days_left: "Time Remaining",
-    dash_trial_expired: "Your 7-Day Free Trial Period Has Expired",
 
     // Language Names
     lang_tr: "Türkçe",

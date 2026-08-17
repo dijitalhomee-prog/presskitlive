@@ -646,10 +646,15 @@ function renderFoldersBar() {
     return name !== 'tüm görseller' && name !== 'tüm klasörler';
   });
 
+  const txtAllPhotos = typeof getTranslation === 'function' ? getTranslation('tab_all_photos', 'Tüm Görseller') : 'Tüm Görseller';
+  const txtLocked = typeof getTranslation === 'function' ? getTranslation('badge_folder_locked', 'Kilitli') : 'Kilitli';
+  const txtUnlocked = typeof getTranslation === 'function' ? getTranslation('badge_folder_open', 'Açık') : 'Açık';
+  const txtProtected = typeof getTranslation === 'function' ? getTranslation('badge_locked_folder', 'Şifreli') : 'Şifreli';
+
   let html = `
     <button class="folder-pill ${state.activeFolderId === 'folder-all' ? 'active' : ''}" data-folder-id="folder-all">
       <i data-lucide="layers"></i>
-      <span>Tüm Görseller</span>
+      <span>${txtAllPhotos}</span>
       <span class="folder-info-count">(${photos.length})</span>
     </button>
   `;
@@ -664,7 +669,7 @@ function renderFoldersBar() {
       lockBadgeHTML = `
         <span class="folder-lock-btn ${isLocked ? 'locked' : 'unlocked'}" onclick="toggleFolderLockHandler(event, '${escapeHTML(f.id)}')" title="${isLocked ? 'Klasör Kilitli (Açmak İçin Tıklayın)' : 'Klasör Açık (Kilitlemek İçin Tıklayın)'}">
           <i data-lucide="${isLocked ? 'lock' : 'unlock'}" style="width:12px; height:12px;"></i>
-          <span>${isLocked ? 'Kilitli' : 'Açık'}</span>
+          <span>${isLocked ? txtLocked : txtUnlocked}</span>
         </span>
       `;
       deleteBtnHTML = `
@@ -675,7 +680,7 @@ function renderFoldersBar() {
     } else if (isLocked) {
       lockBadgeHTML = `
         <span class="folder-lock-badge locked">
-          <i data-lucide="lock" style="width:12px; height:12px;"></i> Şifreli
+          <i data-lucide="lock" style="width:12px; height:12px;"></i> ${txtProtected}
         </span>
       `;
     }
@@ -1312,7 +1317,8 @@ window.addEventListener('languageChanged', (e) => {
   if (state && state.artist) {
     if (typeof renderLogos === 'function') renderLogos();
     if (typeof renderPlatformLinks === 'function') renderPlatformLinks();
-    if (typeof renderFolders === 'function') renderFolders();
-    if (typeof renderPhotos === 'function') renderPhotos();
+    if (typeof renderFoldersBar === 'function') renderFoldersBar();
+    if (typeof renderGalleryPhotos === 'function') renderGalleryPhotos();
+    if (typeof renderSidebarPortfolio === 'function') renderSidebarPortfolio();
   }
 });

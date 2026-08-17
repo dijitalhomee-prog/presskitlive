@@ -20,6 +20,7 @@
   
   <!-- Lucide Icons (Version Locked) -->
   <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+  <script src="/i18n.js?v=20260817_1615"></script>
 
   <!-- CSS -->
   <link rel="stylesheet" href="/style.css">
@@ -136,10 +137,18 @@
       <span>PressKit<span style="color: var(--primary);">Live</span></span>
     </a>
 
-    <a href="https://dijitalgru.com/" target="_blank" class="dijitalgru-top-pill" title="dijitalgru.com sitesini ziyaret edin">
-      <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru" style="height:16px;">
-      <span>DijitalGru™ Yazılımı</span>
-    </a>
+    <div style="display:flex; align-items:center; gap:12px;">
+      <a href="https://dijitalgru.com/" target="_blank" class="dijitalgru-top-pill" title="dijitalgru.com sitesini ziyaret edin">
+        <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru" style="height:16px;">
+        <span data-i18n="nav_software_by">DijitalGru™ Yazılımı</span>
+      </a>
+
+      <!-- TR / EN LANGUAGE SWITCHER PILL -->
+      <div class="lang-switcher-pill">
+        <button type="button" class="lang-toggle-btn active" data-lang="tr" onclick="setLanguage('tr')">TR</button>
+        <button type="button" class="lang-toggle-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
+      </div>
+    </div>
   </nav>
 
   <!-- LOGIN & SIGNUP CONTAINER -->
@@ -148,16 +157,16 @@
       
       <!-- AUTH TABS SWITCHER -->
       <div class="auth-tab-bar">
-        <button type="button" class="auth-tab-btn active" id="tabBtnLogin" onclick="switchAuthTab('login')">Giriş Yap</button>
-        <button type="button" class="auth-tab-btn" id="tabBtnSignup" onclick="switchAuthTab('signup')">Yeni Menajer Kaydı</button>
+        <button type="button" class="auth-tab-btn active" id="tabBtnLogin" onclick="switchAuthTab('login')" data-i18n="login_tab_login">Giriş Yap</button>
+        <button type="button" class="auth-tab-btn" id="tabBtnSignup" onclick="switchAuthTab('signup')" data-i18n="login_tab_register">Yeni Menajer Kaydı</button>
       </div>
 
       <div class="login-header">
         <div class="login-icon-box">
           <i data-lucide="user-check" id="authHeaderIcon" style="width:28px; height:28px;"></i>
         </div>
-        <h2 class="login-title" id="authHeaderTitle">Menajer & Ajans Girişi</h2>
-        <p class="login-subtitle" id="authHeaderSubtitle">
+        <h2 class="login-title" id="authHeaderTitle" data-i18n="login_title">Menajer & Ajans Girişi</h2>
+        <p class="login-subtitle" id="authHeaderSubtitle" data-i18n="login_subtitle">
           Giriş yapmak için e-posta adresinizi ve şifrenizi giriniz.
         </p>
       </div>
@@ -169,21 +178,21 @@
       <!-- LOGIN FORM -->
       <form id="loginForm" class="modal-body" style="padding:0;">
         <div class="form-group">
-          <label>E-posta Adresi *</label>
-          <input type="email" id="loginEmail" placeholder="ornek@ajans.com" required>
+          <label data-i18n="login_email_label">E-posta Adresi *</label>
+          <input type="email" id="loginEmail" placeholder="ornek@ajans.com" required data-i18n="login_email_ph">
         </div>
 
         <div class="form-group">
-          <label>Şifre *</label>
+          <label data-i18n="login_pass_label">Şifre *</label>
           <input type="password" id="loginPassword" placeholder="••••••••" required>
         </div>
 
         <div style="text-align:right; margin-top: -6px; margin-bottom: 16px;">
-          <a href="#" onclick="openForgotPasswordModal(event)" style="font-size:12px; color:var(--primary); font-weight:600; text-decoration:none;">Şifremi Unuttum?</a>
+          <a href="#" onclick="openForgotPasswordModal(event)" style="font-size:12px; color:var(--primary); font-weight:600; text-decoration:none;" data-i18n="login_forgot_pass">Şifremi Unuttum?</a>
         </div>
 
         <button type="submit" class="btn btn-spotify btn-block btn-large" style="margin-top:4px;" id="btnLoginSubmit">
-          <i data-lucide="log-in"></i> Hesabıma Giriş Yap
+          <i data-lucide="log-in"></i> <span data-i18n="login_submit_btn">Hesabıma Giriş Yap</span>
         </button>
       </form>
 
