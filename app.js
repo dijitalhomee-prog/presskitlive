@@ -412,16 +412,16 @@ function renderLogos() {
       grid.innerHTML = `
         <div class="empty-state-box" style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: var(--bg-surface); border: 1px dashed var(--border-glass); border-radius: 12px; width: 100%;">
           <i data-lucide="layers" style="width: 36px; height: 36px; color: var(--text-subdued); margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;"></i>
-          <h4 style="color: #fff; margin: 0 0 6px 0; font-size: 16px; font-weight: 700;">Logo & Marka Materyali Bulunmuyor</h4>
-          <p style="color: var(--text-subdued); font-size: 13px; margin: 0;">Bu sanatçı için henüz kamuya açık logo veya marka dosyası yüklenmemiştir.</p>
+          <h4 style="color: #fff; margin: 0 0 6px 0; font-size: 16px; font-weight: 700;">${typeof getTranslation==='function' ? getTranslation('empty_logos_title', 'Logo & Marka Materyali Bulunmuyor') : 'Logo & Marka Materyali Bulunmuyor'}</h4>
+          <p style="color: var(--text-subdued); font-size: 13px; margin: 0;">${typeof getTranslation==='function' ? getTranslation('empty_logos_desc', 'Bu sanatçı için henüz kamuya açık logo veya marka dosyası yüklenmemiştir.') : 'Bu sanatçı için henüz kamuya açık logo veya marka dosyası yüklenmemiştir.'}</p>
         </div>
       `;
     } else {
       grid.innerHTML = `
         <div class="empty-state-box" style="grid-column: 1 / -1; text-align: center; padding: 40px 20px; background: var(--bg-surface); border: 1px dashed var(--border-glass); border-radius: 12px; width: 100%;">
           <i data-lucide="layers" style="width: 36px; height: 36px; color: var(--text-subdued); margin-bottom: 10px; display: block; margin-left: auto; margin-right: auto;"></i>
-          <h4 style="color: #fff; margin: 0 0 6px 0; font-size: 16px; font-weight: 700;">Henüz Logo veya Marka Materyali Eklenmedi</h4>
-          <p style="color: var(--text-subdued); font-size: 13px; margin: 0 0 16px 0;">Afiş ve tasarım işleri için sanatçınızın logosunu veya vektörel marka metnini ekleyin.</p>
+          <h4 style="color: #fff; margin: 0 0 6px 0; font-size: 16px; font-weight: 700;">${typeof getTranslation==='function' ? getTranslation('empty_logos_title', 'Henüz Logo veya Marka Materyali Eklenmedi') : 'Henüz Logo veya Marka Materyali Eklenmedi'}</h4>
+          <p style="color: var(--text-subdued); font-size: 13px; margin: 0 0 16px 0;">${typeof getTranslation==='function' ? getTranslation('empty_logos_desc', 'Afiş ve tasarım işleri için sanatçınızın logosunu veya vektörel marka metnini ekleyin.') : 'Afiş ve tasarım işleri için sanatçınızın logosunu veya vektörel marka metnini ekleyin.'}</p>
           <button class="btn btn-primary btn-small" onclick="document.getElementById('addLogoModal').classList.add('active')" style="margin: 0 auto; display: inline-flex;">
             <i data-lucide="upload-cloud"></i> + Logo Ekle
           </button>
@@ -438,6 +438,7 @@ function renderLogos() {
     const rawUrl = p.url || '';
     const imgUrl = (rawUrl.startsWith('http') || rawUrl.startsWith('/') || rawUrl.startsWith('data:')) ? rawUrl : '/' + rawUrl;
     const format = p.resolution || 'PNG';
+    const downloadLabel = typeof getTranslation === 'function' ? getTranslation('btn_download_hd', `${format} İndir`) : `${format} İndir`;
 
     html += `
       <div class="logo-card" id="logoCard-${escapeHTML(p.id)}">
@@ -449,7 +450,7 @@ function renderLogos() {
           <p style="color:var(--text-subdued); font-size:12px; margin:0 0 14px 0;">300 DPI Yüksek Çözünürlüklü Marka Dosyası (${escapeHTML(format)})</p>
           <div class="logo-card-actions" style="display:flex; gap:8px; align-items:center;">
             <a href="${imgUrl}" download="${escapeHTML(p.title)}" class="btn btn-outline" style="flex-grow:1; justify-content:center;">
-              <i data-lucide="download"></i> ${escapeHTML(format)} İndir
+              <i data-lucide="download"></i> ${escapeHTML(format)} ${downloadLabel}
             </a>
             ${!state.isPublicView ? `
               <button type="button" class="btn-delete-icon" style="background:rgba(239,68,68,0.15); border:1px solid rgba(239,68,68,0.3); color:#ef4444; border-radius:8px; width:38px; height:38px; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0;" title="Logoyu Sil" onclick="deletePhotoHandler('${escapeHTML(p.id)}', '${escapeHTML(p.title)}')">
