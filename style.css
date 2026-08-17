@@ -1145,6 +1145,58 @@ a {
 .form-group input:focus, .form-group select:focus {
   border-color: var(--primary);
 }
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+@media (max-width: 600px) {
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+}
+
+.modal-card.modal-compact {
+  max-width: 640px !important;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-card.modal-compact .modal-header {
+  padding: 14px 20px !important;
+}
+
+.modal-card.modal-compact .modal-header h3 {
+  font-size: 16px !important;
+}
+
+.modal-card.modal-compact .modal-header p {
+  font-size: 11px !important;
+  margin-top: 2px;
+}
+
+.modal-card.modal-compact .modal-body {
+  padding: 16px 20px !important;
+  gap: 10px !important;
+  overflow-y: auto;
+}
+
+.modal-card.modal-compact .form-group {
+  gap: 4px !important;
+}
+
+.modal-card.modal-compact .form-group label {
+  font-size: 11px !important;
+}
+
+.modal-card.modal-compact .form-group input {
+  padding: 8px 12px !important;
+  font-size: 12px !important;
+}
+
 .modal-footer {
   padding: 16px 24px;
   border-top: 1px solid var(--border-subtle);
