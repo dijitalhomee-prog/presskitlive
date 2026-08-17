@@ -1943,3 +1943,18 @@ button.lang-toggle-btn:hover:not(.active), .lang-toggle-btn:hover:not(.active) {
   background: rgba(255, 255, 255, 0.1) !important;
   color: #ffffff !important;
 }
+
+/* ==========================================================================
+   TOPBAR NAV BUTTON UNIFORM FONT SIZE LOCK
+   ========================================================================== */
+.landing-nav .btn, 
+.topbar .btn, 
+.public-nav .btn {
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  white-space: nowrap !important;
+  padding: 8px 16px !important;
+  height: 38px !important;
+  line-height: 1 !important;
+  letter-spacing: 0.2px !important;
+}

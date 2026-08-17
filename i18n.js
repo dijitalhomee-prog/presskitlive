@@ -132,7 +132,7 @@ const i18nTranslations = {
     // Header & Brand
     nav_official_portal: "Official Media Portal",
     nav_notice_bar: "✨ PressKitLive™ Media Center: Download all press assets and high-res files directly.",
-    nav_agency_login: "Agency & Login",
+    nav_agency_login: "Ajans Girişi",
     nav_dashboard: "Agency Dashboard",
     nav_back_to_artists: "← All Artists",
     nav_get_started: "Get Started",
@@ -142,8 +142,8 @@ const i18nTranslations = {
     hero_tag: "Dedicated SaaS Platform for Music, Cast Agencies & Talent Representation",
     hero_title_html: "A Permanent Home for Your Media Kit<br><span class=\"single-line-hero\"><span class=\"highlight-green\">No Expiring Links,</span> Always Available</span>",
     hero_subtitle: "Your artists', actors', and talents' 300 DPI posters, headshots, and media kits are no longer lost in expiring download links — preserved forever in one permanent portal.",
-    hero_cta_login: "Agency & User Login",
-    hero_cta_whatsapp: "Request Quote via WhatsApp",
+    hero_cta_login: "Ajans & Kullanıcı Girişi",
+    hero_cta_whatsapp: "WhatsApp İle Teklif Al",
 
     // Landing Features
     feat_1_title: "Custom Folders & Password Protection",
@@ -218,7 +218,7 @@ const i18nTranslations = {
     btn_preview: "Preview",
     btn_unlock: "Enter Password & Unlock",
     btn_edit_profile: "Edit Profile",
-    btn_add_artist: "+ Add New Profile / Portfolio",
+    btn_add_artist: "+ Add Profile / Portfolio",
     btn_upgrade_plan: "Upgrade Plan",
 
     // Empty States
