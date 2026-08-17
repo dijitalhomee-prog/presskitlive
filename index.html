@@ -22,7 +22,7 @@
   <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-  <script src="/i18n.js?v=20260817_0026"></script>
+  <script src="/i18n.js?v=20260817_1615"></script>
 
   <!-- CSS -->
   <link rel="stylesheet" href="/style.css?v=20260817_0026">
@@ -437,7 +437,7 @@
         </div>
         <div class="brand-text">
           <span class="brand-name">PressKit<span class="highlight">Live</span></span>
-          <span class="brand-tagline">Sanatçı Medya Portalı</span>
+          <span class="brand-tagline" data-i18n="nav_official_portal">Sanatçı Medya Portalı</span>
         </div>
       </div>
 
@@ -450,35 +450,35 @@
       <!-- GREEN BACK ARROW BUTTON TO RETURN TO MANAGER DASHBOARD / PREVIOUS PAGE -->
       <a href="agency_dashboard.html" class="sidebar-back-pill" onclick="if(document.referrer && document.referrer.includes(window.location.host)){ event.preventDefault(); window.history.back(); }" title="Önceki Sayfaya / Menajer Konsoluna Dön">
         <i data-lucide="arrow-left"></i>
-        <span>Menajer Paneline Dön</span>
+        <span data-i18n="nav_dashboard">Menajer Paneline Dön</span>
       </a>
 
       <!-- Navigation Links -->
       <nav class="sidebar-nav">
-        <label class="section-label">PRESSKIT MENÜSÜ</label>
+        <label class="section-label" data-i18n="nav_sidebar_menu">PRESSKIT MENÜSÜ</label>
         <a href="#hero" class="nav-item active" data-target="hero">
-          <i data-lucide="sparkles"></i> <span>Genel Bakış</span>
+          <i data-lucide="sparkles"></i> <span data-i18n="nav_overview">Genel Bakış</span>
         </a>
         <a href="#afis-fotograflari" class="nav-item" data-target="afis-fotograflari">
-          <i data-lucide="folder"></i> <span>Klasörler & Görseller</span>
+          <i data-lucide="folder"></i> <span data-i18n="nav_photos_folders">Klasörler & Görseller</span>
         </a>
         <a href="#logolar" class="nav-item" data-target="logolar">
-          <i data-lucide="layers"></i> <span>Logo & Marka Materyalleri</span>
+          <i data-lucide="layers"></i> <span data-i18n="nav_logos_brand">Logo & Marka Materyalleri</span>
         </a>
         <a href="#dijital-platformlar" class="nav-item" data-target="dijital-platformlar">
-          <i data-lucide="globe"></i> <span>Dijital Platform Bağlantıları</span>
+          <i data-lucide="globe"></i> <span data-i18n="nav_digital_links">Dijital Platform Bağlantıları</span>
         </a>
         <a href="#menajer-iletisim" class="nav-item" data-target="menajer-iletisim">
-          <i data-lucide="phone-call"></i> <span>Temsilci & İletişim</span>
+          <i data-lucide="phone-call"></i> <span data-i18n="nav_contact_rep">Temsilci & İletişim</span>
         </a>
 
         <!-- YÖNETİLEN PORTFÖY (MANAGED ARTISTS LIST) -->
         <div class="sidebar-portfolio-wrapper">
           <div class="sidebar-portfolio-header">
-            <span class="section-label" style="margin-bottom:0; padding-left:0;">YÖNETİLEN PORTFÖY</span>
+            <span class="section-label" style="margin-bottom:0; padding-left:0;" data-i18n="nav_managed_portfolio">YÖNETİLEN PORTFÖY</span>
             <a href="agency_dashboard.html" class="portfolio-panel-link" title="Tüm Yönetilen Sanatçıları ve Menajer Konsolunu Aç">
               <i data-lucide="layout-dashboard" style="width:12px; height:12px;"></i>
-              <span>Konsol</span>
+              <span data-i18n="nav_console">Konsol</span>
             </a>
           </div>
 
@@ -488,7 +488,7 @@
 
           <a href="admin.html" class="nav-item nav-item-admin" id="sidebarAdminLink" title="Süper Admin Paneli" style="display:none; margin-top:10px;">
             <i data-lucide="shield-check" style="color: #60a5fa;"></i> 
-            <span>Süper Admin Paneli</span>
+            <span data-i18n="nav_super_admin">Süper Admin Paneli</span>
           </a>
         </div>
       </nav>

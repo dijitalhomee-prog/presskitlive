@@ -8,11 +8,26 @@ const i18nTranslations = {
     // Header & Brand
     nav_official_portal: "Resmi Medya Portalı",
     nav_notice_bar: "✨ PressKitLive™ Medya Merkezi: Tüm görseller ve dokümanlar orijinal çözünürlükte doğrudan indirilebilir.",
-    nav_agency_login: "Ajans & Giriş",
+    nav_agency_login: "Ajans Girişi",
     nav_dashboard: "Yönetici Paneli",
     nav_back_to_artists: "← Tüm Sanatçılara Dön",
     nav_get_started: "Hemen Başla",
     nav_software_by: "DijitalGru™ Yazılımı",
+
+    // Dashboard & Sidebar UI
+    nav_contact_info: "Yetkili Bilgileri",
+    nav_change_pass: "Şifre Değiştir",
+    nav_sidebar_menu: "PRESSKIT MENÜSÜ",
+    nav_overview: "Genel Bakış",
+    nav_photos_folders: "Klasörler & Görseller",
+    nav_logos_brand: "Logo & Marka Materyalleri",
+    nav_digital_links: "Dijital Platform Bağlantıları",
+    nav_contact_rep: "Temsilci & İletişim",
+    nav_managed_portfolio: "YÖNETİLEN PORTFÖY",
+    nav_console: "Konsol",
+    nav_super_admin: "Süper Admin Paneli",
+    nav_change_cover: "Kapak Değiştir",
+    nav_edit_contact: "Menajer İletişim",
 
     // Hero Section (Landing)
     hero_tag: "Müzik, Cast Ajansları & Temsilcilikler İçin Özel SaaS Platformu",
@@ -132,18 +147,33 @@ const i18nTranslations = {
     // Header & Brand
     nav_official_portal: "Official Media Portal",
     nav_notice_bar: "✨ PressKitLive™ Media Center: Download all press assets and high-res files directly.",
-    nav_agency_login: "Ajans Girişi",
+    nav_agency_login: "Agency Login",
     nav_dashboard: "Agency Dashboard",
     nav_back_to_artists: "← All Artists",
     nav_get_started: "Get Started",
     nav_software_by: "Powered by DijitalGru™",
 
+    // Dashboard & Sidebar UI
+    nav_contact_info: "Authorized Info",
+    nav_change_pass: "Change Password",
+    nav_sidebar_menu: "PRESSKIT MENU",
+    nav_overview: "Overview",
+    nav_photos_folders: "Folders & Media",
+    nav_logos_brand: "Logos & Brand Assets",
+    nav_digital_links: "Digital Platform Links",
+    nav_contact_rep: "Management & Contact",
+    nav_managed_portfolio: "MANAGED ROSTER",
+    nav_console: "Console",
+    nav_super_admin: "Super Admin Panel",
+    nav_change_cover: "Change Cover",
+    nav_edit_contact: "Contact Manager",
+
     // Hero Section (Landing)
     hero_tag: "Dedicated SaaS Platform for Music, Cast Agencies & Talent Representation",
     hero_title_html: "A Permanent Home for Your Media Kit<br><span class=\"single-line-hero\"><span class=\"highlight-green\">No Expiring Links,</span> Always Available</span>",
     hero_subtitle: "Your artists', actors', and talents' 300 DPI posters, headshots, and media kits are no longer lost in expiring download links — preserved forever in one permanent portal.",
-    hero_cta_login: "Ajans & Kullanıcı Girişi",
-    hero_cta_whatsapp: "WhatsApp İle Teklif Al",
+    hero_cta_login: "Agency & User Login",
+    hero_cta_whatsapp: "Request Quote via WhatsApp",
 
     // Landing Features
     feat_1_title: "Custom Folders & Password Protection",
@@ -271,15 +301,17 @@ function setLanguage(lang) {
   // Update HTML lang attribute
   document.documentElement.lang = lang;
 
-  // Update all elements with data-i18n attribute safely without erasing icons
+  // Update all elements with data-i18n attribute
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
     if (i18nTranslations[lang] && i18nTranslations[lang][key]) {
       const text = i18nTranslations[lang][key];
       if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
         el.placeholder = text;
+      } else if (el.children.length === 0) {
+        el.textContent = text;
       } else {
-        // Check if element has child text nodes specifically to preserve child <i> or <svg> icons
+        // Element has child HTML tags (e.g., Lucide icon <i data-lucide="..."> or <svg>)
         let textUpdated = false;
         for (let i = 0; i < el.childNodes.length; i++) {
           const node = el.childNodes[i];
@@ -290,14 +322,7 @@ function setLanguage(lang) {
           }
         }
         if (!textUpdated) {
-          // If no existing text node found or element is simple span/div
-          if (el.children.length === 0) {
-            el.innerText = text;
-          } else {
-            // Append text node safely
-            const textNode = document.createTextNode(" " + text);
-            el.appendChild(textNode);
-          }
+          el.textContent = text;
         }
       }
     }

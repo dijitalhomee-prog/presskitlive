@@ -20,7 +20,7 @@
   
   <!-- Lucide Icons (Version Locked) -->
   <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
-  <script src="/i18n.js?v=20260817_0026"></script>
+  <script src="/i18n.js?v=20260817_1615"></script>
 
   <!-- CSS -->
   <link rel="stylesheet" href="/style.css?v=20260817_0026">
@@ -346,14 +346,14 @@
 
       <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
         <button class="btn btn-outline btn-small" id="btnOpenContactInfoModal" title="Yetkili & İletişim Bilgilerini Düzenle">
-          <i data-lucide="user-check"></i> Yetkili Bilgileri
+          <i data-lucide="user-check"></i> <span data-i18n="nav_contact_info">Yetkili Bilgileri</span>
         </button>
         <button class="btn btn-outline btn-small" id="btnOpenChangePassModal" title="Şifre Değiştir">
-          <i data-lucide="key-round"></i> Şifre Değiştir
+          <i data-lucide="key-round"></i> <span data-i18n="nav_change_pass">Şifre Değiştir</span>
         </button>
         <a href="https://dijitalgru.com/" target="_blank" class="dijitalgru-top-pill" id="headerManagerPill">
           <img src="/assets/images/dijitalgru_logo.png" alt="DijitalGru">
-          <span id="headerManagerName">Ajans & Yönetici Paneli</span>
+          <span id="headerManagerName" data-i18n="dash_title">Ajans & Yönetici Paneli</span>
         </a>
 
         <!-- TR / EN LANGUAGE SWITCHER PILL -->
@@ -372,7 +372,7 @@
     <div class="agency-stats-grid">
       <div class="stat-card">
         <div style="display:flex; align-items:center; justify-content:space-between; width:100%;">
-          <span class="stat-label">AJANS & TEMSİLCİLİK</span>
+          <span class="stat-label" data-i18n="dash_agency_label">AJANS & TEMSİLCİLİK</span>
           <button type="button" onclick="openContactInfoModal()" style="background:transparent; border:none; color:var(--primary); font-size:12px; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:4px; padding:0;" title="İletişim Bilgilerini Düzenle">
             <i data-lucide="edit-2" style="width:12px; height:12px;"></i> Düzenle
           </button>
@@ -382,7 +382,7 @@
       </div>
 
       <div class="stat-card">
-        <span class="stat-label">AKTİF ABONELİK</span>
+        <span class="stat-label" data-i18n="dash_subscription_label">AKTİF ABONELİK</span>
         <span class="stat-value" id="statPlanName" style="color:var(--accent-blue);">Pro Ajans Paketi</span>
         <span class="stat-sub" id="statPlanPriceSub">
           <img src="/assets/images/iyzico/iyzico_ile_ode_white.svg" alt="iyzico" style="height:14px;"> ₺1.900 + KDV / Ay (Aktif)
@@ -390,7 +390,7 @@
       </div>
 
       <div class="stat-card">
-        <span class="stat-label">PORTFÖY KOTASI</span>
+        <span class="stat-label" data-i18n="dash_quota_label">PORTFÖY KOTASI</span>
         <span class="stat-value" id="statQuotaVal">0 / 10 Profil</span>
         <span class="stat-sub" id="statQuotaSub">10 Profil Ekleme Hakkı Var</span>
       </div>
@@ -407,10 +407,10 @@
       </div>
       <div style="display: flex; gap: 12px;">
         <button class="btn btn-accent" id="btnOpenCreateArtistModal">
-          <i data-lucide="plus-circle"></i> + Yeni Profil / Portföy Ekle
+          <i data-lucide="plus-circle"></i> <span data-i18n="btn_add_artist">+ Yeni Profil / Portföy Ekle</span>
         </button>
         <a href="landing.html#fiyatlandirma" class="btn btn-outline">
-          <i data-lucide="sparkles"></i> Paketinizi Yükseltin
+          <i data-lucide="sparkles"></i> <span data-i18n="btn_upgrade_plan">Paketinizi Yükseltin</span>
         </a>
       </div>
     </div>
