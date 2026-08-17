@@ -24,7 +24,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/style.css?v=20260817_0016">
+  <link rel="stylesheet" href="/style.css?v=20260817_0017">
   <style>
     .file-input-wrapper {
       position: relative;
@@ -471,17 +471,25 @@
           <i data-lucide="phone-call"></i> <span>Temsilci & İletişim</span>
         </a>
 
-        <!-- YÖNETİM & MENAJER KONSOLU -->
-        <label class="section-label" style="margin-top:20px;">MENAJER & PORTFÖY</label>
-        <a href="agency_dashboard.html" class="nav-item nav-item-manager" title="Tüm Yönetilen Sanatçıları ve Menajer Paneline Geç" style="margin-bottom:4px;">
-          <i data-lucide="layout-dashboard" style="color: var(--primary);"></i> 
-          <span>Menajer Konsolu</span>
-          <span class="badge-count" id="sidebarArtistCountBadge" style="background: var(--primary); color: #000; font-size: 11px; padding: 2px 7px; border-radius: 10px; font-weight: 800; margin-left: auto;">Yönetim</span>
-        </a>
-        <a href="admin.html" class="nav-item nav-item-admin" id="sidebarAdminLink" title="Süper Admin Paneli" style="display:none;">
-          <i data-lucide="shield-check" style="color: #60a5fa;"></i> 
-          <span>Süper Admin Paneli</span>
-        </a>
+        <!-- YÖNETİLEN PORTFÖY (MANAGED ARTISTS LIST) -->
+        <div class="sidebar-portfolio-wrapper">
+          <div class="sidebar-portfolio-header">
+            <span class="section-label" style="margin-bottom:0; padding-left:0;">YÖNETİLEN PORTFÖY</span>
+            <a href="agency_dashboard.html" class="portfolio-panel-link" title="Tüm Yönetilen Sanatçıları ve Menajer Konsolunu Aç">
+              <i data-lucide="layout-dashboard" style="width:12px; height:12px;"></i>
+              <span>Konsol</span>
+            </a>
+          </div>
+
+          <div class="sidebar-portfolio-list" id="sidebarPortfolioList">
+            <!-- Dynamically populated by renderSidebarPortfolio() in app.js -->
+          </div>
+
+          <a href="admin.html" class="nav-item nav-item-admin" id="sidebarAdminLink" title="Süper Admin Paneli" style="display:none; margin-top:10px;">
+            <i data-lucide="shield-check" style="color: #60a5fa;"></i> 
+            <span>Süper Admin Paneli</span>
+          </a>
+        </div>
       </nav>
 
       <!-- Sidebar Action Footer -->
@@ -996,7 +1004,7 @@
   </div>
 
   <!-- JavaScript -->
-  <script src="/app.js?v=20260817_0016"></script>
+  <script src="/app.js?v=20260817_0017"></script>
   <script>
     let uploadedPhotoDataUrl = '';
     let uploadedLogoDataUrl = '';

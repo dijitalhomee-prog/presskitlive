@@ -459,6 +459,47 @@ function renderManagerInfo() {
 
   const mailLink = document.getElementById('gridEmailLink');
   if (mailLink && mgr.email) mailLink.href = `mailto:${mgr.email}`;
+
+  renderSidebarPortfolio();
+}
+
+function renderSidebarPortfolio() {
+  const container = document.getElementById('sidebarPortfolioList');
+  if (!container) return;
+
+  const artists = (state.myArtists && state.myArtists.length > 0) ? state.myArtists : (state.artist ? [state.artist] : []);
+
+  if (artists.length === 0) {
+    container.innerHTML = `
+      <div class="portfolio-empty-note">
+        <span>Henüz bağlı sanatçı yok</span>
+        <a href="agency_dashboard.html" class="btn-add-artist-mini">+ Sanatçı Ekle</a>
+      </div>
+    `;
+    return;
+  }
+
+  let html = '';
+  artists.forEach(a => {
+    const isCurrent = (state.artist && (state.artist.id === a.id || state.artist.slug === a.slug));
+    const avatarUrl = a.avatar && a.avatar.trim() !== '' ? a.avatar.trim() : generateInitialsAvatar(a.name);
+    const safeAvatar = (avatarUrl.startsWith('http') || avatarUrl.startsWith('/') || avatarUrl.startsWith('data:')) ? avatarUrl : '/' + avatarUrl;
+    const genre = a.genre || 'Sanatçı';
+
+    html += `
+      <a href="/index.html?artistId=${escapeHTML(a.id)}" class="portfolio-artist-item ${isCurrent ? 'active' : ''}" title="${escapeHTML(a.name)} — ${escapeHTML(genre)}">
+        <img src="${safeAvatar}" alt="${escapeHTML(a.name)}" class="portfolio-artist-avatar" onerror="this.onerror=null; this.src=generateInitialsAvatar('${escapeHTML(a.name)}');">
+        <div class="portfolio-artist-info">
+          <span class="portfolio-artist-name">${escapeHTML(a.name)}</span>
+          <span class="portfolio-artist-genre">${escapeHTML(genre)}</span>
+        </div>
+        ${isCurrent ? '<span class="active-indicator-dot" title="Şu an aktif olan sanatçı"></span>' : ''}
+      </a>
+    `;
+  });
+
+  container.innerHTML = html;
+  if (window.lucide) lucide.createIcons();
 }
 
 function renderFoldersBar() {
