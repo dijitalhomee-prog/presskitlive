@@ -1890,3 +1890,43 @@ a {
 .lightbox-modal.active {
   display: flex !important;
 }
+
+/* ==========================================================================
+   GLOBAL TR / EN LANGUAGE SWITCHER PILL STYLING
+   ========================================================================== */
+.lang-switcher-pill {
+  display: inline-flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 3px;
+  gap: 2px;
+  user-select: none;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+  margin-left: 8px;
+}
+
+.lang-toggle-btn {
+  background: transparent;
+  border: none;
+  color: var(--text-subdued);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: 0.5px;
+}
+
+.lang-toggle-btn.active {
+  background: var(--primary);
+  color: #000;
+  font-weight: 900;
+  box-shadow: 0 2px 8px rgba(29, 185, 84, 0.4);
+}
+
+.lang-toggle-btn:hover:not(.active) {
+  color: #fff;
+}

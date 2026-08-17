@@ -1305,3 +1305,13 @@ async function deletePhotoHandler(photoId) {
     showToast("İşlem gerçekleştirilemedi.", 'error');
   }
 }
+
+// Re-render UI components on language change
+window.addEventListener('languageChanged', (e) => {
+  if (state && state.artist) {
+    if (typeof renderLogos === 'function') renderLogos();
+    if (typeof renderPlatformLinks === 'function') renderPlatformLinks();
+    if (typeof renderFolders === 'function') renderFolders();
+    if (typeof renderPhotos === 'function') renderPhotos();
+  }
+});

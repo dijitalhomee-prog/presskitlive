@@ -22,6 +22,7 @@
   <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="/i18n.js?v=20260817_0025"></script>
 
   <!-- CSS -->
   <link rel="stylesheet" href="/style.css?v=20260817_0024">
@@ -519,6 +520,13 @@
             <span>presskitlive.com/artist/<strong id="artistSlugBadge">...</strong></span>
             <span class="btn-copy-label"><i data-lucide="copy" style="width:12px; height:12px;"></i> Kopyala</span>
           </div>
+
+          <!-- TR / EN LANGUAGE SWITCHER PILL -->
+          <div class="lang-switcher-pill">
+            <button type="button" class="lang-toggle-btn active" data-lang="tr" onclick="setLanguage('tr')">TR</button>
+            <button type="button" class="lang-toggle-btn" data-lang="en" onclick="setLanguage('en')">EN</button>
+          </div>
+
           <button class="btn btn-outline" id="btnOpenAddArtistTop">
             <i data-lucide="upload-cloud"></i> <span>Menajer İletişim</span>
           </button>
