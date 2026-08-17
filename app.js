@@ -527,9 +527,6 @@ function renderFilteredPhotos() {
     if (window.lucide) lucide.createIcons();
     return;
   }
-    if (window.lucide) lucide.createIcons();
-    return;
-  }
 
   let html = '';
   photos.forEach(p => {
