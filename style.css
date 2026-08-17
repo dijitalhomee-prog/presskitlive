@@ -1271,35 +1271,57 @@ a {
 }
 
 .folder-delete-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
-  background: rgba(239, 68, 68, 0.2);
-  color: #ef4444;
-  border: 1px solid rgba(239, 68, 68, 0.4);
-  cursor: pointer;
-  margin-left: 6px;
-  transition: all 0.2s ease;
-  flex-shrink: 0;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 20px !important;
+  height: 20px !important;
+  border-radius: 50% !important;
+  background: rgba(239, 68, 68, 0.25) !important;
+  color: #ef4444 !important;
+  border: 1px solid rgba(239, 68, 68, 0.5) !important;
+  cursor: pointer !important;
+  margin-left: 6px !important;
+  transition: all 0.2s ease !important;
+  flex-shrink: 0 !important;
+}
+
+.folder-delete-btn svg,
+.folder-delete-btn i {
+  width: 11px !important;
+  height: 11px !important;
+  stroke: #ef4444 !important;
+  color: #ef4444 !important;
 }
 
 .folder-delete-btn:hover {
   background: #ef4444 !important;
-  color: #ffffff !important;
   border-color: #ef4444 !important;
-  transform: scale(1.15);
+  color: #ffffff !important;
+  transform: scale(1.15) !important;
+}
+
+.folder-delete-btn:hover svg,
+.folder-delete-btn:hover i {
+  stroke: #ffffff !important;
+  color: #ffffff !important;
 }
 
 .folder-pill.active .folder-delete-btn {
-  background: rgba(239, 68, 68, 0.25);
-  color: #dc2626;
-  border-color: rgba(220, 38, 38, 0.5);
+  background: rgba(239, 68, 68, 0.3) !important;
+  border-color: rgba(239, 68, 68, 0.6) !important;
+}
+
+.folder-pill.active .folder-delete-btn svg,
+.folder-pill.active .folder-delete-btn i {
+  stroke: #ef4444 !important;
 }
 
 .folder-pill.active .folder-delete-btn:hover {
   background: #dc2626 !important;
-  color: #ffffff !important;
+}
+
+.folder-pill.active .folder-delete-btn:hover svg,
+.folder-pill.active .folder-delete-btn:hover i {
+  stroke: #ffffff !important;
 }

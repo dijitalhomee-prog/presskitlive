@@ -384,7 +384,7 @@ function renderFoldersBar() {
       `;
       deleteBtnHTML = `
         <span class="folder-delete-btn" onclick="deleteFolderHandler(event, '${escapeHTML(f.id)}', '${escapeHTML(f.name)}')" title="Klasörü Sil">
-          <i data-lucide="trash-2" style="width:12px; height:12px;"></i>
+          <i data-lucide="x"></i>
         </span>
       `;
     } else if (isLocked) {
