@@ -74,6 +74,8 @@ a {
 .app-container {
   display: flex;
   min-height: 100vh;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 /* Left Sidebar */
@@ -211,6 +213,7 @@ a {
   margin-left: 280px;
   flex-grow: 1;
   min-width: 0;
+  overflow-x: hidden;
 }
 
 /* Topbar Header */
@@ -1568,4 +1571,30 @@ a {
 .custom-confirm-btn-primary:hover {
   background: #1ed760;
   transform: translateY(-1px);
+}
+
+.nav-item-manager {
+  background: rgba(29, 185, 84, 0.1) !important;
+  border: 1px solid rgba(29, 185, 84, 0.3) !important;
+  color: #ffffff !important;
+  transition: all 0.2s ease !important;
+}
+
+.nav-item-manager:hover {
+  background: rgba(29, 185, 84, 0.25) !important;
+  border-color: rgba(29, 185, 84, 0.6) !important;
+  transform: translateX(4px) !important;
+}
+
+.nav-item-admin {
+  background: rgba(59, 130, 246, 0.1) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  color: #60a5fa !important;
+  transition: all 0.2s ease !important;
+}
+
+.nav-item-admin:hover {
+  background: rgba(59, 130, 246, 0.25) !important;
+  border-color: rgba(59, 130, 246, 0.6) !important;
+  transform: translateX(4px) !important;
 }

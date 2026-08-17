@@ -443,6 +443,20 @@ function renderManagerInfo() {
     }
   }
 
+  const countBadgeEl = document.getElementById('sidebarArtistCountBadge');
+  if (countBadgeEl) {
+    if (state.myArtists && state.myArtists.length > 0) {
+      countBadgeEl.innerText = `${state.myArtists.length} Sanatçı`;
+    } else {
+      countBadgeEl.innerText = `Konsol`;
+    }
+  }
+
+  const adminLinkEl = document.getElementById('sidebarAdminLink');
+  if (adminLinkEl && mgr && mgr.isSuperAdmin) {
+    adminLinkEl.style.display = 'flex';
+  }
+
   const mailLink = document.getElementById('gridEmailLink');
   if (mailLink && mgr.email) mailLink.href = `mailto:${mgr.email}`;
 }
