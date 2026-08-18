@@ -817,7 +817,7 @@
       document.getElementById('bannerPlanTitle').innerText = planName;
       document.getElementById('subSectionPlanTitle').innerText = planName;
 
-      // Dynamic Plan Price Display (Item 2 Fix)
+      // Dynamic Plan Price Display & Status Formatting
       const planPrices = {
         bireysel: '₺1.080 + KDV / Ay',
         starter: '₺1.900 + KDV / Ay',
@@ -825,11 +825,24 @@
         enterprise: '₺9.500 + KDV / Ay'
       };
       const rawPlanKey = currentManager.plan || (isSolo ? 'bireysel' : 'starter');
-      const planPriceText = subStatus === 'complimentary' ? 'Ücretsiz (Hediye)' : (planPrices[rawPlanKey] || '₺1.900 + KDV / Ay');
+      const basePrice = planPrices[rawPlanKey] || '₺1.900 + KDV / Ay';
 
       const elPriceSub = document.getElementById('statPlanPriceSub');
       if (elPriceSub) {
-        elPriceSub.innerHTML = `<img src="/assets/images/iyzico/iyzico_ile_ode_white.svg" alt="iyzico" style="height:14px;"> ${planPriceText} (${subStatus === 'active' ? 'Aktif' : subStatus === 'complimentary' ? 'Hediye' : subStatus})`;
+        if (subStatus === 'complimentary') {
+          elPriceSub.innerHTML = `🎁 Sınırsız VIP Lisansı (Hediye Üyelik)`;
+        } else if (subStatus === 'trial_active') {
+          const daysLeft = currentManager.trial_days_left !== undefined ? currentManager.trial_days_left : 7;
+          elPriceSub.innerHTML = `⚡ 7 Gün Ücretsiz Deneme (${daysLeft} Gün Kaldı)`;
+        } else if (subStatus === 'trial_expired') {
+          elPriceSub.innerHTML = `⚠️ Deneme Süresi Sona Erdi (Paket Seçiniz)`;
+        } else if (subStatus === 'payment_failed') {
+          elPriceSub.innerHTML = `⚠️ Ödeme Başarısız (${basePrice})`;
+        } else if (subStatus === 'cancelling') {
+          elPriceSub.innerHTML = `<img src="/assets/images/iyzico/iyzico_ile_ode_white.svg" alt="iyzico" style="height:14px; vertical-align:middle; margin-right:4px;"> ${basePrice} (İptal Aşamasında)`;
+        } else {
+          elPriceSub.innerHTML = `<img src="/assets/images/iyzico/iyzico_ile_ode_white.svg" alt="iyzico" style="height:14px; vertical-align:middle; margin-right:4px;"> ${basePrice} (Aktif)`;
+        }
       }
 
       // Handle subscription status badges and alert banner (Section D.2 & D.3)
