@@ -148,6 +148,13 @@ const i18nTranslations = {
     btn_public_link: "Presskit Linki",
     btn_cancel_sub: "İptal Et",
 
+    // VIP Human Media Assistant
+    btn_vip_assistant: "VIP Asistanıma WhatsApp'tan Görsel Gönder",
+    vip_assistant_title: "7/24 Kişisel Medya Asistanı (%100 Gerçek İnsan)",
+    vip_assistant_desc: "Yoğun konser ve tur programınızda görselleri sisteme yüklemeye vaktiniz yok mu? WhatsApp'tan asistanınıza atın, 300 DPI kalitesinde profilinize anında biz yükleyelim.",
+    vip_assistant_badge: "%100 GERÇEK İNSAN DESTEĞİ",
+    vip_feature_item: "✓ VIP Medya Asistan Desteği (7/24 WhatsApp)",
+
     // Tabs & Badges
     tab_all_photos: "Tüm Görseller",
     badge_folder_open: "Açık",
@@ -336,6 +343,13 @@ const i18nTranslations = {
     btn_manage_edit: "Manage & Edit",
     btn_public_link: "Public Presskit Link",
     btn_cancel_sub: "Cancel Plan",
+
+    // VIP Human Media Assistant
+    btn_vip_assistant: "Send Media to VIP Assistant via WhatsApp",
+    vip_assistant_title: "24/7 Dedicated Media Assistant (100% Real Human)",
+    vip_assistant_desc: "Busy during tours or shows with no time to upload photos? Send them to your assistant via WhatsApp, and we will instantly upload them in 300 DPI to your presskit.",
+    vip_assistant_badge: "100% REAL HUMAN SUPPORT",
+    vip_feature_item: "✓ VIP Media Assistant Support (24/7 WhatsApp)",
 
     // Tabs & Badges
     tab_all_photos: "All Photos",
