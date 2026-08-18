@@ -1380,32 +1380,41 @@ async function initDashboardCalendar() {
   const selectEl = document.getElementById('calArtistSelect');
   if (!selectEl) return;
 
+  renderCalendarGrid();
+
   try {
     const res = await fetch('/api/my-artists');
     if (res.ok) {
       const data = await res.json();
       const artists = data.artists || [];
-      selectEl.innerHTML = '';
-
-      if (artists.length === 0) {
-        selectEl.innerHTML = '<option value="" disabled selected>Portföyde Sanatçı Bulunamadı</option>';
-        return;
-      }
-
-      artists.forEach((a, idx) => {
-        const opt = document.createElement('option');
-        opt.value = a.id;
-        opt.textContent = `${a.name} (${a.genre || 'Sanatçı'})`;
-        if (idx === 0) opt.selected = true;
-        selectEl.appendChild(opt);
-      });
-
-      calState.selectedArtistId = artists[0].id;
-      await loadCalendarForSelectedArtist();
+      populateCalendarArtistSelector(artists);
     }
   } catch (err) {
     console.error("Error initializing calendar:", err);
   }
+}
+
+function populateCalendarArtistSelector(artists) {
+  const selectEl = document.getElementById('calArtistSelect');
+  if (!selectEl) return;
+  selectEl.innerHTML = '';
+
+  if (!artists || artists.length === 0) {
+    selectEl.innerHTML = '<option value="" disabled selected>Portföyde Sanatçı Bulunamadı</option>';
+    renderCalendarGrid();
+    return;
+  }
+
+  artists.forEach((a, idx) => {
+    const opt = document.createElement('option');
+    opt.value = a.id;
+    opt.textContent = `${a.name} (${a.genre || 'Sanatçı'})`;
+    if (idx === 0) opt.selected = true;
+    selectEl.appendChild(opt);
+  });
+
+  calState.selectedArtistId = artists[0].id;
+  loadCalendarForSelectedArtist();
 }
 
 async function loadCalendarForSelectedArtist() {
@@ -1413,6 +1422,9 @@ async function loadCalendarForSelectedArtist() {
   if (selectEl && selectEl.value) {
     calState.selectedArtistId = selectEl.value;
   }
+
+  renderCalendarGrid();
+
   if (!calState.selectedArtistId) return;
 
   try {

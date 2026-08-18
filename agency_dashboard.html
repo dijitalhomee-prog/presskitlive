@@ -865,6 +865,9 @@
             planQuotaLimit = artJson.quotaLimit;
           }
           renderDynamicArtistsGrid();
+          if (typeof populateCalendarArtistSelector === 'function') {
+            populateCalendarArtistSelector(managerArtists);
+          }
         }
       } catch (err) {
         console.error("Dashboard loading error:", err);
