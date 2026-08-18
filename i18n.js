@@ -158,12 +158,18 @@ const i18nTranslations = {
     // VIP Human Media Assistant
     btn_vip_assistant: "VIP Asistanıma WhatsApp'tan Görsel Gönder",
     btn_landing_assistant_cta: "Üye Olun & Asistan Desteğini Kullanın",
+    vip_assistant_badge: "⚡ VIP CANLI ASİSTAN HİZMETİ",
     vip_assistant_title: "7/24 Canlı Medya Asistanı",
     vip_assistant_desc: "Yapay zeka botları yerine doğrudan WhatsApp üzerinden iletişim kurabileceğiniz canlı medya uzmanlarımızla profiliniz her an güncel kalsın.",
-    vip_assistant_badge: "⚡ VIP CANLI ASİSTAN HİZMETİ",
-    vip_feature_item: "✓ VIP Medya Asistan Desteği (7/24 WhatsApp)",
+    vip_feat_1: "WhatsApp / Drive Linki Üzerinden Anında Görsel Aktarımı",
+    vip_feat_2: "300 DPI Baskı Kalitesi & Şifreli Klasör Düzenleme",
+    vip_feat_3: "Konser & Tur Sırasında 7/24 Kesintisiz Asistan Hattı",
     vip_card_title: "7/24 Özel Medya Desteği",
     vip_card_desc: "Tüm paketlerimizde ve kullanıcılarımız için canlı medya uzmanı asistan desteği standart olarak sunulmaktadır.",
+    vip_badge_standard: "Tüm Paketlerde Standart Özellik",
+    dash_no_artists_title: "Henüz Kayıtlı Sanatçınız Bulunmuyor",
+    dash_no_artists_desc: "300 DPI afiş ve medya deposunu oluşturmak için ilk sanatçı sayfanızı hemen ekleyin.",
+    btn_add_first_artist: "İlk Sanatçı Sayfasını Oluştur",
 
     // Calendar & Availability
     cal_title: "Takvim & Müsaitlik Durumu",
@@ -378,9 +384,15 @@ const i18nTranslations = {
     vip_assistant_title: "24/7 Live Media Assistant",
     vip_assistant_desc: "Keep your profile up-to-date at all times with live media specialists you can reach directly on WhatsApp, instead of automated AI bots.",
     vip_assistant_badge: "⚡ LIVE VIP ASSISTANT SERVICE",
-    vip_feature_item: "✓ VIP Media Assistant Support (24/7 WhatsApp)",
+    vip_feat_1: "Instant Image Transfer via WhatsApp / Drive Links",
+    vip_feat_2: "300 DPI Print Quality & Encrypted Folder Management",
+    vip_feat_3: "24/7 Direct Assistant Hotline During Concerts & Tours",
     vip_card_title: "24/7 Dedicated Media Support",
     vip_card_desc: "Live media specialist assistant support is included as standard across all plans and users.",
+    vip_badge_standard: "Standard Feature Across All Plans",
+    dash_no_artists_title: "No Artists Registered Yet",
+    dash_no_artists_desc: "Add your first artist page to build your 300 DPI presskit media repository.",
+    btn_add_first_artist: "Create First Artist Page",
 
     // Calendar & Availability
     cal_title: "Calendar & Availability Status",
