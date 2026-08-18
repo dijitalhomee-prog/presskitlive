@@ -150,12 +150,12 @@ const i18nTranslations = {
 
     // VIP Human Media Assistant
     btn_vip_assistant: "VIP Asistanıma WhatsApp'tan Görsel Gönder",
-    vip_assistant_title: "7/24 Kişisel Medya Asistanı (%100 Gerçek İnsan)",
-    vip_assistant_desc: "Yoğun konser ve tur programınızda görselleri sisteme yüklemeye vaktiniz yok mu? WhatsApp'tan asistanınıza atın, 300 DPI kalitesinde profilinize anında biz yükleyelim.",
-    vip_assistant_badge: "%100 GERÇEK İNSAN DESTEĞİ",
+    vip_assistant_title: "7/24 Canlı Medya Asistanı",
+    vip_assistant_desc: "Yapay zeka botları yerine doğrudan WhatsApp üzerinden iletişim kurabileceğiniz canlı medya uzmanlarımızla profiliniz her an güncel kalsın.",
+    vip_assistant_badge: "⚡ VIP CANLI ASİSTAN HİZMETİ",
     vip_feature_item: "✓ VIP Medya Asistan Desteği (7/24 WhatsApp)",
     vip_card_title: "7/24 Özel Medya Desteği",
-    vip_card_desc: "Tüm paketlerimizde ve kullanıcılarımız için %100 gerçek insan medya asistanı standart olarak sunulmaktadır.",
+    vip_card_desc: "Tüm paketlerimizde ve kullanıcılarımız için canlı medya uzmanı asistan desteği standart olarak sunulmaktadır.",
 
     // Tabs & Badges
     tab_all_photos: "Tüm Görseller",
@@ -348,12 +348,12 @@ const i18nTranslations = {
 
     // VIP Human Media Assistant
     btn_vip_assistant: "Send Media to VIP Assistant via WhatsApp",
-    vip_assistant_title: "24/7 Dedicated Media Assistant (100% Real Human)",
-    vip_assistant_desc: "Busy during tours or shows with no time to upload photos? Send them to your assistant via WhatsApp, and we will instantly upload them in 300 DPI to your presskit.",
-    vip_assistant_badge: "100% REAL HUMAN SUPPORT",
+    vip_assistant_title: "24/7 Live Media Assistant",
+    vip_assistant_desc: "Keep your profile up-to-date at all times with live media specialists you can reach directly on WhatsApp, instead of automated AI bots.",
+    vip_assistant_badge: "⚡ LIVE VIP ASSISTANT SERVICE",
     vip_feature_item: "✓ VIP Media Assistant Support (24/7 WhatsApp)",
     vip_card_title: "24/7 Dedicated Media Support",
-    vip_card_desc: "100% real human media assistant support is included as standard across all plans and users.",
+    vip_card_desc: "Live media specialist assistant support is included as standard across all plans and users.",
 
     // Tabs & Badges
     tab_all_photos: "All Photos",
