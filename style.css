@@ -1958,3 +1958,14 @@ button.lang-toggle-btn:hover:not(.active), .lang-toggle-btn:hover:not(.active) {
   line-height: 1 !important;
   letter-spacing: 0.2px !important;
 }
+
+/* TRIAL PROMO BANNER RESPONSIVE DESIGN */
+@media (max-width: 820px) {
+  .trial-promo-wrapper {
+    padding: 24px 20px !important;
+  }
+  .trial-promo-wrapper > div {
+    grid-template-columns: 1fr !important;
+    gap: 24px !important;
+  }
+}
