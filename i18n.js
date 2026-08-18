@@ -31,9 +31,9 @@ const i18nTranslations = {
     nav_edit_contact: "Menajer İletişim",
 
     // Hero Section (Landing)
-    hero_tag: "Müzisyenler, Oyuncular, Post-Production & Tüm Temsil Edilen Sanat Dalları İçin 300 DPI Medya Portalı",
+    hero_tag: "Temsilciler & Ajanslar İçin Kalıcı Medya Sunucusu",
     hero_title_html: "Kalıcı Bir Medya & Presskit Adresi<br><span class=\"single-line-hero\"><span class=\"highlight-green\">Günü Geçen Linklerde</span> Kaybolmayan Görseller</span>",
-    hero_subtitle: "Müzik, sahne sanatları, oyunculuk, seslendirme ve post-production alanında temsil ettiğiniz tüm yeteneklerin 300 DPI afiş ve headshot portföyleri kalıcı tek bir adreste.",
+    hero_subtitle: "Temsil ettiğiniz tüm isimlerin 300 DPI afiş, headshot ve medya portföyleri artık geçici indirme bağlantılarında değil, kalıcı ve prestijli tek bir adreste.",
     hero_cta_login: "Ajans & Kullanıcı Girişi",
     hero_cta_whatsapp: "WhatsApp İle Teklif Al",
 
@@ -48,8 +48,8 @@ const i18nTranslations = {
     feat_4_desc: "Sitede doğrudan ajansın veya temsilcinin canlı iletişim rozeti yer alır. Yapımcılar ve organizatörler doğrudan WhatsApp'tan ulaşabilir.",
 
     // Pricing Section
-    pricing_title: "Esnek ve Şeffaf Fiyatlandırma",
-    pricing_subtitle: "Ajansınızın veya portföyünüzün büyüklüğüne göre en uygun paketi seçin, 300 DPI medya sunucunuza hemen sahip olun.",
+    pricing_title: "Ajansınız İçin En Uygun Planı Seçin",
+    pricing_subtitle: "Temsil ettiğiniz profil sayısına göre paketinizi belirleyin, 300 DPI kalıcı medya portalınıza hemen sahip olun.",
     trial_banner_tag: "⚡ Kredi Kartı Gerekmez • 7 Gün Ücretsiz",
     trial_banner_title: "7 Gün Boyunca Sınırsız & Ücretsiz Deneyin",
     trial_banner_desc: "1 dakikada ücretsiz kayıt olun, 7 gün boyunca tüm presskit ve 300 DPI medya özelliklerini tam yetkiyle test edin. 7 günün sonunda otomatik pasif konuma geçer.",
@@ -228,9 +228,9 @@ const i18nTranslations = {
     nav_edit_contact: "Contact Manager",
 
     // Hero Section (Landing)
-    hero_tag: "300 DPI Media Portal for Musicians, Actors, Post-Production & All Branches of Art",
+    hero_tag: "Permanent Media Server for Managers & Agencies",
     hero_title_html: "A Permanent Home for Your Media Kit<br><span class=\"single-line-hero\"><span class=\"highlight-green\">No Expiring Links,</span> Always Available</span>",
-    hero_subtitle: "300 DPI posters, headshots, and media kits for musicians, actors, voiceover & post-production artists in one permanent portal.",
+    hero_subtitle: "300 DPI posters, headshots, and media portfolios for all your represented talents are no longer lost in expiring download links — preserved forever in one prestigious portal.",
     hero_cta_login: "Agency & User Login",
     hero_cta_whatsapp: "Request Quote via WhatsApp",
 
@@ -245,8 +245,8 @@ const i18nTranslations = {
     feat_4_desc: "Featuring live contact badges for the agency or representative. Bookers and promoters can reach out directly via WhatsApp.",
 
     // Pricing Section
-    pricing_title: "Flexible & Transparent Pricing",
-    pricing_subtitle: "Choose the right plan for your agency roster size and get instant access to your 300 DPI media server.",
+    pricing_title: "Choose the Perfect Plan for Your Agency",
+    pricing_subtitle: "Select the plan based on the number of profiles you represent, and get your 300 DPI permanent media portal instantly.",
     trial_banner_tag: "⚡ No Credit Card Required • 7 Days Free",
     trial_banner_title: "Try Free & Unlimited for 7 Days",
     trial_banner_desc: "Sign up in 1 minute and test all presskit features and 300 DPI storage with full access for 7 days. Automatically pauses after 7 days.",
