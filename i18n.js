@@ -150,6 +150,7 @@ const i18nTranslations = {
 
     // VIP Human Media Assistant
     btn_vip_assistant: "VIP Asistanıma WhatsApp'tan Görsel Gönder",
+    btn_landing_assistant_cta: "Üye Olun & Asistan Desteğini Kullanın",
     vip_assistant_title: "7/24 Canlı Medya Asistanı",
     vip_assistant_desc: "Yapay zeka botları yerine doğrudan WhatsApp üzerinden iletişim kurabileceğiniz canlı medya uzmanlarımızla profiliniz her an güncel kalsın.",
     vip_assistant_badge: "⚡ VIP CANLI ASİSTAN HİZMETİ",
@@ -348,6 +349,7 @@ const i18nTranslations = {
 
     // VIP Human Media Assistant
     btn_vip_assistant: "Send Media to VIP Assistant via WhatsApp",
+    btn_landing_assistant_cta: "Sign Up & Access Assistant Support",
     vip_assistant_title: "24/7 Live Media Assistant",
     vip_assistant_desc: "Keep your profile up-to-date at all times with live media specialists you can reach directly on WhatsApp, instead of automated AI bots.",
     vip_assistant_badge: "⚡ LIVE VIP ASSISTANT SERVICE",
