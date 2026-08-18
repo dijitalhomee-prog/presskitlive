@@ -20,10 +20,11 @@
   
   <!-- Lucide Icons (Version Locked) -->
   <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
-  <script src="/i18n.js?v=20260817_1631"></script>
+  <script src="/i18n.js?v=20260818_2141"></script>
+  <script src="/app.js?v=20260818_2141"></script>
 
   <!-- CSS -->
-  <link rel="stylesheet" href="/style.css?v=20260818_1935">
+  <link rel="stylesheet" href="/style.css?v=20260818_2141">
   <style>
     .landing-body {
       background-color: #060606;
@@ -102,51 +103,71 @@
     }
     
     .features-section {
-      max-width: 1240px;
+      max-width: 1280px;
       margin: 80px auto;
       padding: 0 20px;
     }
     .features-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 28px;
     }
     .feature-card {
-      background: var(--bg-surface);
-      border: 1px solid var(--border-subtle);
+      background: linear-gradient(145deg, rgba(24, 24, 27, 0.85) 0%, rgba(18, 18, 20, 0.95) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
       border-radius: var(--radius-lg);
-      padding: 36px;
-      transition: var(--transition-normal);
+      padding: 32px 28px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(29, 185, 84, 0.4), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
     }
     .feature-card:hover {
-      border-color: var(--border-glass);
-      transform: translateY(-4px);
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.6);
+      border-color: rgba(29, 185, 84, 0.35);
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7), 0 0 25px rgba(29, 185, 84, 0.12);
+    }
+    .feature-card:hover::before {
+      opacity: 1;
     }
     .feature-icon-box {
-      width: 56px;
-      height: 56px;
-      border-radius: 16px;
-      background: rgba(29, 185, 84, 0.12);
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: radial-gradient(circle, rgba(29, 185, 84, 0.2) 0%, rgba(29, 185, 84, 0.05) 100%);
+      border: 1px solid rgba(29, 185, 84, 0.28);
       color: var(--primary);
       display: flex;
       align-items: center;
       justify-content: center;
       margin-bottom: 20px;
+      flex-shrink: 0;
     }
     .feature-card h3 {
       font-family: var(--font-display);
-      font-size: 22px;
+      font-size: 19px;
       font-weight: 800;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       color: #fff;
+      line-height: 1.3;
     }
     .feature-card p {
-      font-size: 15px;
+      font-size: 14px;
       color: var(--text-muted);
       line-height: 1.6;
+      margin: 0;
     }
 
     .pricing-section {
@@ -403,13 +424,13 @@
     </div>
   </section>
 
-  <!-- REFINED 4-CARD FEATURES SECTION -->
+  <!-- REFINED 6-CARD FEATURES SECTION -->
   <section class="features-section">
     <div class="features-grid">
       
       <div class="feature-card">
         <div class="feature-icon-box">
-          <i data-lucide="folder-lock" style="width:28px; height:28px;"></i>
+          <i data-lucide="folder-lock" style="width:26px; height:26px;"></i>
         </div>
         <h3 data-i18n="feat_1_title">Klasör Oluşturma & Kilit Sistemi</h3>
         <p data-i18n="feat_1_desc">Konser, lansman veya dizi/film projelerine özel sınırsız fotoğraf klasörü açın. Yetkisiz indirmeyi engellemek için tek tıkla şifreleyin.</p>
@@ -417,7 +438,7 @@
 
       <div class="feature-card">
         <div class="feature-icon-box">
-          <i data-lucide="archive" style="width:28px; height:28px;"></i>
+          <i data-lucide="archive" style="width:26px; height:26px;"></i>
         </div>
         <h3 data-i18n="feat_2_title">300 DPI Headshot & Baskı Kalitesi</h3>
         <p data-i18n="feat_2_desc">Görselleriniz (baskı afişleri ve oyuncu headshot portreleri) hiçbir sıkıştırmaya uğramadan tam çözünürlüğünde saklanır.</p>
@@ -425,7 +446,7 @@
 
       <div class="feature-card">
         <div class="feature-icon-box">
-          <i data-lucide="layers" style="width:28px; height:28px;"></i>
+          <i data-lucide="layers" style="width:26px; height:26px;"></i>
         </div>
         <h3 data-i18n="feat_3_title">Logo, Tipografi & Biyografi Deposu</h3>
         <p data-i18n="feat_3_desc">Mekan, yapımcı ve cast direktörlerinin kullanabileceği şeffaf PNG vektörler, tipografi, özgeçmiş ve basın bültenleri hazır sunulur.</p>
@@ -433,7 +454,7 @@
 
       <div class="feature-card">
         <div class="feature-icon-box">
-          <i data-lucide="user-check" style="width:28px; height:28px;"></i>
+          <i data-lucide="user-check" style="width:26px; height:26px;"></i>
         </div>
         <h3 data-i18n="feat_4_title">Doğrudan Temsilci & WhatsApp İletişimi</h3>
         <p data-i18n="feat_4_desc">Sitede doğrudan ajansın veya temsilcinin canlı iletişim rozeti yer alır. Yapımcılar ve organizatörler doğrudan WhatsApp'tan ulaşabilir.</p>
@@ -441,10 +462,18 @@
 
       <div class="feature-card">
         <div class="feature-icon-box">
-          <i data-lucide="calendar" style="width:28px; height:28px;"></i>
+          <i data-lucide="calendar" style="width:26px; height:26px;"></i>
         </div>
         <h3 data-i18n="feat_5_title">Canlı Müsaitlik & Portföy Takvimi</h3>
         <p data-i18n="feat_5_desc">Temsil ettiğiniz isimlerin müsaitlik durumunu (Müsait, Dolu, Opsiyonlu) takvimde yönetin. Presskit linkinize giren organizatörler ve cast direktörleri takvimi anında incelesin.</p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon-box">
+          <i data-lucide="zap" style="width:26px; height:26px;"></i>
+        </div>
+        <h3 data-i18n="feat_6_title">Özel Slug & 7/24 Kesintisiz Yayın</h3>
+        <p data-i18n="feat_6_desc">Temsil ettiğiniz tüm isimler için markanıza özel alan adı (slug) ile 7/24 kesintisiz, indirme kotasına veya son kullanım süresine takılmayan yayın yapın.</p>
       </div>
 
     </div>

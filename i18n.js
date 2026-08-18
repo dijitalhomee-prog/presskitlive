@@ -49,6 +49,8 @@ const i18nTranslations = {
     feat_4_desc: "Sitede doğrudan ajansın veya temsilcinin canlı iletişim rozeti yer alır. Yapımcılar ve organizatörler doğrudan WhatsApp'tan ulaşabilir.",
     feat_5_title: "Canlı Müsaitlik & Portföy Takvimi",
     feat_5_desc: "Temsil ettiğiniz isimlerin müsaitlik durumunu (Müsait, Dolu, Opsiyonlu) takvimde yönetin. Presskit linkinize giren organizatörler ve cast direktörleri takvimi anında incelesin.",
+    feat_6_title: "Özel Slug & 7/24 Kesintisiz Yayın",
+    feat_6_desc: "Temsil ettiğiniz tüm isimler için markanıza özel alan adı (slug) ile 7/24 kesintisiz, indirme kotasına veya son kullanım süresine takılmayan yayın yapın.",
     plan_feat_calendar: "Canlı Müsaitlik & Portföy Takvimi",
 
     // Pricing Section
@@ -263,6 +265,8 @@ const i18nTranslations = {
     feat_4_desc: "Featuring live contact badges for the agency or representative. Bookers and promoters can reach out directly via WhatsApp.",
     feat_5_title: "Live Availability & Portfolio Calendar",
     feat_5_desc: "Manage schedule availability (Available, Booked, Optioned) for your roster. Promoters and casting directors can view live availability directly on your presskit link.",
+    feat_6_title: "Custom Slug & 24/7 Permanent Hosting",
+    feat_6_desc: "Publish 24/7 dedicated presskits with custom domain slugs for your roster, free from expiration limits or download quotas.",
     plan_feat_calendar: "Live Availability & Roster Calendar",
 
     // Pricing Section
