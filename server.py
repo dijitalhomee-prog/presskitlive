@@ -1093,11 +1093,15 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
         if path == "/api/artist/availability/toggle":
             artist_id = req_body.get("artistId", "").strip()
             date_str = req_body.get("date", "").strip()
+            dates_list = req_body.get("dates", [])
             status_val = req_body.get("status", "").strip().lower()
             title_val = req_body.get("title", "").strip()
 
-            if not artist_id or not date_str:
-                self.send_error_json(400, "artistId ve date alanları zorunludur.")
+            if not dates_list and date_str:
+                dates_list = [date_str]
+
+            if not artist_id or not dates_list:
+                self.send_error_json(400, "artistId ve date/dates alanları zorunludur.")
                 return
 
             artist = db.get_artist_by_id(artist_id)
@@ -1105,12 +1109,16 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error_json(403, "Bu sanatçının takvimini güncelleme yetkiniz yoktur.")
                 return
 
-            res = db.set_artist_availability_date(artist["id"], date_str, status_val, title_val)
+            results = []
+            for d in dates_list:
+                res = db.set_artist_availability_date(artist["id"], d, status_val, title_val)
+                results.append(res)
+
             all_avail = db.get_artist_availability(artist["id"])
             self.send_json(200, {
                 "status": "success",
-                "message": "Takvim tarihi güncellendi.",
-                "result": res,
+                "message": f"{len(dates_list)} tarih güncellendi.",
+                "results": results,
                 "availability": all_avail
             })
             return

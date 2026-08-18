@@ -76,6 +76,27 @@ class TestAvailabilityCalendar(unittest.TestCase):
         self.assertEqual(matched[0]["status"], "booked")
         self.assertEqual(matched[0]["title"], "Harbiye Open Air Concert")
 
+    def test_02b_multi_date_availability_range(self):
+        """Test drag-to-select range setting multiple dates at once."""
+        dates = ["2026-09-18", "2026-09-19", "2026-09-20"]
+        res = self.session1.post(f"{BASE_URL}/api/artist/availability/toggle", json={
+            "artistId": self.artist1["id"],
+            "dates": dates,
+            "status": "option",
+            "title": "Turne Opsiyonu"
+        })
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data["status"], "success")
+
+        res_get = self.session1.get(f"{BASE_URL}/api/artist/availability?artistId={self.artist1['id']}")
+        avail = res_get.json()["availability"]
+        matched = [a for a in avail if a["date"] in dates]
+        self.assertEqual(len(matched), 3)
+        for m in matched:
+            self.assertEqual(m["status"], "option")
+            self.assertEqual(m["title"], "Turne Opsiyonu")
+
     def test_03_unauthorized_update_blocked(self):
         """Test that manager 2 cannot modify manager 1's artist availability."""
         res = self.session2.post(f"{BASE_URL}/api/artist/availability/toggle", json={
