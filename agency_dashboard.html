@@ -501,10 +501,10 @@
             <div class="form-group" style="margin-bottom: 12px;">
               <label style="font-size: 11px; font-weight: 700; color: var(--text-subdued);">Müsaitlik Durumu</label>
               <select id="calStatusInput" style="background: var(--bg-base); border: 1px solid var(--border-subtle); color: #fff; padding: 10px; border-radius: 6px; font-size: 13px; width: 100%; outline: none;">
-                <option value="available">🟢 Müsait</option>
-                <option value="booked">🔴 Dolu / Meşgul</option>
-                <option value="option">🟡 Opsiyonlu</option>
-                <option value="clear">⚪ Durumu Temizle (Sil)</option>
+                <option value="available" data-i18n="cal_available">Müsait</option>
+                <option value="booked" data-i18n="cal_booked">Dolu / Meşgul</option>
+                <option value="option" data-i18n="cal_option">Opsiyonlu</option>
+                <option value="clear" data-i18n="cal_clear">Durumu Temizle (Sil)</option>
               </select>
             </div>
 
@@ -632,7 +632,7 @@
           <select id="editArtistPerformType" required style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); color: #fff; padding: 12px; border-radius: var(--radius-md); width: 100%; font-size: 14px;">
             <option value="" disabled selected>Sanat Dalı ve Uzmanlık Seçiniz...</option>
             
-            <optgroup label="🎵 Müzik & Sahne">
+            <optgroup label="Müzik & Sahne">
               <option value="DJ / Elektronik">DJ / Elektronik Müzik</option>
               <option value="Live Band / Orkestra">Live Band / Orkestra</option>
               <option value="Müzik Prodüktörü">Müzik Prodüktörü / Beatmaker</option>
@@ -641,7 +641,7 @@
               <option value="Şarkı Sözü Yazarı">Besteci / Şarkı Sözü Yazarı</option>
             </optgroup>
 
-            <optgroup label="🎭 Sahne Sanatları & Oyunculuk">
+            <optgroup label="Sahne Sanatları & Oyunculuk">
               <option value="Oyuncu">Oyuncu (Actor / Actress)</option>
               <option value="Seslendirme Sanatçısı">Seslendirme Sanatçısı (Voiceover)</option>
               <option value="Dansçı">Dansçı (Dancer / Choreographer)</option>
@@ -651,7 +651,7 @@
               <option value="Spiker / Sunucu">Spiker / Sunucu</option>
             </optgroup>
 
-            <optgroup label="🎬 Post Production & Dijital Sanatlar">
+            <optgroup label="Post Production & Dijital Sanatlar">
               <option value="Post Production Coordinator">Post Production Coordinator</option>
               <option value="Colorist">Colorist (Renk Düzenleme)</option>
               <option value="Visual Effects (VFX) Artist">Visual Effects (VFX) Artist</option>
@@ -777,7 +777,7 @@
           <select id="newArtistPerformType" required style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); color: #fff; padding: 12px; border-radius: var(--radius-md); width: 100%; font-size: 14px;">
             <option value="" disabled selected>Sanat Dalı ve Uzmanlık Seçiniz...</option>
             
-            <optgroup label="🎵 Müzik & Sahne">
+            <optgroup label="Müzik & Sahne">
               <option value="DJ / Elektronik">DJ / Elektronik Müzik</option>
               <option value="Live Band / Orkestra">Live Band / Orkestra</option>
               <option value="Müzik Prodüktörü">Müzik Prodüktörü / Beatmaker</option>
@@ -786,7 +786,7 @@
               <option value="Şarkı Sözü Yazarı">Besteci / Şarkı Sözü Yazarı</option>
             </optgroup>
 
-            <optgroup label="🎭 Sahne Sanatları & Oyunculuk">
+            <optgroup label="Sahne Sanatları & Oyunculuk">
               <option value="Oyuncu">Oyuncu (Actor / Actress)</option>
               <option value="Seslendirme Sanatçısı">Seslendirme Sanatçısı (Voiceover)</option>
               <option value="Dansçı">Dansçı (Dancer / Choreographer)</option>
@@ -796,7 +796,7 @@
               <option value="Spiker / Sunucu">Spiker / Sunucu</option>
             </optgroup>
 
-            <optgroup label="🎬 Post Production & Dijital Sanatlar">
+            <optgroup label="Post Production & Dijital Sanatlar">
               <option value="Post Production Coordinator">Post Production Coordinator</option>
               <option value="Colorist">Colorist (Renk Düzenleme)</option>
               <option value="Visual Effects (VFX) Artist">Visual Effects (VFX) Artist</option>
@@ -919,14 +919,14 @@
       const elPriceSub = document.getElementById('statPlanPriceSub');
       if (elPriceSub) {
         if (subStatus === 'complimentary') {
-          elPriceSub.innerHTML = `🎁 Sınırsız VIP Lisansı (Hediye Üyelik)`;
+          elPriceSub.innerHTML = `Sınırsız VIP Lisansı (Hediye Üyelik)`;
         } else if (subStatus === 'trial_active') {
           const daysLeft = currentManager.trial_days_left !== undefined ? currentManager.trial_days_left : 7;
-          elPriceSub.innerHTML = `⚡ 7 Gün Ücretsiz Deneme (${daysLeft} Gün Kaldı)`;
+          elPriceSub.innerHTML = `7 Gün Ücretsiz Deneme (${daysLeft} Gün Kaldı)`;
         } else if (subStatus === 'trial_expired') {
-          elPriceSub.innerHTML = `⚠️ Deneme Süresi Sona Erdi (Paket Seçiniz)`;
+          elPriceSub.innerHTML = `Deneme Süresi Sona Erdi (Paket Seçiniz)`;
         } else if (subStatus === 'payment_failed') {
-          elPriceSub.innerHTML = `⚠️ Ödeme Başarısız (${basePrice})`;
+          elPriceSub.innerHTML = `Ödeme Başarısız (${basePrice})`;
         } else if (subStatus === 'cancelling') {
           elPriceSub.innerHTML = `<img src="/assets/images/iyzico/iyzico_ile_ode_white.svg" alt="iyzico" style="height:14px; vertical-align:middle; margin-right:4px;"> ${basePrice} (İptal Aşamasında)`;
         } else {

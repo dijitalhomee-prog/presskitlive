@@ -197,7 +197,7 @@ async function checkTrialStatus() {
           <div style="display:flex; align-items:center; gap:12px;">
             <i data-lucide="alert-triangle" style="color:#ef4444; width:26px; height:26px; flex-shrink:0;"></i>
             <div>
-              <strong style="color:#fff; font-size:15px; display:block;">⚠️ 7 Günlük Ücretsiz Deneme Süreniz Sona Ermiştir</strong>
+              <strong style="color:#fff; font-size:15px; display:block;">7 Günlük Ücretsiz Deneme Süreniz Sona Ermiştir</strong>
               <span style="color:var(--text-subdued); font-size:13px;">Hesabınız otomatik olarak pasif duruma düşmüştür. Portallarınızı canlı tutmak için lütfen bir abonelik paketi seçiniz.</span>
             </div>
           </div>
@@ -996,7 +996,7 @@ window.copyArtistUrlToClipboard = async function(e) {
   // Feedback Notification
   if (copied) {
     if (window.showToast) {
-      showToast("Sanatçı Presskit Linki Panoya Kopyalandı! 📋", "success");
+      showToast("Sanatçı Presskit Linki Panoya Kopyalandı!", "success");
     } else {
       alert("Sanatçı Presskit Linki Kopyalandı:\n" + shareableUrl);
     }
@@ -1171,12 +1171,12 @@ function setupPhotoModals() {
         selectedBatchFiles = validFiles;
         const titleInput = document.getElementById('inputPhotoTitle');
         if (validFiles.length === 1) {
-          if (displayLabel) displayLabel.innerText = `📄 ${validFiles[0].name} (${(validFiles[0].size / (1024 * 1024)).toFixed(1)} MB)`;
+          if (displayLabel) displayLabel.innerText = `${validFiles[0].name} (${(validFiles[0].size / (1024 * 1024)).toFixed(1)} MB)`;
           if (titleInput && (!titleInput.value || titleInput.value === 'Fotoğraf Paketi')) {
             titleInput.value = validFiles[0].name.split('.')[0].replace(/[-_]/g, ' ');
           }
         } else {
-          if (displayLabel) displayLabel.innerText = `📷 ${validFiles.length} Adet Fotoğraf Seçildi`;
+          if (displayLabel) displayLabel.innerText = `${validFiles.length} Adet Fotoğraf Seçildi`;
           if (titleInput && !titleInput.value) {
             titleInput.value = `Görsel Paketi (${validFiles.length} adet)`;
           }
@@ -1552,7 +1552,7 @@ function updateCalendarSelectionUI() {
     labelEl.textContent = 'Tarih Seçiniz';
   } else if (count === 1) {
     const parts = calState.selectedDateStrs[0].split('-');
-    labelEl.textContent = `📅 ${parts[2]}/${parts[1]}/${parts[0]}`;
+    labelEl.textContent = `${parts[2]}/${parts[1]}/${parts[0]}`;
     
     const existing = calState.availabilityMap[calState.selectedDateStrs[0]];
     if (existing) {
@@ -1566,7 +1566,7 @@ function updateCalendarSelectionUI() {
     const sorted = [...calState.selectedDateStrs].sort();
     const firstParts = sorted[0].split('-');
     const lastParts = sorted[sorted.length - 1].split('-');
-    labelEl.textContent = `📅 ${count} Tarih Seçildi (${firstParts[2]}/${firstParts[1]} - ${lastParts[2]}/${lastParts[1]})`;
+    labelEl.textContent = `${count} Tarih Seçildi (${firstParts[2]}/${firstParts[1]} - ${lastParts[2]}/${lastParts[1]})`;
   }
 }
 
@@ -1812,13 +1812,13 @@ function selectPublicCalendarDate(dateStr) {
   const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
 
   if (!item) {
-    infoText.innerHTML = `📅 <strong>${formattedDate}</strong>: Bilgi girilmedi (Varsayılan Müsait).`;
+    infoText.innerHTML = `<strong>${formattedDate}</strong>: Bilgi girilmedi (Varsayılan Müsait).`;
   } else {
-    let statusLabel = '🟢 Müsait';
-    if (item.status === 'booked') statusLabel = '🔴 Dolu / Meşgul';
-    else if (item.status === 'option') statusLabel = '🟡 Opsiyonlu';
+    let statusLabel = 'Müsait';
+    if (item.status === 'booked') statusLabel = 'Dolu / Meşgul';
+    else if (item.status === 'option') statusLabel = 'Opsiyonlu';
 
     const noteText = item.title ? ` — <em>${escapeHTML(item.title)}</em>` : '';
-    infoText.innerHTML = `📅 <strong>${formattedDate}</strong>: ${statusLabel}${noteText}`;
+    infoText.innerHTML = `<strong>${formattedDate}</strong>: ${statusLabel}${noteText}`;
   }
 }

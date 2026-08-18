@@ -7,7 +7,7 @@ const i18nTranslations = {
   tr: {
     // Header & Brand
     nav_official_portal: "Resmi Medya Portalı",
-    nav_notice_bar: "✨ PressKitLive™ Medya Merkezi: Tüm görseller ve dokümanlar orijinal çözünürlükte doğrudan indirilebilir.",
+    nav_notice_bar: "PressKitLive™ Medya Merkezi: Tüm görseller ve dokümanlar orijinal çözünürlükte doğrudan indirilebilir.",
     nav_agency_login: "Ajans Girişi",
     nav_dashboard: "Yönetici Paneli",
     nav_back_to_artists: "← Tüm Sanatçılara Dön",
@@ -56,7 +56,7 @@ const i18nTranslations = {
     // Pricing Section
     pricing_title: "Ajansınız İçin En Uygun Planı Seçin",
     pricing_subtitle: "Temsil ettiğiniz profil sayısına göre paketinizi belirleyin, 300 DPI kalıcı medya portalınıza hemen sahip olun.",
-    trial_banner_tag: "⚡ Kredi Kartı Gerekmez • 7 Gün Ücretsiz",
+    trial_banner_tag: "Kredi Kartı Gerekmez • 7 Gün Ücretsiz",
     trial_banner_title: "7 Gün Boyunca Sınırsız & Ücretsiz Deneyin",
     trial_banner_desc: "1 dakikada ücretsiz kayıt olun, 7 gün boyunca tüm presskit ve 300 DPI medya özelliklerini tam yetkiyle test edin. 7 günün sonunda otomatik pasif konuma geçer.",
     trial_banner_btn: "7 Günlük Ücretsiz Denemeyi Başlat",
@@ -81,9 +81,9 @@ const i18nTranslations = {
     plan_feat_zip_download: "Tek Tıkla Tüm ZIP İndirme",
     plan_feat_whatsapp_btn: "Menajer WhatsApp Butonu",
 
-    btn_start_sub: "⏳ Çok Yakında",
-    btn_start_pro: "⏳ Çok Yakında",
-    btn_start_enterprise: "⏳ Çok Yakında",
+    btn_start_sub: "Çok Yakında",
+    btn_start_pro: "Çok Yakında",
+    btn_start_enterprise: "Çok Yakında",
 
     // Enterprise Banner
     enterprise_banner_badge: "50+ PROFİL & KURUMSAL AJANSLAR İÇİN",
@@ -158,7 +158,7 @@ const i18nTranslations = {
     // VIP Human Media Assistant
     btn_vip_assistant: "VIP Asistanıma WhatsApp'tan Görsel Gönder",
     btn_landing_assistant_cta: "Üye Olun & Asistan Desteğini Kullanın",
-    vip_assistant_badge: "⚡ VIP CANLI ASİSTAN HİZMETİ",
+    vip_assistant_badge: "VIP CANLI ASİSTAN HİZMETİ",
     vip_assistant_title: "7/24 Canlı Medya Asistanı",
     vip_assistant_desc: "Yapay zeka botları yerine doğrudan WhatsApp üzerinden iletişim kurabileceğiniz canlı medya uzmanlarımızla profiliniz her an güncel kalsın.",
     vip_feat_1: "WhatsApp / Drive Linki Üzerinden Anında Görsel Aktarımı",
@@ -229,7 +229,7 @@ const i18nTranslations = {
   en: {
     // Header & Brand
     nav_official_portal: "Official Media Portal",
-    nav_notice_bar: "✨ PressKitLive™ Media Center: Download all press assets and high-res files directly.",
+    nav_notice_bar: "PressKitLive™ Media Center: Download all press assets and high-res files directly.",
     nav_agency_login: "Agency Login",
     nav_dashboard: "Agency Dashboard",
     nav_back_to_artists: "← All Artists",
@@ -278,7 +278,7 @@ const i18nTranslations = {
     // Pricing Section
     pricing_title: "Choose the Perfect Plan for Your Agency",
     pricing_subtitle: "Select the plan based on the number of profiles you represent, and get your 300 DPI permanent media portal instantly.",
-    trial_banner_tag: "⚡ No Credit Card Required • 7 Days Free",
+    trial_banner_tag: "No Credit Card Required • 7 Days Free",
     trial_banner_title: "Try Free & Unlimited for 7 Days",
     trial_banner_desc: "Sign up in 1 minute and test all presskit features and 300 DPI storage with full access for 7 days. Automatically pauses after 7 days.",
     trial_banner_btn: "Start 7-Day Free Trial",
@@ -303,9 +303,9 @@ const i18nTranslations = {
     plan_feat_zip_download: "One-Click Full ZIP Download",
     plan_feat_whatsapp_btn: "Manager WhatsApp Direct Button",
 
-    btn_start_sub: "⏳ Coming Soon",
-    btn_start_pro: "⏳ Coming Soon",
-    btn_start_enterprise: "⏳ Coming Soon",
+    btn_start_sub: "Coming Soon",
+    btn_start_pro: "Coming Soon",
+    btn_start_enterprise: "Coming Soon",
 
     // Enterprise Banner
     enterprise_banner_badge: "FOR 50+ PROFILES & ENTERPRISE AGENCIES",
@@ -383,7 +383,7 @@ const i18nTranslations = {
     btn_landing_assistant_cta: "Sign Up & Access Assistant Support",
     vip_assistant_title: "24/7 Live Media Assistant",
     vip_assistant_desc: "Keep your profile up-to-date at all times with live media specialists you can reach directly on WhatsApp, instead of automated AI bots.",
-    vip_assistant_badge: "⚡ LIVE VIP ASSISTANT SERVICE",
+    vip_assistant_badge: "LIVE VIP ASSISTANT SERVICE",
     vip_feat_1: "Instant Image Transfer via WhatsApp / Drive Links",
     vip_feat_2: "300 DPI Print Quality & Encrypted Folder Management",
     vip_feat_3: "24/7 Direct Assistant Hotline During Concerts & Tours",
