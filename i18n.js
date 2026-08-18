@@ -21,6 +21,7 @@ const i18nTranslations = {
     nav_sidebar_menu: "PRESSKIT MENÜSÜ",
     nav_overview: "Genel Bakış",
     nav_photos_folders: "Klasörler & Görseller",
+    nav_calendar: "Müsaitlik & Takvim",
     nav_logos_brand: "Logo & Marka Materyalleri",
     nav_digital_links: "Dijital Platform Bağlantıları",
     nav_contact_rep: "Temsilci & İletişim",
@@ -159,6 +160,17 @@ const i18nTranslations = {
     vip_card_title: "7/24 Özel Medya Desteği",
     vip_card_desc: "Tüm paketlerimizde ve kullanıcılarımız için canlı medya uzmanı asistan desteği standart olarak sunulmaktadır.",
 
+    // Calendar & Availability
+    cal_title: "Takvim & Müsaitlik Durumu",
+    cal_subtitle: "Portföyünüzdeki yeteneklerin ajanda, konser ve çekim tarihlerini pratik bir şekilde yönetin.",
+    cal_select_artist: "Sanatçı / Yetenek Seçin:",
+    cal_available: "Müsait",
+    cal_booked: "Dolu / Meşgul",
+    cal_option: "Opsiyonlu",
+    cal_clear: "Temizle",
+    cal_event_title: "Etkinlik / Not:",
+    cal_save: "Kaydet & Güncelle",
+
     // Tabs & Badges
     tab_all_photos: "Tüm Görseller",
     badge_folder_open: "Açık",
@@ -220,6 +232,7 @@ const i18nTranslations = {
     nav_sidebar_menu: "PRESSKIT MENU",
     nav_overview: "Overview",
     nav_photos_folders: "Folders & Media",
+    nav_calendar: "Availability & Calendar",
     nav_logos_brand: "Logos & Brand Assets",
     nav_digital_links: "Digital Platform Links",
     nav_contact_rep: "Management & Contact",
@@ -358,6 +371,17 @@ const i18nTranslations = {
     vip_feature_item: "✓ VIP Media Assistant Support (24/7 WhatsApp)",
     vip_card_title: "24/7 Dedicated Media Support",
     vip_card_desc: "Live media specialist assistant support is included as standard across all plans and users.",
+
+    // Calendar & Availability
+    cal_title: "Calendar & Availability Status",
+    cal_subtitle: "Manage schedule, show, and shoot availability dates for your represented roster.",
+    cal_select_artist: "Select Artist / Talent:",
+    cal_available: "Available",
+    cal_booked: "Booked / Busy",
+    cal_option: "Optioned",
+    cal_clear: "Clear Date",
+    cal_event_title: "Event / Note:",
+    cal_save: "Save & Update",
 
     // Tabs & Badges
     tab_all_photos: "All Photos",

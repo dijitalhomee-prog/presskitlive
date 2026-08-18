@@ -219,6 +219,18 @@ def init_db():
         );
         """)
 
+        # 7. Artist Availability Table
+        cursor.execute("""
+        CREATE TABLE IF NOT EXISTS artist_availability (
+            id TEXT PRIMARY KEY,
+            artist_id TEXT NOT NULL REFERENCES artists(id),
+            date TEXT NOT NULL,
+            status TEXT NOT NULL,
+            title TEXT,
+            created_at TEXT NOT NULL
+        );
+        """)
+
         # 7. Password Reset Tokens Table (Section B.1)
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS password_reset_tokens (
@@ -720,6 +732,50 @@ def create_photo(artist_id, folder_id, title, url, resolution="3808 x 5712 px (3
 def delete_photo(photo_id):
     with get_connection() as conn:
         conn.execute("DELETE FROM photos WHERE id = ?", (photo_id,))
+        conn.commit()
+    return True
+
+# ARTIST AVAILABILITY MANAGEMENT
+def get_artist_availability(artist_id):
+    with get_connection() as conn:
+        rows = conn.execute("SELECT * FROM artist_availability WHERE artist_id = ? ORDER BY date ASC", (artist_id,)).fetchall()
+        avail = []
+        for r in rows:
+            d = dict(r)
+            d["artistId"] = d["artist_id"]
+            d["createdAt"] = d["created_at"]
+            avail.append(d)
+        return avail
+
+def set_artist_availability_date(artist_id, date_str, status, title=""):
+    created_at = time.strftime("%Y-%m-%d %H:%M:%S")
+    with get_connection() as conn:
+        row = conn.execute("SELECT id FROM artist_availability WHERE artist_id = ? AND date = ?", (artist_id, date_str)).fetchone()
+        if row:
+            if status == "clear":
+                conn.execute("DELETE FROM artist_availability WHERE id = ?", (row["id"],))
+                conn.commit()
+                return {"status": "deleted", "date": date_str}
+            else:
+                conn.execute("""
+                    UPDATE artist_availability SET status = ?, title = ? WHERE id = ?
+                """, (status, title, row["id"]))
+                conn.commit()
+                return {"id": row["id"], "artistId": artist_id, "date": date_str, "status": status, "title": title}
+        else:
+            if status == "clear":
+                return {"status": "deleted", "date": date_str}
+            avail_id = f"avail-{uuid.uuid4().hex[:8]}"
+            conn.execute("""
+                INSERT INTO artist_availability (id, artist_id, date, status, title, created_at)
+                VALUES (?, ?, ?, ?, ?, ?)
+            """, (avail_id, artist_id, date_str, status, title, created_at))
+            conn.commit()
+            return {"id": avail_id, "artistId": artist_id, "date": date_str, "status": status, "title": title}
+
+def delete_artist_availability_date(artist_id, date_str):
+    with get_connection() as conn:
+        conn.execute("DELETE FROM artist_availability WHERE artist_id = ? AND date = ?", (artist_id, date_str))
         conn.commit()
     return True
 

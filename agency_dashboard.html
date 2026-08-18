@@ -437,6 +437,92 @@
       </div>
     </section>
 
+    <!-- PORTFOLIO AVAILABILITY & CALENDAR SECTION -->
+    <section style="margin-top: 50px;" id="calendarSection">
+      <div class="section-header" style="margin-bottom: 24px;">
+        <div>
+          <h2 class="section-title"><i data-lucide="calendar"></i> <span data-i18n="cal_title">Takvim & Müsaitlik Durumu</span></h2>
+          <p class="section-subtitle" data-i18n="cal_subtitle">Portföyünüzdeki yeteneklerin ajanda, konser ve çekim tarihlerini pratik bir şekilde yönetin.</p>
+        </div>
+      </div>
+
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+        
+        <!-- TOP TOOLBAR: ARTIST SELECTOR & STATUS LEGEND -->
+        <div style="display: flex; flex-wrap: wrap; gap: 20px; align-items: center; justify-content: space-between; margin-bottom: 24px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 20px;">
+          <div style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 260px;">
+            <label style="font-size: 13px; font-weight: 700; color: #fff; white-space: nowrap;" data-i18n="cal_select_artist">Sanatçı / Yetenek Seçin:</label>
+            <select id="calArtistSelect" onchange="loadCalendarForSelectedArtist()" style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); color: #fff; padding: 10px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 700; flex: 1; outline: none;">
+              <option value="" disabled selected>Yükleniyor...</option>
+            </select>
+          </div>
+
+          <!-- STATUS LEGEND -->
+          <div style="display: flex; align-items: center; gap: 16px; font-size: 12px; font-weight: 700;">
+            <div style="display: flex; align-items: center; gap: 6px; color: #22C55E;">
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #22C55E; display: inline-block;"></span>
+              <span data-i18n="cal_available">Müsait</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; color: #EF4444;">
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #EF4444; display: inline-block;"></span>
+              <span data-i18n="cal_booked">Dolu / Meşgul</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 6px; color: #EAB308;">
+              <span style="width: 10px; height: 10px; border-radius: 50%; background: #EAB308; display: inline-block;"></span>
+              <span data-i18n="cal_option">Opsiyonlu</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- COMPACT CALENDAR WIDGET & EDIT SIDE PANEL -->
+        <div style="display: grid; grid-template-columns: 1fr 300px; gap: 24px; align-items: start;" class="cal-widget-grid">
+          
+          <!-- MINI CALENDAR GRID -->
+          <div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px;">
+              <h3 id="calCurrentMonthLabel" style="font-family: var(--font-display); font-size: 18px; font-weight: 800; color: #fff; margin: 0;">Ağustos 2026</h3>
+              <div style="display: flex; gap: 6px;">
+                <button type="button" class="btn btn-outline btn-sm" onclick="changeCalendarMonth(-1)"><i data-lucide="chevron-left"></i></button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="changeCalendarMonth(1)"><i data-lucide="chevron-right"></i></button>
+              </div>
+            </div>
+
+            <!-- WEEKDAY HEADERS & DAYS GRID -->
+            <div id="calGridContainer" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center;">
+              <!-- Dynamically populated by JS -->
+            </div>
+          </div>
+
+          <!-- SELECTED DATE QUICK EDIT PANEL -->
+          <div style="background: var(--bg-surface-elevated); border: 1px solid var(--border-subtle); border-radius: 12px; padding: 20px;" id="calEditPanel">
+            <h4 style="font-family: var(--font-display); font-size: 15px; font-weight: 800; color: #fff; margin: 0 0 12px 0;" id="calSelectedDateLabel">Tarih Seçiniz</h4>
+            <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 16px;">Takvimden bir güne tıklayarak durumunu belirleyin veya not ekleyin.</p>
+            
+            <div class="form-group" style="margin-bottom: 12px;">
+              <label style="font-size: 11px; font-weight: 700; color: var(--text-subdued);">Müsaitlik Durumu</label>
+              <select id="calStatusInput" style="background: var(--bg-base); border: 1px solid var(--border-subtle); color: #fff; padding: 10px; border-radius: 6px; font-size: 13px; width: 100%; outline: none;">
+                <option value="available">🟢 Müsait</option>
+                <option value="booked">🔴 Dolu / Meşgul</option>
+                <option value="option">🟡 Opsiyonlu</option>
+                <option value="clear">⚪ Durumu Temizle (Sil)</option>
+              </select>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label style="font-size: 11px; font-weight: 700; color: var(--text-subdued);" data-i18n="cal_event_title">Etkinlik / Not:</label>
+              <input type="text" id="calNoteInput" placeholder="Örn: Harbiye Konseri veya Set Çekimi" style="background: var(--bg-base); border: 1px solid var(--border-subtle); color: #fff; padding: 10px; border-radius: 6px; font-size: 13px; width: 100%; outline: none;">
+            </div>
+
+            <button type="button" class="btn btn-spotify btn-block btn-small" onclick="saveSelectedDateAvailability()" data-i18n="cal_save">
+              <i data-lucide="check"></i> Kaydet & Güncelle
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
     <!-- SUBSCRIPTION MANAGEMENT SECTION (SECTION D.2) -->
     <section style="margin-top: 50px;">
       <div class="section-header" style="margin-bottom: 24px;">

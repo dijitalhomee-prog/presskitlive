@@ -139,6 +139,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   setupActions();
   setupFolderModals();
   setupPhotoModals();
+  if (document.getElementById('calArtistSelect')) {
+    initDashboardCalendar();
+  }
 });
 
 async function checkImpersonationStatus() {
@@ -1359,5 +1362,217 @@ window.addEventListener('languageChanged', (e) => {
     if (typeof renderFoldersBar === 'function') renderFoldersBar();
     if (typeof renderGalleryPhotos === 'function') renderGalleryPhotos();
     if (typeof renderSidebarPortfolio === 'function') renderSidebarPortfolio();
+    if (typeof renderCalendarGrid === 'function') renderCalendarGrid();
   }
 });
+
+/* ==========================================================================
+   PORTFOLIO AVAILABILITY & CALENDAR MODULE
+   ========================================================================== */
+let calState = {
+  currentDate: new Date(),
+  selectedArtistId: null,
+  selectedDateStr: null,
+  availabilityMap: {}
+};
+
+async function initDashboardCalendar() {
+  const selectEl = document.getElementById('calArtistSelect');
+  if (!selectEl) return;
+
+  try {
+    const res = await fetch('/api/my-artists');
+    if (res.ok) {
+      const data = await res.json();
+      const artists = data.artists || [];
+      selectEl.innerHTML = '';
+
+      if (artists.length === 0) {
+        selectEl.innerHTML = '<option value="" disabled selected>Portföyde Sanatçı Bulunamadı</option>';
+        return;
+      }
+
+      artists.forEach((a, idx) => {
+        const opt = document.createElement('option');
+        opt.value = a.id;
+        opt.textContent = `${a.name} (${a.genre || 'Sanatçı'})`;
+        if (idx === 0) opt.selected = true;
+        selectEl.appendChild(opt);
+      });
+
+      calState.selectedArtistId = artists[0].id;
+      await loadCalendarForSelectedArtist();
+    }
+  } catch (err) {
+    console.error("Error initializing calendar:", err);
+  }
+}
+
+async function loadCalendarForSelectedArtist() {
+  const selectEl = document.getElementById('calArtistSelect');
+  if (selectEl && selectEl.value) {
+    calState.selectedArtistId = selectEl.value;
+  }
+  if (!calState.selectedArtistId) return;
+
+  try {
+    const res = await fetch(`/api/artist/availability?artistId=${encodeURIComponent(calState.selectedArtistId)}`);
+    if (res.ok) {
+      const data = await res.json();
+      const availList = data.availability || [];
+      calState.availabilityMap = {};
+      availList.forEach(item => {
+        calState.availabilityMap[item.date] = item;
+      });
+      renderCalendarGrid();
+    }
+  } catch (err) {
+    console.error("Error loading availability:", err);
+  }
+}
+
+function changeCalendarMonth(delta) {
+  calState.currentDate.setMonth(calState.currentDate.getMonth() + delta);
+  renderCalendarGrid();
+}
+
+function renderCalendarGrid() {
+  const container = document.getElementById('calGridContainer');
+  const monthLabel = document.getElementById('calCurrentMonthLabel');
+  if (!container || !monthLabel) return;
+
+  const year = calState.currentDate.getFullYear();
+  const month = calState.currentDate.getMonth();
+
+  const monthNamesTr = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
+  const monthNamesEn = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const currentLang = (typeof i18n !== 'undefined' && i18n.currentLang) ? i18n.currentLang : 'tr';
+  const monthNames = currentLang === 'en' ? monthNamesEn : monthNamesTr;
+
+  monthLabel.textContent = `${monthNames[month]} ${year}`;
+
+  const weekHeadersTr = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
+  const weekHeadersEn = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const weekHeaders = currentLang === 'en' ? weekHeadersEn : weekHeadersTr;
+
+  let html = '';
+
+  // Weekday Headers
+  weekHeaders.forEach(day => {
+    html += `<div style="font-size: 11px; font-weight: 800; color: var(--text-subdued); padding: 6px 0; text-transform: uppercase;">${day}</div>`;
+  });
+
+  // Calculate Days in Month & Start Offset
+  const firstDay = new Date(year, month, 1);
+  let startingDay = firstDay.getDay() - 1; // Monday start
+  if (startingDay === -1) startingDay = 6;
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+  // Prev Month Days
+  for (let i = startingDay - 1; i >= 0; i--) {
+    const dayNum = daysInPrevMonth - i;
+    html += `<div class="cal-day-cell other-month"><span class="cal-day-num">${dayNum}</span></div>`;
+  }
+
+  // Current Month Days
+  const todayStr = new Date().toISOString().split('T')[0];
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const monthPadded = String(month + 1).padStart(2, '0');
+    const dayPadded = String(day).padStart(2, '0');
+    const dateStr = `${year}-${monthPadded}-${dayPadded}`;
+
+    const availItem = calState.availabilityMap[dateStr];
+    const isToday = dateStr === todayStr;
+    const isSelected = dateStr === calState.selectedDateStr;
+
+    let statusDotHtml = '';
+    let cellTitle = `${dateStr}`;
+    if (availItem) {
+      statusDotHtml = `<span class="cal-status-dot ${availItem.status}" title="${escapeHTML(availItem.title || availItem.status)}"></span>`;
+      if (availItem.title) cellTitle += ` — ${availItem.title}`;
+    }
+
+    html += `
+      <div class="cal-day-cell ${isSelected ? 'selected' : ''}" onclick="selectCalendarDateCell('${dateStr}')" title="${escapeHTML(cellTitle)}">
+        <span class="cal-day-num" style="${isToday ? 'color:var(--primary); font-weight:900;' : ''}">${day}</span>
+        ${statusDotHtml}
+      </div>
+    `;
+  }
+
+  // Next Month Days Padding
+  const totalCells = startingDay + daysInMonth;
+  const remainingCells = (7 - (totalCells % 7)) % 7;
+  for (let i = 1; i <= remainingCells; i++) {
+    html += `<div class="cal-day-cell other-month"><span class="cal-day-num">${i}</span></div>`;
+  }
+
+  container.innerHTML = html;
+  if (window.lucide) lucide.createIcons();
+}
+
+function selectCalendarDateCell(dateStr) {
+  calState.selectedDateStr = dateStr;
+  renderCalendarGrid();
+
+  const labelEl = document.getElementById('calSelectedDateLabel');
+  const statusInput = document.getElementById('calStatusInput');
+  const noteInput = document.getElementById('calNoteInput');
+
+  if (labelEl) {
+    const parts = dateStr.split('-');
+    labelEl.textContent = `📅 ${parts[2]}/${parts[1]}/${parts[0]}`;
+  }
+
+  const existing = calState.availabilityMap[dateStr];
+  if (existing) {
+    if (statusInput) statusInput.value = existing.status || 'available';
+    if (noteInput) noteInput.value = existing.title || '';
+  } else {
+    if (statusInput) statusInput.value = 'available';
+    if (noteInput) noteInput.value = '';
+  }
+}
+
+async function saveSelectedDateAvailability() {
+  if (!calState.selectedArtistId) {
+    showToast("Lütfen bir sanatçı seçin.", 'error');
+    return;
+  }
+  if (!calState.selectedDateStr) {
+    showToast("Lütfen takvimden bir gün seçin.", 'error');
+    return;
+  }
+
+  const statusInput = document.getElementById('calStatusInput');
+  const noteInput = document.getElementById('calNoteInput');
+
+  const statusVal = statusInput ? statusInput.value : 'available';
+  const noteVal = noteInput ? noteInput.value.trim() : '';
+
+  try {
+    const res = await fetch('/api/artist/availability/toggle', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        artistId: calState.selectedArtistId,
+        date: calState.selectedDateStr,
+        status: statusVal,
+        title: noteVal
+      })
+    });
+
+    const data = await res.json();
+    if (data.status === 'success') {
+      showToast("Tarih müsaitlik durumu kaydedildi.", 'success');
+      await loadCalendarForSelectedArtist();
+    } else {
+      showToast(data.message || "Kaydedilemedi.", 'error');
+    }
+  } catch (err) {
+    showToast("Bir hata oluştu.", 'error');
+  }
+}

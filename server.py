@@ -350,6 +350,16 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             })
             return
 
+        # GET /api/artist/availability
+        if path == "/api/artist/availability":
+            artist_id = query_params.get("artistId", [""])[0]
+            if not artist_id:
+                self.send_error_json(400, "artistId parametresi gereklidir.")
+                return
+            avail = db.get_artist_availability(artist_id)
+            self.send_json(200, {"status": "success", "availability": avail, "artistId": artist_id})
+            return
+
         # GET /api/artist (PUBLIC PRESSKIT ENDPOINT WITH LOCK REDACTION)
         if path in ["/api/artist", "/api/artists"]:
             requested_id = query_params.get("artistId", [query_params.get("id", [""])[0]])[0]
@@ -1077,6 +1087,32 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
 
             db.delete_photo(photo_id)
             self.send_json(200, {"status": "success", "message": "Fotoğraf silindi.", "artist": db.get_artist_by_id(artist["id"])})
+            return
+
+        # POST /api/artist/availability/toggle
+        if path == "/api/artist/availability/toggle":
+            artist_id = req_body.get("artistId", "").strip()
+            date_str = req_body.get("date", "").strip()
+            status_val = req_body.get("status", "").strip().lower()
+            title_val = req_body.get("title", "").strip()
+
+            if not artist_id or not date_str:
+                self.send_error_json(400, "artistId ve date alanları zorunludur.")
+                return
+
+            artist = db.get_artist_by_id(artist_id)
+            if not artist or not self.is_authorized_manager(mgr, artist):
+                self.send_error_json(403, "Bu sanatçının takvimini güncelleme yetkiniz yoktur.")
+                return
+
+            res = db.set_artist_availability_date(artist["id"], date_str, status_val, title_val)
+            all_avail = db.get_artist_availability(artist["id"])
+            self.send_json(200, {
+                "status": "success",
+                "message": "Takvim tarihi güncellendi.",
+                "result": res,
+                "availability": all_avail
+            })
             return
 
         self.send_error_json(404, "Böyle bir API endpoint bulunamadı.")
