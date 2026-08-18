@@ -1126,11 +1126,15 @@ a {
   display: flex;
   flex-direction: column;
   gap: 6px;
+  width: 100%;
+  box-sizing: border-box;
 }
 .form-group label {
   font-size: 12px;
   font-weight: 700;
   color: var(--text-muted);
+  display: block;
+  width: 100%;
 }
 .form-group input, .form-group select {
   background: var(--bg-base);
@@ -1141,6 +1145,9 @@ a {
   font-family: var(--font-sans);
   font-size: 14px;
   outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  display: block;
 }
 .form-group input:focus, .form-group select:focus {
   border-color: var(--primary);
