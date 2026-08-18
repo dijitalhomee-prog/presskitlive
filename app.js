@@ -878,7 +878,28 @@ function renderFilteredPhotos() {
 // Photo Lightbox In-Page Viewer
 // --------------------------------------------------------------------------
 function openPhotoLightbox(url, title, resolution) {
-  const modal = document.getElementById('photoLightboxModal');
+  let modal = document.getElementById('photoLightboxModal');
+  if (!modal) {
+    modal = document.createElement('div');
+    modal.className = 'lightbox-modal';
+    modal.id = 'photoLightboxModal';
+    modal.onclick = (e) => closePhotoLightbox(e);
+    modal.innerHTML = `
+      <button class="lightbox-close" id="btnCloseLightbox" onclick="closePhotoLightbox(event)">&times;</button>
+      <div class="lightbox-content" onclick="event.stopPropagation()">
+        <img id="lightboxImg" src="" alt="Görsel">
+        <div class="lightbox-info">
+          <h3 id="lightboxTitle"></h3>
+          <span id="lightboxRes"></span>
+          <a id="lightboxDownloadBtn" href="" download class="btn btn-spotify btn-large" style="margin-top:4px;">
+            <i data-lucide="download"></i> 300 DPI Orijinal Dosyayı İndir (.JPG)
+          </a>
+        </div>
+      </div>
+    `;
+    document.body.appendChild(modal);
+  }
+
   const img = document.getElementById('lightboxImg');
   const titleEl = document.getElementById('lightboxTitle');
   const resEl = document.getElementById('lightboxRes');
