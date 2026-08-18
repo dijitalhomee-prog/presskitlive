@@ -68,7 +68,7 @@ const i18nTranslations = {
 
     plan_feat_1_artist: "1 Sanatçı / DJ Özel Presskit Portalı",
     plan_feat_4_artist: "4 Sanatçı Özel Medya Portalı",
-    plan_feat_10_artist: "10 Sanatçıya Kadar Ayrı Presskit Sayfası",
+    plan_feat_10_artist: "10 Sanatçı Özel Medya Portalı",
     plan_feat_50_artist: "50 Sanatçı Özel Medya Portalı",
     plan_feat_unlimited_storage: "Sınırsız 300 DPI Görsel Depolama",
     plan_feat_folder_lock: "Klasör Oluşturma & Şifreli Kilit Sistemi",
@@ -265,7 +265,7 @@ const i18nTranslations = {
 
     plan_feat_1_artist: "1 Artist / DJ Dedicated Presskit Portal",
     plan_feat_4_artist: "4 Artists Dedicated Media Portals",
-    plan_feat_10_artist: "Up to 10 Individual Presskit Pages",
+    plan_feat_10_artist: "10 Artists Dedicated Media Portals",
     plan_feat_50_artist: "50 Artists Dedicated Media Portals",
     plan_feat_unlimited_storage: "Unlimited 300 DPI Image Storage",
     plan_feat_folder_lock: "Folder Creation & Password Locking",
