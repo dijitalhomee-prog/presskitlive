@@ -288,6 +288,7 @@ async function loadArtistData() {
       renderManagerInfo();
       renderFoldersBar();
       renderFilteredPhotos();
+      if (document.getElementById('publicCalGridContainer')) loadPublicArtistCalendar();
     }
   } catch (error) {
     console.error('Artist data load error:', error);
@@ -1363,6 +1364,7 @@ window.addEventListener('languageChanged', (e) => {
     if (typeof renderGalleryPhotos === 'function') renderGalleryPhotos();
     if (typeof renderSidebarPortfolio === 'function') renderSidebarPortfolio();
     if (typeof renderCalendarGrid === 'function') renderCalendarGrid();
+    if (typeof renderPublicCalendarGrid === 'function') renderPublicCalendarGrid();
   }
 });
 
@@ -1692,5 +1694,131 @@ async function saveSelectedDateAvailability() {
     }
   } catch (err) {
     showToast("Bir hata oluştu.", 'error');
+  }
+}
+
+/* ==========================================================================
+   PUBLIC READ-ONLY CALENDAR WIDGET LOGIC
+   ========================================================================== */
+let publicCalState = {
+  currentDate: new Date(),
+  availabilityMap: {}
+};
+
+async function loadPublicArtistCalendar() {
+  const container = document.getElementById('publicCalGridContainer');
+  if (!container || !state.artist || !state.artist.id) return;
+
+  renderPublicCalendarGrid();
+
+  try {
+    const res = await fetch(`/api/artist/availability?artistId=${encodeURIComponent(state.artist.id)}`);
+    if (res.ok) {
+      const data = await res.json();
+      const list = data.availability || [];
+      publicCalState.availabilityMap = {};
+      list.forEach(item => {
+        publicCalState.availabilityMap[item.date] = item;
+      });
+      renderPublicCalendarGrid();
+    }
+  } catch (err) {
+    console.error("Public calendar error:", err);
+  }
+}
+
+function changePublicCalendarMonth(delta) {
+  publicCalState.currentDate.setMonth(publicCalState.currentDate.getMonth() + delta);
+  renderPublicCalendarGrid();
+}
+
+function renderPublicCalendarGrid() {
+  const container = document.getElementById('publicCalGridContainer');
+  const monthLabel = document.getElementById('publicCalMonthLabel');
+  if (!container || !monthLabel) return;
+
+  const year = publicCalState.currentDate.getFullYear();
+  const month = publicCalState.currentDate.getMonth();
+
+  const monthNamesTr = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylul", "Ekim", "Kasım", "Aralık"];
+  const monthNamesEn = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const currentLang = (typeof i18n !== 'undefined' && i18n.currentLang) ? i18n.currentLang : 'tr';
+  const monthNames = currentLang === 'en' ? monthNamesEn : monthNamesTr;
+
+  monthLabel.textContent = `${monthNames[month]} ${year}`;
+
+  const weekHeadersTr = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
+  const weekHeadersEn = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const weekHeaders = currentLang === 'en' ? weekHeadersEn : weekHeadersTr;
+
+  let html = '';
+  weekHeaders.forEach(day => {
+    html += `<div style="font-size: 11px; font-weight: 800; color: var(--text-subdued); padding: 6px 0; text-transform: uppercase;">${day}</div>`;
+  });
+
+  const firstDay = new Date(year, month, 1);
+  let startingDay = firstDay.getDay() - 1;
+  if (startingDay === -1) startingDay = 6;
+
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const daysInPrevMonth = new Date(year, month, 0).getDate();
+
+  for (let i = startingDay - 1; i >= 0; i--) {
+    const dayNum = daysInPrevMonth - i;
+    html += `<div class="cal-day-cell other-month"><span class="cal-day-num">${dayNum}</span></div>`;
+  }
+
+  const todayStr = new Date().toISOString().split('T')[0];
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    const monthPadded = String(month + 1).padStart(2, '0');
+    const dayPadded = String(day).padStart(2, '0');
+    const dateStr = `${year}-${monthPadded}-${dayPadded}`;
+
+    const availItem = publicCalState.availabilityMap[dateStr];
+    const isToday = dateStr === todayStr;
+
+    let statusDotHtml = '';
+    let cellTitle = `${dateStr}`;
+    if (availItem) {
+      statusDotHtml = `<span class="cal-status-dot ${availItem.status}"></span>`;
+      if (availItem.title) cellTitle += ` — ${availItem.title}`;
+    }
+
+    html += `
+      <div class="cal-day-cell" onclick="selectPublicCalendarDate('${dateStr}')" title="${escapeHTML(cellTitle)}">
+        <span class="cal-day-num" style="${isToday ? 'color:var(--primary); font-weight:900;' : ''}">${day}</span>
+        ${statusDotHtml}
+      </div>
+    `;
+  }
+
+  const totalCells = startingDay + daysInMonth;
+  const remainingCells = (7 - (totalCells % 7)) % 7;
+  for (let i = 1; i <= remainingCells; i++) {
+    html += `<div class="cal-day-cell other-month"><span class="cal-day-num">${i}</span></div>`;
+  }
+
+  container.innerHTML = html;
+  if (window.lucide) lucide.createIcons();
+}
+
+function selectPublicCalendarDate(dateStr) {
+  const infoText = document.getElementById('publicCalInfoText');
+  if (!infoText) return;
+
+  const item = publicCalState.availabilityMap[dateStr];
+  const parts = dateStr.split('-');
+  const formattedDate = `${parts[2]}/${parts[1]}/${parts[0]}`;
+
+  if (!item) {
+    infoText.innerHTML = `📅 <strong>${formattedDate}</strong>: Bilgi girilmedi (Varsayılan Müsait).`;
+  } else {
+    let statusLabel = '🟢 Müsait';
+    if (item.status === 'booked') statusLabel = '🔴 Dolu / Meşgul';
+    else if (item.status === 'option') statusLabel = '🟡 Opsiyonlu';
+
+    const noteText = item.title ? ` — <em>${escapeHTML(item.title)}</em>` : '';
+    infoText.innerHTML = `📅 <strong>${formattedDate}</strong>: ${statusLabel}${noteText}`;
   }
 }

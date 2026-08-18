@@ -22,8 +22,8 @@
   <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-  <script src="/i18n.js?v=20260818_1935"></script>
-  <script src="/app.js?v=20260818_1935"></script>
+  <script src="/i18n.js?v=20260818_1941"></script>
+  <script src="/app.js?v=20260818_1941"></script>
 
   <!-- CSS -->
   <link rel="stylesheet" href="/style.css?v=20260817_0026">
@@ -707,6 +707,57 @@
               </div>
               <i data-lucide="external-link" class="arrow-icon"></i>
             </a>
+          </div>
+        </section>
+
+        <!-- PUBLIC AVAILABILITY & CALENDAR SECTION -->
+        <section class="press-section" id="sanatci-takvim" style="margin-bottom: 48px;">
+          <div class="section-header">
+            <div>
+              <h2 class="section-title"><i data-lucide="calendar"></i> <span data-i18n="cal_title">Takvim & Müsaitlik Durumu</span></h2>
+              <p class="section-subtitle" data-i18n="cal_subtitle">Sanatçının güncel ajanda, konser ve çekim tarihlerini takvim üzerinden inceleyin.</p>
+            </div>
+          </div>
+
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-subtle); border-radius: var(--radius-lg); padding: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.5);">
+            
+            <!-- TOOLBAR: MONTH NAVIGATION & STATUS LEGEND -->
+            <div style="display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; margin-bottom: 20px; border-bottom: 1px solid var(--border-subtle); padding-bottom: 16px;">
+              <div style="display: flex; align-items: center; gap: 12px;">
+                <h3 id="publicCalMonthLabel" style="font-family: var(--font-display); font-size: 17px; font-weight: 800; color: #fff; margin: 0;">Ağustos 2026</h3>
+                <div style="display: flex; gap: 4px;">
+                  <button type="button" class="btn btn-outline btn-sm" onclick="changePublicCalendarMonth(-1)"><i data-lucide="chevron-left"></i></button>
+                  <button type="button" class="btn btn-outline btn-sm" onclick="changePublicCalendarMonth(1)"><i data-lucide="chevron-right"></i></button>
+                </div>
+              </div>
+
+              <!-- STATUS LEGEND -->
+              <div style="display: flex; align-items: center; gap: 14px; font-size: 12px; font-weight: 700;">
+                <div style="display: flex; align-items: center; gap: 5px; color: #22C55E;">
+                  <span style="width: 8px; height: 8px; border-radius: 50%; background: #22C55E; display: inline-block;"></span>
+                  <span data-i18n="cal_available">Müsait</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px; color: #EF4444;">
+                  <span style="width: 8px; height: 8px; border-radius: 50%; background: #EF4444; display: inline-block;"></span>
+                  <span data-i18n="cal_booked">Dolu / Meşgul</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 5px; color: #EAB308;">
+                  <span style="width: 8px; height: 8px; border-radius: 50%; background: #EAB308; display: inline-block;"></span>
+                  <span data-i18n="cal_option">Opsiyonlu</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- PUBLIC MINI CALENDAR GRID -->
+            <div id="publicCalGridContainer" style="display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; text-align: center;">
+              <!-- Dynamically rendered by JS -->
+            </div>
+
+            <!-- SELECTED DATE INFO BOX FOR PUBLIC VISITORS -->
+            <div id="publicCalInfoBox" style="margin-top: 16px; background: rgba(255,255,255,0.03); border: 1px dashed var(--border-subtle); border-radius: 8px; padding: 12px 16px; font-size: 13px; color: var(--text-muted); text-align: center;">
+              <span id="publicCalInfoText">Bir tarihe tıklayarak detay ve ajanda bilgisini görüntüleyebilirsiniz.</span>
+            </div>
+
           </div>
         </section>
 
