@@ -31,9 +31,9 @@ const i18nTranslations = {
     nav_edit_contact: "Menajer İletişim",
 
     // Hero Section (Landing)
-    hero_tag: "Müzik, Cast Ajansları & Temsilcilikler İçin Özel SaaS Platformu",
+    hero_tag: "Müzisyenler, Oyuncular, Post-Production & Tüm Temsil Edilen Sanat Dalları İçin 300 DPI Medya Portalı",
     hero_title_html: "Kalıcı Bir Medya & Presskit Adresi<br><span class=\"single-line-hero\"><span class=\"highlight-green\">Günü Geçen Linklerde</span> Kaybolmayan Görseller</span>",
-    hero_subtitle: "Sanatçı, oyuncu ve temsil ettiğiniz isimlerin 300 DPI afiş, headshot ve medya portföyleri artık geçici linklerde değil, kalıcı tek bir adreste.",
+    hero_subtitle: "Müzik, sahne sanatları, oyunculuk, seslendirme ve post-production alanında temsil ettiğiniz tüm yeteneklerin 300 DPI afiş ve headshot portföyleri kalıcı tek bir adreste.",
     hero_cta_login: "Ajans & Kullanıcı Girişi",
     hero_cta_whatsapp: "WhatsApp İle Teklif Al",
 
@@ -228,9 +228,9 @@ const i18nTranslations = {
     nav_edit_contact: "Contact Manager",
 
     // Hero Section (Landing)
-    hero_tag: "Dedicated SaaS Platform for Music, Cast Agencies & Talent Representation",
+    hero_tag: "300 DPI Media Portal for Musicians, Actors, Post-Production & All Branches of Art",
     hero_title_html: "A Permanent Home for Your Media Kit<br><span class=\"single-line-hero\"><span class=\"highlight-green\">No Expiring Links,</span> Always Available</span>",
-    hero_subtitle: "Your artists', actors', and talents' 300 DPI posters, headshots, and media kits are no longer lost in expiring download links — preserved forever in one permanent portal.",
+    hero_subtitle: "300 DPI posters, headshots, and media kits for musicians, actors, voiceover & post-production artists in one permanent portal.",
     hero_cta_login: "Agency & User Login",
     hero_cta_whatsapp: "Request Quote via WhatsApp",
 
