@@ -47,6 +47,9 @@ const i18nTranslations = {
     feat_3_desc: "Mekan, yapımcı ve cast direktörlerinin kullanabileceği şeffaf PNG vektörler, tipografi, özgeçmiş ve basın bültenleri hazır sunulur.",
     feat_4_title: "Doğrudan Temsilci & WhatsApp İletişimi",
     feat_4_desc: "Sitede doğrudan ajansın veya temsilcinin canlı iletişim rozeti yer alır. Yapımcılar ve organizatörler doğrudan WhatsApp'tan ulaşabilir.",
+    feat_5_title: "Canlı Müsaitlik & Portföy Takvimi",
+    feat_5_desc: "Temsil ettiğiniz isimlerin müsaitlik durumunu (Müsait, Dolu, Opsiyonlu) takvimde yönetin. Presskit linkinize giren organizatörler ve cast direktörleri takvimi anında incelesin.",
+    plan_feat_calendar: "Canlı Müsaitlik & Portföy Takvimi",
 
     // Pricing Section
     pricing_title: "Ajansınız İçin En Uygun Planı Seçin",
@@ -258,6 +261,9 @@ const i18nTranslations = {
     feat_3_desc: "Transparent PNG vectors, typography, bios, and press releases ready for promoters, producers, and casting directors.",
     feat_4_title: "Direct Agent & WhatsApp Communication",
     feat_4_desc: "Featuring live contact badges for the agency or representative. Bookers and promoters can reach out directly via WhatsApp.",
+    feat_5_title: "Live Availability & Portfolio Calendar",
+    feat_5_desc: "Manage schedule availability (Available, Booked, Optioned) for your roster. Promoters and casting directors can view live availability directly on your presskit link.",
+    plan_feat_calendar: "Live Availability & Roster Calendar",
 
     // Pricing Section
     pricing_title: "Choose the Perfect Plan for Your Agency",
