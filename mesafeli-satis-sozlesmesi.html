@@ -11,14 +11,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/png" href="/assets/images/favicon.png">
   <title>Mesafeli Satış Sözleşmesi — PressKitLive | DijitalGru™</title>
-  <meta name="description" content="PressKitLive SaaS dijital platform üyelik hizmetleri resmi mesafeli satış sözleşmesi.">
+  <meta name="description" content="PressKitLive SaaS dijital platform üyelik hizmetleri resmi mesafeli satış sözleşmesi ve yasal bildirimler.">
   
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   
-  <!-- Lucide Icons (Version Locked) -->
+  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
 
   <!-- CSS -->
@@ -68,13 +68,18 @@
       font-size: 18px;
       font-weight: 800;
       color: var(--primary);
-      margin: 24px 0 10px 0;
+      margin: 28px 0 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 6px;
     }
     .legal-content p, .legal-content ul {
       font-size: 14px;
       color: var(--text-muted);
-      line-height: 1.7;
-      margin-bottom: 14px;
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+    .legal-content ul {
+      padding-left: 20px;
     }
     .legal-info-card {
       background: rgba(255, 255, 255, 0.03);
@@ -82,6 +87,22 @@
       border-radius: var(--radius-md);
       padding: 20px;
       margin: 16px 0;
+      font-size: 14px;
+      color: #ddd;
+      line-height: 1.8;
+    }
+    .legal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(29, 185, 84, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(29, 185, 84, 0.3);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 16px;
     }
   </style>
 </head>
@@ -104,49 +125,98 @@
   <div class="legal-container">
     <div class="legal-card">
       <div class="legal-header">
+        <span class="legal-badge">
+          <i data-lucide="shield-check" style="width:14px; height:14px;"></i> Resmi Yasal Sözleşme
+        </span>
         <h1 class="legal-title">
           <i data-lucide="file-text" style="color:var(--primary);"></i> Mesafeli Satış Sözleşmesi
         </h1>
-        <p class="legal-subtitle">6502 Sayılı Tüketicinin Korunması Hakkında Kanun Uyarınca Düzenlenmiştir</p>
+        <p class="legal-subtitle">6502 Sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği Uyarınca Düzenlenmiştir</p>
       </div>
 
       <div class="legal-content">
+        
         <h3>MADDE 1 — TARAFLAR</h3>
+        <p>İşbu Mesafeli Satış Sözleşmesi (“Sözleşme”), aşağıda bilgileri yer alan SATICI ile www.presskitlive.com web sitesinden veya mobil arayüzünden dijital hizmet satın alan ALICI (Müşteri) arasında aşağıda belirtilen hüküm ve şartlar çerçevesinde elektronik ortamda kurulmuştur.</p>
+
         <div class="legal-info-card">
-          <strong>SATICI BİLGİLERİ:</strong><br>
-          Unvan: DijitalGru / Furkan Egemen Güneş<br>
-          Adres: Gülbahar Mah. No 34 Kat 3 Daire 11, Şişli / İstanbul<br>
-          Vergi Dairesi & No: Zincirlikuyu Vergi Dairesi / 4330665400<br>
-          Telefon: 0537 627 44 15 • E-posta: dijitalgru@gmail.com
+          <strong style="color:#fff; font-size:15px; display:block; margin-bottom:8px;">1.1. SATICI BİLGİLERİ (Hizmet Sağlayıcı):</strong>
+          <strong>Unvan / Ticari Ad:</strong> DijitalGru / Furkan Egemen Güneş<br>
+          <strong>Adres:</strong> Gülbahar Mah. No 34 Kat 3 Daire 11, Şişli / İstanbul<br>
+          <strong>Vergi Dairesi & No:</strong> Zincirlikuyu Vergi Dairesi / 4330665400<br>
+          <strong>Telefon:</strong> +90 537 627 44 15<br>
+          <strong>E-posta:</strong> dijitalgru@gmail.com<br>
+          <strong>Web Sitesi:</strong> https://presskitlive.com / https://dijitalgru.com
         </div>
 
         <div class="legal-info-card">
-          <strong>ALICI BİLGİLERİ:</strong><br>
-          Ad-Soyad / Unvan: <span id="buyerNameDoc">[Ödeme Anında Beyan Edilen Müşteri Adı]</span><br>
-          T.C. Kimlık / Vergi No: <span id="buyerTcknDoc">[Ödeme Anında Beyan Edilen TCKN / VKNO]</span><br>
-          E-posta: <span id="buyerEmailDoc">[Ödeme Anında Beyan Edilen E-posta]</span><br>
-          Telefon: <span id="buyerPhoneDoc">[Ödeme Anında Beyan Edilen Telefon]</span>
+          <strong style="color:#fff; font-size:15px; display:block; margin-bottom:8px;">1.2. ALICI BİLGİLERİ (Müşteri):</strong>
+          <strong>Ad-Soyad / Unvan:</strong> <span id="buyerNameDoc">[Ödeme Anında Beyan Edilen Müşteri Adı]</span><br>
+          <strong>T.C. Kimlik / Vergi No:</strong> <span id="buyerTcknDoc">[Ödeme Anında Beyan Edilen TCKN / VKNO]</span><br>
+          <strong>Fatura Adresi:</strong> <span id="buyerAddressDoc">[Ödeme Anında Beyan Edilen Fatura Adresi]</span><br>
+          <strong>E-posta:</strong> <span id="buyerEmailDoc">[Ödeme Anında Beyan Edilen E-posta Adresi]</span><br>
+          <strong>Telefon:</strong> <span id="buyerPhoneDoc">[Ödeme Anında Beyan Edilen Telefon Numarası]</span>
         </div>
 
-        <h3>MADDE 2 — SÖZLEŞMENİN KONUSU</h3>
+        <h3>MADDE 2 — SÖZLEŞMENİN KONUSU VE KAPSAMI</h3>
         <p>
-          İşbu sözleşmenin konusu, ALICI'nın SATICI'ya ait PressKitLive platformu üzerinden elektronik ortamda siparişini yaptığı dijital SaaS yazılım aboneliği (Starter, Pro Ajans veya Enterprise paketleri) hizmetinin satışı, teslimi ve tarafların hak ve yükümlülüklerinin saptanmasıdır.
+          İşbu Sözleşme'nin konusu, ALICI'nın SATICI'ya ait PressKitLive (www.presskitlive.com) alan adlı web sitesi üzerinden elektronik ortamda siparişini verdiği, aşağıda nitelikleri ve satış fiyatı belirtilen dijital bulut platformu abonelik hizmetinin (SaaS - Software as a Service) satışı, teslimi ve tarafların hak ve yükümlülüklerinin 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümleri gereğince saptanmasıdır.
         </p>
 
-        <h3>MADDE 3 — HİZMET NİTELİĞİ VE ÖDEME</h3>
+        <h3>MADDE 3 — SATIN ALINAN HİZMET BİLGİLERİ VE ÖDEME ŞARTLARI</h3>
         <p>
-          Satın alınan hizmet; dijital ortamda anında ifa edilen bulut depolama, 300 DPI medya sunucusu ve ajans paneli erişim lisansıdır. Ödemeler iyzico altyapısı üzerinden kredi kartı / banka kartı ile 3D Secure onaylı olarak gerçekleştirilir.
+          Satın alınan hizmet; sanatçılar, menajerler ve ajanslar için 300 DPI medya deposu, şifreli klasör yönetimi, canlı müsaitlik takvimi ve dijital presskit yayınlama lisansını içeren bulut yazılım aboneliğidir.
+        </p>
+        <ul>
+          <li><strong>Hizmet Adı:</strong> PressKitLive Dijital Platform Aboneliği (Bireysel / Starter / Pro / Enterprise)</li>
+          <li><strong>Hizmet Türü:</strong> Gayrimaddi Dijital Hizmet & SaaS Yazılım Lisansı</li>
+          <li><strong>Abonelik Süresi:</strong> Aylık veya Yıllık Tekrarlayan Lisans</li>
+          <li><strong>Ödeme Yöntemi:</strong> iyzico Ödeme ve Elektronik Para Hizmetleri A.Ş. altyapısı üzerinden 256-bit SSL şifreli ve 3D Secure onaylı Kredi Kartı / Banka Kartı</li>
+          <li><strong>Toplam Fiyat:</strong> Seçilen plana göre web sitesinde ilan edilen ve ödeme ekranında gösterilen tutardır (+%20 KDV dahil).</li>
+        </ul>
+
+        <h3>MADDE 4 — HİZMETİN TESLİMATI VE İFA ŞEKLİ</h3>
+        <p>
+          4.1. İşbu Sözleşme konusu hizmet, elektronik ortamda anında ifa edilen gayrimaddi bir bulut yazılım hizmeti olduğundan fiziki kargo veya kurye teslimatı söz konusu değildir.
+        </p>
+        <p>
+          4.2. ALICI'nın iyzico ödeme altyapısı üzerinden ödemeyi başarıyla tamamlamasını müteakip, satın alınan abonelik paketi ve ajans yönetim paneli <strong>anında (otomatik olarak)</strong> ALICI'nın erişimine açılır. Kullanıcı hesap erişim bilgileri ve e-fatura bilgisi ALICI'nın bildirdiği e-posta adresine iletilir.
         </p>
 
-        <h3>MADDE 4 — CAYMA HAKKI İSTİSNASI</h3>
+        <h3>MADDE 5 — CAYMA HAKKI VE CAYMA HAKKININ KULLANILAMAYACAĞI HALLER</h3>
         <p>
-          Mesafeli Sözleşmeler Yönetmeliği’nin 15. maddesinin (ğ) bendi uyarınca; <em>"Elektronik ortamda anında ifa edilen hizmetler veya tüketiciye anında teslim edilen gayrimaddi mallara ilişkin sözleşmelerde"</em> <strong>cayma hakkı kullanılamaz.</strong> ALICI, hizmetin elektronik ortamda anında erişime açıldığını ve cayma hakkının bulunmadığını kabul eder.
+          5.1. ALICI, Mesafeli Sözleşmeler Yönetmeliği’nin 15. maddesinin 1. fıkrasının (ğ) bendi uyarınca; <strong>"Elektronik ortamda anında ifa edilen hizmetler veya tüketiciye anında teslim edilen gayrimaddi mallara ilişkin sözleşmelerde"</strong> cayma hakkının kullanılamayacağını bildiğini kabul, beyan ve taahhüt eder.
+        </p>
+        <p>
+          5.2. PressKitLive platformunda sunulan bulut altyapısı ve 300 DPI depolama lisansı ödeme yapıldığı anda kullanıma açıldığı ve içeriğe erişim sağlandığı için mevzuat gereğince cayma hakkı kapsamı dışındadır.
         </p>
 
-        <h3>MADDE 5 — YETKİLİ MAHKEME</h3>
+        <h3>MADDE 6 — ABONELİK İPTALİ VE İADE KOŞULLARI</h3>
         <p>
-          İşbu sözleşmenin uygulanmasında, Ticaret Bakanlığınca ilan edilen değere kadar Tüketici Hakem Heyetleri ile SATICI'nın yerleşim yerindeki (İstanbul) Tüketici Mahkemeleri yetkilidir.
+          6.1. ALICI, dilediği zaman herhangi bir cezai şart ödemeksizin ajans yönetim panelinde yer alan abonelik ayarlarından veya SATICI'nın <strong>dijitalgru@gmail.com</strong> e-posta adresine yazılı bildirimde bulunarak gelecek dönem yenilemesini iptal edebilir.
         </p>
+        <p>
+          6.2. İptal talebinde bulunulan mevcut dönemin kalan günleri için ücret iadesi yapılmaz. ALICI, ödemesini yaptığı fatura döneminin sonuna kadar platform hizmetlerinden kesintisiz yararlanmaya devam eder.
+        </p>
+        <p>
+          6.3. Sistemsel veya hatalı mükerrer çekim durumlarında, SATICI'ya yapılan yazılı başvuruyu müteakip hatalı tutar iyzico ödeme altyapısı üzerinden ALICI'nın kartına 3-7 iş günü içerisinde aynen iade edilir.
+        </p>
+
+        <h3>MADDE 7 — GİZLİLİK VE KİŞİSEL VERİLERİN KORUNMASI</h3>
+        <p>
+          SATICI, ALICI tarafından kendisine iletilen kişisel verileri 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) uyarınca korumayı, Gizlilik Politikası kapsamı dışında üçüncü şahıslarla paylaşmamayı ve satmamayı kabul eder. Ödeme bilgileri (kredi kartı numarası, CVV vb.) SATICI sunucularında asla saklanmaz; işlemler doğrudan BDDK ve PCI-DSS lisanslı iyzico altyapısı üzerinden gerçekleştirilir.
+        </p>
+
+        <h3>MADDE 8 — UYUŞMAZLIKLARIN ÇÖZÜMÜ VE YETKİLİ MAHKEME</h3>
+        <p>
+          İşbu Sözleşme'nin uygulanmasından doğabilecek uyuşmazlıklarda, Ticaret Bakanlığınca her yıl ilan edilen parasal sınırlar dahilinde ALICI'nın veya SATICI'nın yerleşim yerindeki Tüketici Hakem Heyetleri ile Tüketici Mahkemeleri yetkilidir.
+        </p>
+
+        <h3>MADDE 9 — YÜRÜRLÜK</h3>
+        <p>
+          ALICI, web sitesi üzerinden ödeme işlemini gerçekleştirdiğinde ve "Mesafeli Satış Sözleşmesi'ni okudum ve kabul ediyorum" onay kutucuğunu işaretlediğinde işbu Sözleşme'nin tüm koşullarını kabul etmiş sayılır. Sözleşme elektronik ortamda onaylandığı tarihte yürürlüğe girer.
+        </p>
+
       </div>
     </div>
   </div>

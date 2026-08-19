@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@500;600;700;800;900&display=swap" rel="stylesheet">
   
-  <!-- Lucide Icons (Version Locked) -->
+  <!-- Lucide Icons -->
   <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
 
   <!-- CSS -->
@@ -68,13 +68,41 @@
       font-size: 18px;
       font-weight: 800;
       color: var(--primary);
-      margin: 24px 0 10px 0;
+      margin: 28px 0 12px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      padding-bottom: 6px;
     }
     .legal-content p, .legal-content ul {
       font-size: 14px;
       color: var(--text-muted);
-      line-height: 1.7;
-      margin-bottom: 14px;
+      line-height: 1.75;
+      margin-bottom: 16px;
+    }
+    .legal-content ul {
+      padding-left: 20px;
+    }
+    .legal-info-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 20px;
+      margin: 16px 0;
+      font-size: 14px;
+      color: #ddd;
+      line-height: 1.8;
+    }
+    .legal-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(29, 185, 84, 0.15);
+      color: var(--primary);
+      border: 1px solid rgba(29, 185, 84, 0.3);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 800;
+      margin-bottom: 16px;
     }
   </style>
 </head>
@@ -97,30 +125,40 @@
   <div class="legal-container">
     <div class="legal-card">
       <div class="legal-header">
+        <span class="legal-badge">
+          <i data-lucide="refresh-cw" style="width:14px; height:14px;"></i> Hizmet İfası & İade Politikası
+        </span>
         <h1 class="legal-title">
           <i data-lucide="truck" style="color:var(--primary);"></i> Teslimat ve İade Şartları
         </h1>
-        <p class="legal-subtitle">Dijital Hizmet Teslimat Süreçleri ve İptal/İade Kuralları</p>
+        <p class="legal-subtitle">Dijital Hizmet Teslimat Süreçleri, Abonelik İptali ve İade Koşulları</p>
       </div>
 
       <div class="legal-content">
-        <h3>1. Dijital Hizmet Teslimatı</h3>
+        
+        <h3>1. DİJİTAL HİZMET TESLİMATI (ANINDA İFA)</h3>
         <p>
-          PressKitLive platformu üzerinden satın alınan Starter, Pro Ajans veya Enterprise abonelik paketleri fiziki kargo veya teslimat gerektirmeyen **dijital SaaS yazılım hizmetleridir**.
+          PressKitLive platformu üzerinden satın alınan Bireysel Sanatçı / DJ, Starter Menajer, Pro Ajans ve Enterprise abonelik paketleri fiziki kargo veya kurye teslimatı gerektirmeyen <strong>dijital SaaS yazılım hizmetleridir.</strong>
         </p>
         <p>
-          iyzico ödeme altyapısı üzerinden 3D Secure onaylı ödemenin tamamlanmasını müteakip, hesabınız ve sanatçı presskit medya portalınız **anında (otomatik olarak)** aktif edilir. Hesap giriş bilgileri kayıtlı e-posta adresinize iletilir.
-        </p>
-
-        <h3>2. İptal ve İade Şartları</h3>
-        <p>
-          Satın alınan hizmetler elektronik ortamda anında ifa edilen bulut depolama ve yazılım lisansı niteliğinde olduğundan; Mesafeli Sözleşmeler Yönetmeliği uyarınca ödeme sonrasında **cayma hakkı ve ücret iadesi bulunmamaktadır.**
+          iyzico ödeme altyapısı üzerinden 3D Secure onaylı ödeme işleminin başarıyla tamamlanmasını müteakip; satın aldığınız abonelik lisansı ve ajans yönetim paneli <strong>anında (otomatik olarak)</strong> kullanıma açılır. Hesap erişim bilgileri ve e-fatura detayları kayıtlı e-posta adresinize anında gönderilir. Herhangi bir kargo ücreti veya fiziki teslimat süresi bulunmamaktadır.
         </p>
 
-        <h3>3. Abonelik İptali ve Yenileme</h3>
+        <h3>2. İADE VE İPTAL KOŞULLARI</h3>
         <p>
-          Aboneliğinizi dilediğiniz zaman ajans yönetim panelinizden veya <strong>dijitalgru@gmail.com</strong> adresine yazılı bildirimde bulunarak bir sonraki dönemin yenilenmesini durduracak şekilde iptal edebilirsiniz. İptal edilen dönemin kalan günleri için ücret iadesi yapılmaz, ancak hizmet dönemi sonuna kadar aktif kalır.
+          Satın alınan hizmetler elektronik ortamda anında ifa edilen bulut depolama, 300 DPI medya sunucusu ve yazılım lisansı niteliğinde olduğundan; 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği uyarınca ödeme sonrasında **cayma hakkı ve sebepsiz iade hakkı bulunmamaktadır.**
         </p>
+
+        <h3>3. ABONELİK İPTALİ VE GELECEK DÖNEM YENİLEMESİ</h3>
+        <p>
+          Aboneliğinizi dilediğiniz zaman ajans yönetim panelinizde yer alan hesap ayarlarından veya <strong>dijitalgru@gmail.com</strong> e-posta adresine yazılı bildirimde bulunarak bir sonraki dönemin yenilenmesini durduracak şekilde iptal edebilirsiniz. İptal edilen dönemin kalan günleri için ücret iadesi yapılmaz, ancak hesabınız ve portallarınız fatura dönemi sonuna kadar aktif kalır.
+        </p>
+
+        <h3>4. HATA VE MÜKERRER ÇEKİM İADELERİ</h3>
+        <p>
+          Sistemsel bir arıza veya yanlışlıkla mükerrer (çift) kart çekimi yaşanması durumunda; ALICI'nın <strong>dijitalgru@gmail.com</strong> adresine veya <strong>0537 627 44 15</strong> nolu müşteri hattına başvurması halinde yapılan inceleme sonucu fazla çekilen tutar iyzico altyapısı üzerinden ALICI'nın kredi kartına/banka kartına 3-7 iş günü içerisinde iade edilir.
+        </p>
+
       </div>
     </div>
   </div>
