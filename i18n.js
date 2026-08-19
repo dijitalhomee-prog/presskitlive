@@ -36,7 +36,7 @@ const i18nTranslations = {
     hero_title_html: "Kalıcı Bir Medya & Presskit Adresi<br><span class=\"single-line-hero\"><span class=\"highlight-green\">Günü Geçen Linklerde</span> Kaybolmayan Görseller</span>",
     hero_subtitle: "Temsil ettiğiniz tüm isimlerin 300 DPI afiş, headshot ve medya portföyleri artık geçici indirme bağlantılarında değil, kalıcı ve prestijli tek bir adreste.",
     hero_cta_login: "Ajans & Kullanıcı Girişi",
-    hero_cta_whatsapp: "WhatsApp İle Teklif Al",
+    hero_cta_whatsapp: "E-Posta İle Teklif Al",
 
     // Landing Features
     feat_1_title: "Klasör Oluşturma & Kilit Sistemi",
@@ -90,7 +90,7 @@ const i18nTranslations = {
     enterprise_banner_title: "Markanıza Özel Altyapı & Kurumsal Teklif Alın",
     enterprise_banner_desc: "50'den fazla temsil ettiğiniz profiliniz varsa, ajansınıza özel domain ve white-label medya sunucusu istiyorsanız doğrudan ekibimizle iletişime geçin.",
     enterprise_btn_email: "Markanıza Özel Teklif Alın",
-    enterprise_btn_whatsapp: "WhatsApp İle Ulaşın",
+    enterprise_btn_whatsapp: "E-Posta İle Ulaşın",
 
     // Security Banner
     security_title: "%100 Güvenli Ödeme Altyapısı",
@@ -258,7 +258,7 @@ const i18nTranslations = {
     hero_title_html: "A Permanent Home for Your Media Kit<br><span class=\"single-line-hero\"><span class=\"highlight-green\">No Expiring Links,</span> Always Available</span>",
     hero_subtitle: "300 DPI posters, headshots, and media portfolios for all your represented talents are no longer lost in expiring download links — preserved forever in one prestigious portal.",
     hero_cta_login: "Agency & User Login",
-    hero_cta_whatsapp: "Request Quote via WhatsApp",
+    hero_cta_whatsapp: "Get Quote via Email",
 
     // Landing Features
     feat_1_title: "Custom Folders & Password Protection",
@@ -312,7 +312,7 @@ const i18nTranslations = {
     enterprise_banner_title: "Get White-Label Infrastructure & Custom Enterprise Quote",
     enterprise_banner_desc: "Representing over 50 profiles? Need a custom domain and white-label media server for your agency? Contact our team directly.",
     enterprise_btn_email: "Get Custom Enterprise Quote",
-    enterprise_btn_whatsapp: "Contact via WhatsApp",
+    enterprise_btn_whatsapp: "Contact via Email",
 
     // Security Banner
     security_title: "100% Secure Payment Infrastructure",
