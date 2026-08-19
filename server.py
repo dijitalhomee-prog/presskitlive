@@ -563,7 +563,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
                 return
 
             mgr = self.get_current_manager()
-            user_email = mgr["email"] if mgr else req_body.get("email", "dijitalgru@gmail.com")
+            user_email = mgr["email"] if mgr else req_body.get("email", "info@presskitlive.com")
             user_phone = (mgr["phone"] if mgr and mgr.get("phone") else req_body.get("phone", "+905376274415"))
             user_name = mgr["name"] if mgr else req_body.get("name", "Aycan Yağcı")
 
