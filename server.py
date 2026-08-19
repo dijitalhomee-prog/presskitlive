@@ -567,7 +567,7 @@ class PressKitHandler(http.server.SimpleHTTPRequestHandler):
             user_phone = (mgr["phone"] if mgr and mgr.get("phone") else req_body.get("phone", "+905376274415"))
             user_name = mgr["name"] if mgr else req_body.get("name", "Aycan Yağcı")
 
-            res = create_subscription_checkout(plan_id, user_email, user_phone, user_name, tckn)
+            res = create_iyzico_checkout_form(plan_id, user_email, user_phone, user_name, tckn)
 
             if mgr and res.get("status") == "success":
                 sub_ref = res.get("token", f"sub-ref-{mgr['id']}")
