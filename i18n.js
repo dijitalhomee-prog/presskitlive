@@ -81,9 +81,9 @@ const i18nTranslations = {
     plan_feat_zip_download: "Tek Tıkla Tüm ZIP İndirme",
     plan_feat_whatsapp_btn: "Menajer WhatsApp Butonu",
 
-    btn_start_sub: "Çok Yakında",
-    btn_start_pro: "Çok Yakında",
-    btn_start_enterprise: "Çok Yakında",
+    btn_start_sub: "Aboneliği Başlat",
+    btn_start_pro: "Aboneliği Başlat",
+    btn_start_enterprise: "Aboneliği Başlat",
 
     // Enterprise Banner
     enterprise_banner_badge: "50+ PROFİL & KURUMSAL AJANSLAR İÇİN",
@@ -303,9 +303,9 @@ const i18nTranslations = {
     plan_feat_zip_download: "One-Click Full ZIP Download",
     plan_feat_whatsapp_btn: "Manager WhatsApp Direct Button",
 
-    btn_start_sub: "Coming Soon",
-    btn_start_pro: "Coming Soon",
-    btn_start_enterprise: "Coming Soon",
+    btn_start_sub: "Start Subscription",
+    btn_start_pro: "Start Subscription",
+    btn_start_enterprise: "Start Subscription",
 
     // Enterprise Banner
     enterprise_banner_badge: "FOR 50+ PROFILES & ENTERPRISE AGENCIES",

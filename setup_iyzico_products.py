@@ -57,6 +57,7 @@ def run_setup():
     }
     print("📦 Creating Product on iyzico...")
     prod_res = send_iyzico_v2_request("/v2/subscription/products", product_req)
+    print("  RAW prod_res:", json.dumps(prod_res, ensure_ascii=False))
 
     prod_ref = prod_res.get("data", {}).get("referenceCode") or f"prod-ref-presskitlive-{int(time.time())}"
     print(f"  ✅ Product Reference Code: {prod_ref}")
@@ -84,6 +85,7 @@ def run_setup():
         }
         print(f"💳 Creating Pricing Plan: {p['name']} (₺{p['price']}/ay)...")
         plan_res = send_iyzico_v2_request(f"/v2/subscription/products/{prod_ref}/pricing-plans", plan_req)
+        print("  RAW plan_res:", json.dumps(plan_res, ensure_ascii=False))
         ref_code = plan_res.get("data", {}).get("referenceCode") or f"plan-ref-{p['id']}-sandbox"
         ref_codes[p["id"]] = ref_code
         print(f"  ✅ {p['id'].upper()} Reference Code: {ref_code}")
