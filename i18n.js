@@ -18,6 +18,7 @@ const i18nTranslations = {
     // Dashboard & Sidebar UI
     nav_contact_info: "Yetkili Bilgileri",
     nav_change_pass: "Şifre Değiştir",
+    nav_email_support: "Destek E-Postası",
     nav_sidebar_menu: "PRESSKIT MENÜSÜ",
     nav_overview: "Genel Bakış",
     nav_photos_folders: "Klasörler & Görseller",
@@ -238,8 +239,9 @@ const i18nTranslations = {
     nav_manager_panel: "Manager Control Panel",
 
     // Dashboard & Sidebar UI
-    nav_contact_info: "Authorized Info",
+    nav_contact_info: "Contact Info",
     nav_change_pass: "Change Password",
+    nav_email_support: "Email Support",
     nav_sidebar_menu: "PRESSKIT MENU",
     nav_overview: "Overview",
     nav_photos_folders: "Folders & Media",
