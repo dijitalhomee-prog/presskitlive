@@ -1011,8 +1011,8 @@ a {
 }
 .footer-container {
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 40px;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
   margin-bottom: 40px;
 }
 .footer-brand-logo {
@@ -1223,10 +1223,22 @@ a {
   max-width: 1200px;
   margin: 0 auto;
   display: grid;
-  grid-template-columns: 2fr 1fr 1fr;
-  gap: 40px;
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
   padding-bottom: 40px;
   border-bottom: 1px solid var(--border-subtle);
+}
+@media (max-width: 768px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+  .footer-col-right {
+    border-left: none !important;
+    padding-left: 0 !important;
+    border-top: 1px solid var(--border-subtle);
+    padding-top: 32px;
+  }
 }
 .footer-brand-logo {
   height: 32px;

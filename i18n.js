@@ -99,6 +99,7 @@ const i18nTranslations = {
 
     // Footer Section
     footer_desc: "PressKitLive — Sanatçılar ve menajerler için DijitalGru™ tarafından geliştirilmiş 300 DPI medya depo ve presskit altyapısı.",
+    footer_presskit_desc: "Sanatçılar, oyuncular ve ajanslar için 300 DPI medya deposu, şifreli klasör ve dijital presskit altyapısı.",
     footer_official_links: "RESMİ BAĞLANTILAR",
     footer_contact_support: "İLETİŞİM & DESTEK",
     footer_rights: "© 2026 PressKitLive. Tüm Hakları Saklıdır.",
@@ -322,6 +323,7 @@ const i18nTranslations = {
 
     // Footer Section
     footer_desc: "PressKitLive — 300 DPI media repository and presskit infrastructure developed by DijitalGru™ for artists and managers.",
+    footer_presskit_desc: "300 DPI media storage, encrypted folders, and digital presskit infrastructure for artists, actors, and agencies.",
     footer_official_links: "OFFICIAL LINKS",
     footer_contact_support: "CONTACT & SUPPORT",
     footer_rights: "© 2026 PressKitLive. All Rights Reserved.",
